@@ -4,12 +4,14 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const User = require('./models/user');
+require ('dotenv').config();
+
 
 const userRoutes = require('./routes/user');
 
 const app = express();
 
-mongoose.connect('mongodb+srv://cvmadmin:edPUCHw2Ha4l5KP4@cluster0.bp2jrmc.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://'+process.env.USERNAMEMONGO+':'+process.env.PASSWORDMONGO+'@cluster0.bp2jrmc.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
