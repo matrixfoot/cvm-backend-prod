@@ -44,9 +44,9 @@ exports.allowIfLoggedin = async (req, res, next) => {
 
 exports.signup = async (req, res, next) => {
   try {
-    const { email, password, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,role } = req.body
+    const { email, password, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role } = req.body
     const hashedPassword = await hashPassword(password);
-    const newUser = new User({email, password:hashedPassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,role: role || "basic" });
+    const newUser = new User({email, password:hashedPassword,firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role: role || "basic" });
     const accessToken = jwt.sign({ userId: newUser._id }, 'RANDOM_TOKEN_SECRET', {
       expiresIn: "1d"
     });
