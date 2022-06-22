@@ -5,6 +5,7 @@ const userController = require('../controllers/user');
 router.post('/signup', userController.signup);
 
 router.post('/login', userController.login);
+router.post('/signout', userController.signout);
 
 
 router.get('/:id', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'profile'),userController.getUser);
