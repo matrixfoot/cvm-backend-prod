@@ -12,7 +12,7 @@ router.get('/:id', userController.allowIfLoggedin, userController.grantAccess('r
 
 router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'), userController.getUsers);
 
-router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.updateUser);
+router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.updateUser);
 
 router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.deleteUser);
 
