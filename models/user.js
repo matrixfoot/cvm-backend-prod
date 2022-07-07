@@ -4,7 +4,8 @@ const uniqueValidator = require('mongoose-unique-validator');
 const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  
+  confirmpassword: { type: String, required: true },
+  acceptTerms:Boolean,
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
   fonction: { type: String, required: true },
@@ -13,6 +14,7 @@ const userSchema = mongoose.Schema({
   raisonsociale: { type: String, required: true },
   nomsociete: { type: String, required: true },
   clientcode:{ type: String, required: true },
+  
   role: {
     type: String,
     default: 'basic',
@@ -20,7 +22,15 @@ const userSchema = mongoose.Schema({
    },
    accessToken: {
     type: String
-   }
+   },
+   verified: Date,
+    resetToken: { 
+        token: String,
+        expires: Date
+    },
+    passwordReset: Date,
+    created: { type: Date, default: Date.now },
+    updated: Date
 });
 
 userSchema.plugin(uniqueValidator);

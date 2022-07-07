@@ -1,0 +1,12 @@
+{
+    
+    "emailFrom": "kammounomarindus@gmail.com",
+    "smtpOptions": {
+        "host": "smtp.google.com",
+        "port": 587,
+        "auth": {
+            "user": "kammounomarindus@gmail.com",
+            "pass": "Indus12345@"
+        }
+    }
+}

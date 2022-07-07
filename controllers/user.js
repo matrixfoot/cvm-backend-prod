@@ -1,9 +1,12 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const config = require('../config.json');
+const crypto = require("crypto");
+const sendEmail = require('../send-email');
 const { roles } = require('../role')
 const fs = require('fs');
+
 async function hashPassword(password) {
   return await bcrypt.hash(password, 10);
 }
@@ -42,16 +45,27 @@ exports.allowIfLoggedin = async (req, res, next) => {
   }
 }
 
+
 exports.signup = async (req, res, next) => {
   try {
-    const { email, password, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role } = req.body
+    
+    const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role,origin} = req.body
     const hashedPassword = await hashPassword(password);
-    const newUser = new User({email, password:hashedPassword,firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role: role || "basic" });
+    const confirmedhashedPassword = await hashPassword(confirmpassword);
+    
+    const newUser = new User({email, password:hashedPassword,confirmpassword:confirmedhashedPassword,firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role: role || "basic" });
     const accessToken = jwt.sign({ userId: newUser._id }, 'RANDOM_TOKEN_SECRET', {
       expiresIn: "1d"
     });
+    if (await User.findOne({ email: req.body.email })) {
+      // send already registered error in email to prevent account enumeration
+      return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
+      
+  }
+  if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
     newUser.accessToken = accessToken;
-    await newUser.save();
+    
+    await (newUser.save(),sendVerificationEmail(newUser, origin));
     res.json({
       data: newUser,
       message: "You have signed up successfully"
@@ -59,7 +73,22 @@ exports.signup = async (req, res, next) => {
   } catch (error) {
     next(error)
   }
+ 
+  
 }
+
+
+exports.verifyEmail= async ({ token }) => {
+  const user = await User.findOne({ accessToken: token });
+  
+  if (!user) throw 'vérification échouée';
+  
+  user.verified = Date.now();
+  
+  await user.save();
+}
+
+
 
 exports.login = async (req, res, next) => {
   try {
@@ -141,5 +170,39 @@ exports.deleteUser = async (req, res, next) => {
       next(error)
     }
   }
- 
+  async function sendVerificationEmail(newUser, origin) {
+    let message;
+    if (origin) {
+        const verifyUrl = `${origin}/newUser/verify-email?token=${newUser.accessToken}`;
+        message = `<p>Please click the below link to verify your email address:</p>
+                   <p><a href="${verifyUrl}">${verifyUrl}</a></p>`;
+    } else {
+        message = `<p>Please use the below token to verify your email address with the <code>/newUser/verify-email</code> api route:</p>
+                   <p><code>${newUser.accessToken}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: newUser.email,
+        subject: 'Sign-up Verification API - Verify Email',
+        html: `<h4>Verify Email</h4>
+               <p>Thanks for registering!</p>
+               ${message}`
+    });
+  }
+  async function sendAlreadyRegisteredEmail(email, origin) {
+    let message;
+    if (origin) {
+        message = `<p>If you don't know your password please visit the <a href="${origin}/account/forgot-password">forgot password</a> page.</p>`;
+    } else {
+        message = `<p>If you don't know your password you can reset it via the <code>/account/forgot-password</code> api route.</p>`;
+    }
+  
+    await sendEmail({
+        to: email,
+        subject: 'Sign-up Verification API - Email Already Registered',
+        html: `<h4>Email Already Registered</h4>
+               <p>Your email <strong>${email}</strong> is already registered.</p>
+               ${message}`
+    });
+  }
 
