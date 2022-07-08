@@ -49,7 +49,8 @@ exports.allowIfLoggedin = async (req, res, next) => {
 exports.signup = async (req, res, next) => {
   try {
     
-    const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role,origin} = req.body
+    const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body
+    const {origin}= req.headers
     const hashedPassword = await hashPassword(password);
     const confirmedhashedPassword = await hashPassword(confirmpassword);
     
