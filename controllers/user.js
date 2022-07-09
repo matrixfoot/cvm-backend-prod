@@ -191,7 +191,7 @@ exports.updateUser = async (req, res, next) => {
     const origin = req.headers;
     const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
-    if (req.body.password) {
+    if (req.body.password&&req.body.confirmpassword) {
       
   
     const hashedPassword = await hashPassword(password);
