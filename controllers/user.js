@@ -50,7 +50,7 @@ exports.signup = async (req, res, next) => {
   try {
     
     const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body
-    const {origin}= req.headers
+    
     const hashedPassword = await hashPassword(password);
     const confirmedhashedPassword = await hashPassword(confirmpassword);
     
@@ -89,8 +89,46 @@ exports.verifyEmail= async ({ token }) => {
   await user.save();
 }
 
+exports.forgotPassword=async ({ email }, origin) =>{
+  const user = await User.findOne({ email });
+  
+  // always return ok response to prevent email enumeration
+  if (!user) return;
+  
+  // create reset token that expires after 24 hours
+  user.resetToken = {
+      token: randomTokenString(),
+      expires: new Date(Date.now() + 24*60*60*1000)
+  };
+  await user.save();
 
+  // send email
+  await sendPasswordResetEmail(user, origin);
+}
 
+exports.validateResetToken= async({ token }) =>{
+  const user = await User.findOne({
+      'resetToken.token': token,
+      'resetToken.expires': { $gt: Date.now() }
+  });
+  
+  if (!user) throw 'Invalid token';
+}
+
+exports.resetPassword=async({ token, password }) =>{
+  const user = await User.findOne({ 
+      'resetToken.token': token,
+      'resetToken.expires': { $gt: Date.now() }
+  });
+  
+  if (!user) throw 'Invalid token';
+  
+  // update password and remove reset token
+  user.password = hash(password);
+  user.passwordReset =  Date.now();
+  user.resetToken = undefined;
+  await user.save();
+}
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -148,16 +186,30 @@ exports.getUser = (req, res, next) => {
     }
   );
 };
-exports.updateUser = (req, res, next) => {
-  const userObject = req.file ?
-    {
-      ...JSON.parse(req.body.user),
-      ficheUrl: `${req.file.url}`
-    } : { ...req.body };
-  User.updateOne({ _id: req.params.id }, { ...userObject, _id: req.params.id })
-    .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-    .catch(error => res.status(400).json({ error }));
-};
+exports.updateUser = async (req, res, next) => {
+  try {
+    
+    const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body
+    const hashedPassword = await hashPassword(password);
+    const confirmedhashedPassword = await hashPassword(confirmpassword);
+    const _id = req.params.id;
+    if (await User.findOne({ email: req.body.email })) {
+      // send already registered error in email to prevent account enumeration
+      return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
+      
+  }
+
+
+    if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
+    await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role});
+    const user = await User.findById(_id)
+    res.status(200).json({
+      data: user
+    });
+  } catch (error) {
+    next(error)
+  }
+}
 
 exports.deleteUser = async (req, res, next) => {
     try {
@@ -206,4 +258,35 @@ exports.deleteUser = async (req, res, next) => {
                ${message}`
     });
   }
+  async function sendPasswordResetEmail(user, origin) {
+    let message;
+    if (origin) {
+        const resetUrl = `${origin}/user/reset-password?token=${user.resetToken.token}`;
+        message = `<p>Please click the below link to reset your password, the link will be valid for 1 day:</p>
+                   <p><a href="${resetUrl}">${resetUrl}</a></p>`;
+    } else {
+        message = `<p>Please use the below token to reset your password with the <code>/user/reset-password</code> api route:</p>
+                   <p><code>${user.resetToken.token}</code></p>`;
+    }
+
+    await sendEmail({
+        to: account.email,
+        subject: 'Sign-up Verification API - Reset Password',
+        html: `<h4>Reset Password Email</h4>
+               ${message}`
+    });
+}
+  function randomTokenString() {
+    return crypto.randomBytes(40).toString('hex');
+}
+async function getAccount(id) {
+  
+  const user = await User.findById(id);
+  if (!user) throw 'Account not found';
+  return user;
+}
+function basicDetails(user) {
+  const { id,email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role, created, updated} = user;
+  return { id,email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role, created, updated};
+}
 
