@@ -188,7 +188,7 @@ exports.getUser = (req, res, next) => {
 };
 exports.updateUser = async (req, res, next) => {
   try {
-    
+    const origin = req.headers;
     const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body
     const hashedPassword = await hashPassword(password);
     const confirmedhashedPassword = await hashPassword(confirmpassword);
