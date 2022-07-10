@@ -5,7 +5,7 @@ const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   confirmpassword: { type: String, required: true },
-  acceptTerms:Boolean,
+  acceptTerms:{ type: Boolean},
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
   fonction: { type: String, required: true },
@@ -23,14 +23,14 @@ const userSchema = mongoose.Schema({
    accessToken: {
     type: String
    },
-   verified: Date,
+   verified: { type: Date},
     resetToken: { 
         token: String,
         expires: Date
     },
-    passwordReset: Date,
+    passwordReset: { type: Date},
     created: { type: Date, default: Date.now },
-    updated: Date
+    updated: { type: Date}
 });
 
 userSchema.plugin(uniqueValidator);

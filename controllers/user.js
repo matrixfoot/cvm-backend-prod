@@ -213,6 +213,7 @@ exports.updateUser = async (req, res, next) => {
     else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role});}
     const user = await User.findById(_id);
     user.updated = Date.now();
+    await user.save();
     res.status(200).json({
       data: user,
       message: 'Objet modifié !'
