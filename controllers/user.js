@@ -141,7 +141,11 @@ exports.login = async (req, res, next) => {
     });
     await User.findByIdAndUpdate(user._id, { accessToken })
     res.status(200).json({
-       userId: user._id, email: user.email,password: user.password, role: user.role, Firstname: user.firstname, Lastname: user.lastname, fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,raisonsociale:user.raisonsociale, nomsociete: user.nomsociete, clientcode:user.clientcode,
+       userId: user._id, email: user.email,password: user.password,confirmpassword: user.confirmpassword, role: user.role,
+       acceptterms: user.acceptTerms, Firstname: user.firstname, Lastname: user.lastname, 
+       fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,
+       raisonsociale:user.raisonsociale, nomsociete: user.nomsociete, clientcode:user.clientcode,
+       verified:user.verified,resettoken:user.resetToken,passwordreset:user.passwordReset,created:user.created,verified:user.verified,
       accessToken
     })
   } catch (error) {
