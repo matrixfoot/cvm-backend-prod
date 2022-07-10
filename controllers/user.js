@@ -145,7 +145,7 @@ exports.login = async (req, res, next) => {
        acceptterms: user.acceptTerms, Firstname: user.firstname, Lastname: user.lastname, 
        fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,
        raisonsociale:user.raisonsociale, nomsociete: user.nomsociete, clientcode:user.clientcode,
-       verified:user.verified,resettoken:user.resetToken,passwordreset:user.passwordReset,created:user.created,verified:user.verified,
+       verified:user.verified,resettoken:user.resetToken,passwordreset:user.passwordReset,created:user.created,updated:user.updated,
       accessToken
     })
   } catch (error) {
