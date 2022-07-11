@@ -18,9 +18,8 @@ mongoose.connect('mongodb+srv://'+process.env.USERNAMEMONGO+':'+process.env.PASS
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
-
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://cvm-backend.herokuapp.com,localhost:4200,http://localhost:3000,https://wonderful-boba-dfd34f.netlify.app');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization,x-access-token');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
