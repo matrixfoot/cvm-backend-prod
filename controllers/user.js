@@ -48,7 +48,7 @@ exports.allowIfLoggedin = async (req, res, next) => {
 
 exports.signup = async (req, res, next) => {
   try {
-    const origin = req.headers
+    const origin ="https://cvm-backend.herokuapp.com/api/"
     const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body
     
     const hashedPassword = await hashPassword(password);
