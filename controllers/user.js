@@ -150,7 +150,8 @@ try{
   if (!user) throw 'Invalid token';
   
   // update password and remove reset token
-  user.password = hashPassword(password);
+  user.password = await hashPassword(password);
+  user.confirmpassword= await hashPassword(password);
   user.passwordReset =  Date.now();
   user.resetToken = undefined;
   await user.save();
