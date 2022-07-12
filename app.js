@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const User = require('./models/user');
+const cors = require('cors');
 require ('dotenv').config();
 
 
@@ -17,7 +18,7 @@ mongoose.connect('mongodb+srv://'+process.env.USERNAMEMONGO+':'+process.env.PASS
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-
+app.use(cors({ origin: (origin, callback) => callback(null, true), credentials: true }));
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization,x-access-token');

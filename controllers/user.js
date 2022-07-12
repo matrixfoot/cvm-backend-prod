@@ -26,7 +26,7 @@ exports.grantAccess = function(action, resource) {
       }
       next()
     } catch (error) {
-      next(error)
+      res.status(33).json({ error });
     }
   }
 }
@@ -41,7 +41,7 @@ exports.allowIfLoggedin = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    next(error);
+    res.status(32).json({ error });
   }
 }
 
@@ -72,28 +72,40 @@ exports.signup = async (req, res, next) => {
       message: "You have signed up successfully"
     })
   } catch (error) {
-    next(error)
+    res.status(31).json({ error });
   }
  
   
 }
 
 
-exports.verifyEmail= async ({ token }) => {
-  const user = await User.findOne({ accessToken: token });
+exports.verifyEmail= async (req, res, next) => {
+  try {
+  const {token}= req.body
+  const user = await User.findOne({ accessToken:token});
+   
   
   if (!user) throw 'vérification échouée';
   
   user.verified = Date.now();
   
   await user.save();
+  res.json({
+    message: 'Verification avec succès, vous pouvez maintenant vous connecter'
+  })
+}catch (error) {
+  res.status(404).json({ error });
+}
 }
 
-exports.forgotPassword=async ({ email }, origin) =>{
+exports.forgotPassword= async (req, res, next) => {
+try{
+  const origin =req.get('origin');
+  const {email}=req.body;
   const user = await User.findOne({ email });
   
   // always return ok response to prevent email enumeration
-  if (!user) return;
+  if (!user) return await (res.status(350).json({ error: 'Cet utilisateur est inexsitant!' }));
   
   // create reset token that expires after 24 hours
   user.resetToken = {
@@ -104,18 +116,32 @@ exports.forgotPassword=async ({ email }, origin) =>{
 
   // send email
   await sendPasswordResetEmail(user, origin);
+res.json({ 
+  message: 'Prière de consulter votre email pour appliquer les instructions' })
+}catch (error) {
+  res.status(404).json({ error });
 }
-
-exports.validateResetToken= async({ token }) =>{
+}
+exports.validateResetToken= async (req, res, next) => {
+  try{
+  const {token}= req.body;
   const user = await User.findOne({
       'resetToken.token': token,
       'resetToken.expires': { $gt: Date.now() }
   });
   
   if (!user) throw 'Invalid token';
+  res.json({ 
+    message: 'Votre clé de réinitialisation est valide,si vous voulez modifier votre mot de passe copier la clé et cliquer sur réinitialiser mot de passe' })
+}
+catch (error) {
+  res.status(404).json({ error });
+}
 }
 
-exports.resetPassword=async({ token, password }) =>{
+exports.resetPassword= async (req, res, next) => {
+try{
+  const {token,password}= req.body;
   const user = await User.findOne({ 
       'resetToken.token': token,
       'resetToken.expires': { $gt: Date.now() }
@@ -124,10 +150,15 @@ exports.resetPassword=async({ token, password }) =>{
   if (!user) throw 'Invalid token';
   
   // update password and remove reset token
-  user.password = hash(password);
+  user.password = hashPassword(password);
   user.passwordReset =  Date.now();
   user.resetToken = undefined;
   await user.save();
+  res.json({
+     message: 'Votre mot de passe est maintenant réinitialisé, vous pouvez vous connecter' })
+}catch (error) {
+  res.status(454).json({ error });
+}
 }
 exports.login = async (req, res, next) => {
   try {
@@ -157,7 +188,7 @@ exports.signout = async (req, res) => {
     req.session = null;
     return res.status(200).send({ message: "You've been signed out!" });
   } catch (err) {
-    this.next(err);
+    res.status(34).json({ err });
   }
 };
 
@@ -192,7 +223,7 @@ exports.getUser = (req, res, next) => {
 };
 exports.updateUser = async (req, res, next) => {
   try {
-    const origin = req.headers;
+    const origin =req.get('origin');
     const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
@@ -221,7 +252,7 @@ exports.updateUser = async (req, res, next) => {
       message: 'Objet modifié !'
     });
   } catch (error) {
-    next(error)
+    res.status(35).json({ error });
   }
 }
 
@@ -234,7 +265,7 @@ exports.deleteUser = async (req, res, next) => {
         message: 'User has been deleted'
       });
     } catch (error) {
-      next(error)
+      res.status(36).json({ error });
     }
   }
   async function sendVerificationEmail(newUser, origin) {
@@ -284,7 +315,7 @@ exports.deleteUser = async (req, res, next) => {
     }
 
     await sendEmail({
-        to: account.email,
+        to: user.email,
         subject: 'Sign-up Verification API - Reset Password',
         html: `<h4>Reset Password Email</h4>
                ${message}`
