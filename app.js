@@ -55,6 +55,6 @@ app.use((req, res, next) => {
 
 
  app.use('/api/users', userRoutes);
- app.use('/api', userRoutes);
+ 
 
 module.exports = app;
