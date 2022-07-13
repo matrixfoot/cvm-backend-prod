@@ -16,6 +16,6 @@ router.get('/', userController.allowIfLoggedin, userController.grantAccess('read
 
 router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.updateUser);
 
-router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.deleteUser);
+router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.deleteUser);
 
 module.exports = router;
