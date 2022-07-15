@@ -275,7 +275,7 @@ exports.deleteUser = async (req, res, next) => {
   async function sendVerificationEmail(newUser, origin) {
     let message;
     if (origin) {
-        const verifyUrl = `${origin}/newUser/verify-email?token=${newUser.accessToken}`;
+        const verifyUrl = `${origin}/verify-email/:${newUser.accessToken}`;
         message = `<p>Please click the below link to verify your email address:</p>
                    <p><a href="${verifyUrl}">${verifyUrl}</a></p>`;
     } else {
