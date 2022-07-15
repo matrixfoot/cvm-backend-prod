@@ -81,7 +81,7 @@ exports.signup = async (req, res, next) => {
 
 exports.verifyEmail= async (req, res, next) => {
   try {
-  const {token}= req.body
+  const token= req.params.accessToken
   const user = await User.findOne({ accessToken:token});
    
   
