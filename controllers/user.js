@@ -207,7 +207,20 @@ exports.getUsers = (req, res, next) => {
     }
   );
 };
-
+exports.filteruserrole = (req, res, next) => {
+  const {role} = req.body
+  User.find({role}).then(
+    (users) => {
+      res.status(200).json(users);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
 exports.getUser = (req, res, next) => {
   User.findOne({
     _id: req.params.id

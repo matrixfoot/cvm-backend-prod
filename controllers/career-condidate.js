@@ -50,9 +50,8 @@ exports.getCondidates = (req, res, next) => {
 };
 
 exports.getCondidate = (req, res, next) => {
-  Condidate.findOne({
-    _id: req.params.id
-  }).then(
+  const {email} = req.body
+  Condidate.find({ email}).then(
     (condidate) => {
       res.status(200).json(condidate);
     }
