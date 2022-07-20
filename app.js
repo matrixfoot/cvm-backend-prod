@@ -9,6 +9,7 @@ require ('dotenv').config();
 
 
 const userRoutes = require('./routes/user');
+const condidateRoutes = require('./routes/career-condidate');
 
 const app = express();
 
@@ -55,5 +56,6 @@ app.use((req, res, next) => {
 
 
  app.use('/api/users', userRoutes);
+ app.use('/api/condidates', condidateRoutes);
 
 module.exports = app;

@@ -91,7 +91,7 @@ exports.verifyEmail= async (req, res, next) => {
   
   await user.save();
   res.json({
-    message: 'Verification avec succès, vous pouvez maintenant vous connecter'
+    message: 'Verification passée avec succès, vous pouvez maintenant vous connecter'
   })
 }catch (error) {
   res.status(404).json({ error });
@@ -166,6 +166,7 @@ exports.login = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+    if (!user.verified) return res.status(401).json({ error: 'Compte pas encore vérifié, veuillez cliquer sur le mail de vérification envoyé à votre adresse: !' });
     const validPassword = await validatePassword(password, user.password);
     if (!validPassword) return res.status(401).json({ error: 'Mot de passe incorrect !' });
     const accessToken = jwt.sign({ userId: user._id }, 'RANDOM_TOKEN_SECRET', {
