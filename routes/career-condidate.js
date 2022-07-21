@@ -4,7 +4,7 @@ const condidateController = require('../controllers/career-condidate');
 const userController = require('../controllers/user');
 
 router.post('/createcondidate', condidateController.createcondidate);
-
+router.post('/filtercondidatechoice', userController.allowIfLoggedin, userController.grantAccess('readAny', 'condidate'),condidateController.filtercondidatechoice);
 router.post('/condidate', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'condidate'),condidateController.getCondidate);
 
 router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'condidate'), condidateController.getCondidates);

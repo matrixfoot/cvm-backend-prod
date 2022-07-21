@@ -63,6 +63,23 @@ exports.getCondidate = (req, res, next) => {
     }
   );
 };
+exports.filtercondidatechoice = async (req, res, next) => {
+  const {email,firstname,lastname,mobile,decision} = req.body;
+  
+  
+  await 
+  Condidate.find({$or:[{email},{firstname},{mobile},{lastname},{decision}]}).then(
+    (condidates) => {
+      res.status(200).json(condidates);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
 exports.updateCondidate = async (req, res, next) => {
   try {
     const origin =req.get('origin');

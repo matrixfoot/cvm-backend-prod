@@ -279,9 +279,10 @@ exports.filteruserlastname = (req, res, next) => {
 };
 exports.filteruserchoice = async (req, res, next) => {
   const {email,firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body;
-  if (req.body!==null)
-  return await 
-  User.find(req.body).then(
+  
+  
+  await 
+  User.find({$or:[{email},{firstname},{fonction},{lastname},{secteur},{civilite},{raisonsociale},{nomsociete},{role}]}).then(
     (users) => {
       res.status(200).json(users);
     }
