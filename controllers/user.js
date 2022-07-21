@@ -221,6 +221,78 @@ exports.filteruserrole = (req, res, next) => {
     }
   );
 };
+exports.filteruseremail = (req, res, next) => {
+  const {email} = req.body
+  User.find({email}).then(
+    (users) => {
+      res.status(200).json(users);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
+exports.filteruserfonction = (req, res, next) => {
+  const {fonction} = req.body
+  User.find({fonction}).then(
+    (users) => {
+      res.status(200).json(users);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
+exports.filteruserfirstname = (req, res, next) => {
+  const {firstname} = req.body
+  User.find({firstname}).then(
+    (users) => {
+      res.status(200).json(users);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
+exports.filteruserlastname = (req, res, next) => {
+  const {lastname} = req.body
+  User.find({lastname}).then(
+    (users) => {
+      res.status(200).json(users);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
+exports.filteruserchoice = async (req, res, next) => {
+  const {email,firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body;
+  if (req.body!==null)
+  return await 
+  User.find(req.body).then(
+    (users) => {
+      res.status(200).json(users);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
 exports.getUser = (req, res, next) => {
   User.findOne({
     _id: req.params.id
