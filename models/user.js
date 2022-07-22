@@ -8,11 +8,12 @@ const userSchema = mongoose.Schema({
   acceptTerms:{ type: Boolean},
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
-  fonction: { type: String, required: true },
-  secteur: { type: String, required: true },
+  fonction: { type: String,},
+  secteur: { type: String,},
   civilite: { type: String, required: true },
-  raisonsociale: { type: String, required: true },
-  nomsociete: { type: String, required: true },
+  usertype: { type: String, required: true },
+  raisonsociale: { type: String,},
+  nomsociete: { type: String,},
   clientcode:{ type: String, required: true },
   
   role: {

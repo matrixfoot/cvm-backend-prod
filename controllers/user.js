@@ -49,12 +49,12 @@ exports.allowIfLoggedin = async (req, res, next) => {
 exports.signup = async (req, res, next) => {
   try {
     const origin =req.get('origin');
-    const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body
+    const { email, password,confirmpassword, firstname,lastname,usertype,fonction,secteur,civilite,raisonsociale,mobile,nomsociete,clientcode,role} = req.body
     
     const hashedPassword = await hashPassword(password);
     const confirmedhashedPassword = await hashPassword(confirmpassword);
     
-    const newUser = new User({email, password:hashedPassword,confirmpassword:confirmedhashedPassword,firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role: role || "basic" });
+    const newUser = new User({email, password:hashedPassword,confirmpassword:confirmedhashedPassword,firstname,usertype,lastname,mobile,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role: role || "basic" });
     const accessToken = jwt.sign({ userId: newUser._id }, 'RANDOM_TOKEN_SECRET', {
       expiresIn: "1d"
     });
@@ -176,7 +176,7 @@ exports.login = async (req, res, next) => {
     res.status(200).json({
        userId: user._id, email: user.email,password: user.password,confirmpassword: user.confirmpassword, role: user.role,
        acceptterms: user.acceptTerms, Firstname: user.firstname, Lastname: user.lastname, 
-       fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,
+       fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,usertype:user.usertype,mobile:user.mobile,
        raisonsociale:user.raisonsociale, nomsociete: user.nomsociete, clientcode:user.clientcode,
        verified:user.verified,resettoken:user.resetToken,passwordreset:user.passwordReset,created:user.created,updated:user.updated,
       accessToken
@@ -278,11 +278,11 @@ exports.filteruserlastname = (req, res, next) => {
   );
 };
 exports.filteruserchoice = async (req, res, next) => {
-  const {email,firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body;
+  const {email,firstname,lastname,fonction,secteur,civilite,raisonsociale,mobile,usertype,nomsociete,clientcode,role} = req.body;
   
   
   await 
-  User.find({$or:[{email},{firstname},{fonction},{lastname},{secteur},{civilite},{raisonsociale},{nomsociete},{role}]}).then(
+  User.find({$or:[{email},{firstname},{fonction},{lastname},{secteur},{mobile},{civilite},{usertype},{raisonsociale},{nomsociete},{role}]}).then(
     (users) => {
       res.status(200).json(users);
     }
@@ -312,7 +312,7 @@ exports.getUser = (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   try {
     const origin =req.get('origin');
-    const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role} = req.body
+    const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
@@ -330,8 +330,8 @@ exports.updateUser = async (req, res, next) => {
 
 
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
-    await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role});}
-    else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role});}
+    await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role});}
+    else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,mobile,clientcode,role});}
     
     user.updated = Date.now();
     await user.save();
