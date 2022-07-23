@@ -57,5 +57,9 @@ app.use((req, res, next) => {
 
  app.use('/api/users', userRoutes);
  app.use('/api/condidates', condidateRoutes);
+ app.use(express.static(path.join(__dirname, 'images')));
+  app.get('*', (request, response) => {
+    response.sendFile(path.join(__dirname, 'cvcondidates'));
+  })
 
 module.exports = app;

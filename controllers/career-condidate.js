@@ -13,8 +13,9 @@ const fs = require('fs');
 exports.createcondidate = async (req, res, next) => {
     try {
       const origin =req.get('origin');
-      const {email,firstname,lastname,mobile,description} = req.body
-      const newCondidate = new Condidate({email,firstname,lastname,mobile,description});
+      const condidateObject= JSON.parse(req.body.condidate);
+      const newCondidate = new Condidate({...condidateObject,
+        ficheUrl: `${req.file.url}`});
       
       
       
@@ -81,15 +82,20 @@ exports.filtercondidatechoice = async (req, res, next) => {
   );
 };
 exports.updateCondidate = async (req, res, next) => {
+ 
   try {
     const origin =req.get('origin');
     
-    const {email,firstname,lastname,description,mobile,decision} = req.body
+    const condidateObject = req.file ?
+      {
+        ...JSON.parse(req.body.condidate),
+        ficheUrl: `${req.file.url}`
+      } : { ...req.body };
     const _id = req.params.id;
     const condidate = await Condidate.findById(_id);
-    if (req.body.decision) {
-        await Condidate.findByIdAndUpdate(_id, { email,firstname,lastname,description,mobile,decision});}
-        else {await User.findByIdAndUpdate(_id, { email,firstname,lastname,description,mobile});}
+    
+        await Condidate.findByIdAndUpdate(_id, { ...condidateObject});
+        
     condidate.updated = Date.now();
     await condidate.save();
     res.status(200).json({
