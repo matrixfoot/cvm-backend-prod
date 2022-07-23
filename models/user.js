@@ -12,6 +12,7 @@ const userSchema = mongoose.Schema({
   secteur: { type: String,},
   civilite: { type: String, required: true },
   usertype: { type: String, required: true },
+  mobile: { type: String, required: true },
   raisonsociale: { type: String,},
   nomsociete: { type: String,},
   clientcode:{ type: String, required: true },
