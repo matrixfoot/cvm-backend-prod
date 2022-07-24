@@ -13,13 +13,13 @@ const MIME_TYPES = {
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'xlsx'  
 };
 cloudinary.config({  //Your Cloudinary API Data
-  cloud_name: 'dukprdbod',
-  api_key: '262164836529172',
-  api_secret: '3Cqr73sOemYtlKN6-7IJEvEgN5E'
+  cloud_name: 'dfodbn7qv',
+  api_key: '388111355517854',
+  api_secret: 'xsnhok1yBMAlnET-HxwL4NlWSiM'
 });
 const storage = cloudinaryStorage({
   cloudinary: cloudinary,
-  folder: 'cvcandidats',
+  folder: 'uploadedfiche',
   
  allowedFormats: ['application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation','pdf','PPTX'],
  destination: function (req, file, callback) { callback(null, 'images');},
@@ -30,4 +30,4 @@ const storage = cloudinaryStorage({
   }
 });
 
-module.exports = multer({storage: storage}).single('file');
+module.exports = multer({storage: storage}).single('image');

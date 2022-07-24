@@ -10,23 +10,21 @@ const fs = require('fs');
 
 
 
-exports.createcondidate = async (req, res, next) => {
-    try {
+exports.createcondidate = (req, res, next) => {
+    
       const origin =req.get('origin');
       const condidateObject= JSON.parse(req.body.condidate);
       const newCondidate = new Condidate({...condidateObject,
-        ficheUrl: `${req.file.url}`});
+        ficheUrl:`${req.file.url}`});
       
       
       
-      await (newCondidate.save(),sendconfirmemail(newCondidate, origin));
-      res.json({
+      (newCondidate.save(),sendconfirmemail(newCondidate, origin)).
+      then (()=>res.status(201).json({
         data: newCondidate,
         message: "Votre demande a été crée avec succès"
-      })
-    } catch (error) {
-      res.status(31).json({ error });
-    }
+      }))
+      .catch(error => res.status(400).json({ error }));
    
     
   }

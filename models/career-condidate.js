@@ -7,7 +7,7 @@ const condidateSchema = mongoose.Schema({
   lastname: { type: String, required: true },
   adresse: { type: String, required: true },
   mobile: { type: String, required: true },
-  ficheUrl: { type: String, required: true },
+  ficheUrl: { type: String, required: false },
   description: { type: String, required: true },
   decision: { type: String},
   created: { type: Date, default: Date.now },
