@@ -62,6 +62,21 @@ exports.getCondidate = (req, res, next) => {
     }
   );
 };
+exports.getcondidatebyid = (req, res, next) => {
+  Condidate.findOne({
+    _id: req.params.id
+  }).then(
+    (condidate) => {
+      res.status(200).json(condidate);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
 exports.filtercondidatechoice = async (req, res, next) => {
   const {email,firstname,lastname,mobile,decision} = req.body;
   
