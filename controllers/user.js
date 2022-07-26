@@ -62,7 +62,14 @@ exports.signup = async (req, res, next) => {
       // send already registered error in email to prevent account enumeration
       return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
       
+      
   }
+  if (await User.findOne({ mobile: req.body.mobile })) {
+    
+    return await (res.status(300).json({ error: 'utilisateur avec ce Mobile existe déjà!' }))
+    
+    
+}
   if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
     newUser.accessToken = accessToken;
     
@@ -334,7 +341,7 @@ exports.updateUser = async (req, res, next) => {
     else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,mobile,clientcode,role});}
     
     user.updated = Date.now();
-    await user.save();
+    await (user.save(),sendupdateemail(user, origin));
     res.status(200).json({
       data: user,
       message: 'Objet modifié !'
@@ -358,6 +365,25 @@ exports.deleteUser = async (req, res, next) => {
     } catch (error) {
       res.status(36).json({ error });
     }
+  }
+  async function sendupdateemail(user, origin) {
+    let message;
+    if (origin) {
+        const updateuserUrl = `${origin}/login`;
+        message = `<p>votre profil a été modifiée, veuillez vous connecter pour découvrir les modifications apportées à votre profil</p>
+                   <p><a href="${updateuserUrl}">${updateuserUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact#contactid`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: user.email,
+        subject: 'Vérification des modifications  de votre profil',
+        html: `<h4>Suivi Profil</h4>
+               <p>Merci pour votre interaction!</p>
+               ${message}`
+    });
   }
   async function sendVerificationEmail(newUser, origin) {
     let message;

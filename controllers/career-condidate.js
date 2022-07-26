@@ -110,7 +110,7 @@ exports.updateCondidate = async (req, res, next) => {
         await Condidate.findByIdAndUpdate(_id, { ...condidateObject});
         
     condidate.updated = Date.now();
-    await condidate.save();
+    await (condidate.save(),sendupdateemail(condidate, origin));
     res.status(200).json({
       data: condidate,
       message: 'Candidature modifié !'
@@ -134,6 +134,25 @@ exports.deletecondidate = async (req, res, next) => {
     } catch (error) {
       res.status(36).json({ error });
     }
+  }
+  async function sendupdateemail(condidate, origin) {
+    let message;
+    if (origin) {
+        const updatecondidateUrl = `${origin}/login`;
+        message = `<p>votre demande a été modifiée, veuillez vous connecter pour découvrir le sort de  votre candidature</p>
+                   <p><a href="${updatecondidateUrl}">${updatecondidateUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact#contactid`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: condidate.email,
+        subject: 'Suivi du sort  de votre candidature',
+        html: `<h4>Suivi candidature</h4>
+               <p>Merci pour votre interaction!</p>
+               ${message}`
+    });
   }
   async function sendconfirmemail(newCondidate, origin) {
     let message;
