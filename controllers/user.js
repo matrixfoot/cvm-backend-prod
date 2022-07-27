@@ -184,7 +184,12 @@ exports.login = async (req, res, next) => {
        userId: user._id, email: user.email,password: user.password,confirmpassword: user.confirmpassword, role: user.role,
        acceptterms: user.acceptTerms, Firstname: user.firstname, Lastname: user.lastname, 
        fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,usertype:user.usertype,mobile:user.mobile,
-       raisonsociale:user.raisonsociale, nomsociete: user.nomsociete, clientcode:user.clientcode,
+       raisonsociale:user.raisonsociale, nomsociete: user.nomsociete,natureactivite:user.natureactivite,
+       activite:user.activite,
+       sousactivite:user.sousactivite,
+       regimefiscalimpot:user.regimefiscalimpot,
+       regimefiscaltva:user.regimefiscaltva,
+       matriculefiscale:user.matriculefiscale, clientcode:user.clientcode,
        verified:user.verified,resettoken:user.resetToken,passwordreset:user.passwordReset,created:user.created,updated:user.updated,
       accessToken
     })
