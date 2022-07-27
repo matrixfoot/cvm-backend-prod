@@ -362,7 +362,7 @@ exports.updateUser = async (req, res, next) => {
     
     user.updated = Date.now();
     await (user.save(),sendupdateemail(user, origin));
-    if (await req.body.natureactivite=='autre'||req.body.activite=='autre'||req.body.sousactivite=='autre') return await (sendupdatecompleteemail(user, origin));
+    if (await req.body.natureactivite=='Autre'||req.body.activite=='Autre'||req.body.sousactivite=='Autre'||req.body.regimefiscalimpot=='Autre') return await (sendupdatecompleteemail(user, origin));
     res.status(200).json({
       data: user,
       message: 'Objet modifié !'
