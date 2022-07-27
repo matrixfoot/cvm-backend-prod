@@ -342,11 +342,22 @@ exports.updateUser = async (req, res, next) => {
 
 
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
-    await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role});}
-    else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,secteur,civilite,raisonsociale,nomsociete,mobile,clientcode,role});}
+    await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
+      activite,
+      sousactivite,
+      regimefiscalimpot,
+      regimefiscaltva,
+      matriculefiscale,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role});}
+    else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
+      activite,
+      sousactivite,
+      regimefiscalimpot,
+      regimefiscaltva,
+      matriculefiscale,secteur,civilite,raisonsociale,nomsociete,mobile,clientcode,role});}
     
     user.updated = Date.now();
     await (user.save(),sendupdateemail(user, origin));
+    if (await req.body.natureactivite=='autre'||req.body.activite=='autre'||req.body.sousactivite=='autre') return await (sendupdatecompleteemail(user, origin));
     res.status(200).json({
       data: user,
       message: 'Objet modifié !'
@@ -370,6 +381,26 @@ exports.deleteUser = async (req, res, next) => {
     } catch (error) {
       res.status(36).json({ error });
     }
+  }
+  
+  async function sendupdatecompleteemail(user, origin) {
+    let message;
+    if (origin) {
+        const updatecompleteuserUrl = `${origin}/home`;
+        message = `<p>Merci pour votre interaction, vous serez informé dès que le service sera disponible</p>
+                   <p><a href="${updatecompleteuserUrl}">${updatecompleteuserUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact#contactid`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: user.email,
+        subject: 'Vérification des modifications  de votre profil',
+        html: `<h4>Suivi Profil</h4>
+               <p>Merci pour votre interaction!</p>
+               ${message}`
+    });
   }
   async function sendupdateemail(user, origin) {
     let message;
