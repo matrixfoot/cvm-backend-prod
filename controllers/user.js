@@ -404,7 +404,7 @@ exports.deleteUser = async (req, res, next) => {
   
     await sendEmail({
         to: user.email,
-        subject: 'Vérification des modifications  de votre profil',
+        subject: 'Vérification de complétude  de votre profil',
         html: `<h4>Suivi Profil</h4>
                <p>Merci pour votre interaction!</p>
                ${message}`
