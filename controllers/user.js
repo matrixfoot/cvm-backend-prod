@@ -319,7 +319,12 @@ exports.getUser = (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   try {
     const origin =req.get('origin');
-    const { email, password,confirmpassword, firstname,lastname,fonction,secteur,civilite,raisonsociale,mobile,nomsociete,clientcode,role} = req.body
+    const { email, password,confirmpassword, firstname,lastname, natureactivite,
+    activite,
+    sousactivite,
+    regimefiscalimpot,
+    regimefiscaltva,
+    matriculefiscale,fonction,secteur,civilite,raisonsociale,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
