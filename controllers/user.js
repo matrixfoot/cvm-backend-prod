@@ -361,11 +361,8 @@ exports.updateUser = async (req, res, next) => {
       matriculefiscale,secteur,civilite,raisonsociale,nomsociete,mobile,clientcode,role});}
     
     user.updated = Date.now();
-    await (user.save(),sendupdateemail(user, origin));
-    if (await req.body.natureactivite=='Autre'||req.body.activite=='Autre'||req.body.sousactivite=='Autre'||req.body.regimefiscalimpot=='Autre') return await (sendupdatecompleteemail(user, origin),res.status(200).json({
-      data: user,
-      message: 'Objet modifié !'
-    }));
+    await (user.save(),sendupdatecompleteemail(user, origin));
+    
     res.status(200).json({
       data: user,
       message: 'Objet modifié !'
@@ -395,7 +392,7 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const updatecompleteuserUrl = `${origin}/home`;
-        message = `<p>Merci pour votre interaction, vous serez informé dès que le service sera disponible</p>
+        message = `<p>Merci pour votre interaction, nous tenons à vous informer que vous êtes invité une seule fois pour completer votre profil. Toutefois, vous pouvez modifer vos informations personelles quand vous voulez</p>
                    <p><a href="${updatecompleteuserUrl}">${updatecompleteuserUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
