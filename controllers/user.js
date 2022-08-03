@@ -448,8 +448,10 @@ exports.deleteUser = async (req, res, next) => {
   async function sendAlreadyRegisteredEmail(email, origin) {
     let message;
     if (origin) {
-        message = `<p>If you don't know your password please visit the <a href="${origin}/login/forgot-password">forgot password</a> page.</p>`;
-    } else {
+      const alreadyexistUrl = `${origin}/login/forgot-password`;
+        message = `<p>If you don't know your password please visit the:</p> 
+        <p><a href="${alreadyexistUrl}">${alreadyexistUrl}</a></p>`
+      } else {
         message = `<p>If you don't know your password you can reset it via the <code>/account/forgot-password</code> api route.</p>`;
     }
   

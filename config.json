@@ -2,11 +2,11 @@
     
     "emailFrom": "kammounomarindus@gmail.com",
     "smtpOptions": {
-        "host": "smtp.ethereal.email",
-        "port": 587,
+        "service": "Gmail",
+       
         "auth": {
-            "user": "dorcas49@ethereal.email",
-            "pass": "eWUSZBhxTEYQhuraP3"
+            "user": "kammounomarindus@gmail.com",
+            "pass": "nloowsqfdqicyttp"
         }
     }
 }
