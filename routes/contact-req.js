@@ -8,7 +8,7 @@ router.post('/filtercontactreqsup', userController.allowIfLoggedin, userControll
 router.post('/filtercontactreqinf', userController.allowIfLoggedin, userController.grantAccess('readAny', 'contact'),contactController.getContactreqinf);
 
 router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'contact'), contactController.getContactreqs);
-
+router.get('/:id', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'contact'),contactController.getcontactbyid);
 router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'contact'),contactController.updateContact);
 
 
