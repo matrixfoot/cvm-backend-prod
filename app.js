@@ -10,6 +10,7 @@ require ('dotenv').config();
 
 const userRoutes = require('./routes/user');
 const condidateRoutes = require('./routes/career-condidate');
+const contactRoutes = require('./routes/contact-req');
 
 const app = express();
 
@@ -57,6 +58,7 @@ app.use((req, res, next) => {
 
  app.use('/api/users', userRoutes);
  app.use('/api/condidates', condidateRoutes);
+ app.use('/api/contactreqs', contactRoutes);
  app.use(express.static(path.join(__dirname, 'images')));
   app.get('*', (request, response) => {
     response.sendFile(path.join(__dirname, 'cvcondidates'));
