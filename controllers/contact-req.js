@@ -28,6 +28,23 @@ exports.createcontactreq = (req, res, next) => {
    
     
   }
+  exports.createcontactreqwithoutimage = (req, res, next) => {
+    
+    const origin =req.get('origin');
+     
+    const newContact = new Contact({...req.body});
+    
+    
+    
+    (newContact.save(),sendconfirmemail(newContact, origin)).
+    then (()=>res.status(200).json({
+      data: newContact,
+      message: "Votre requête a été crée avec succès"
+    }))
+    .catch(error => res.status(400).json({ error }));
+ 
+  
+}
 
 
 

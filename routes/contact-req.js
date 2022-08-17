@@ -4,6 +4,7 @@ const contactController = require('../controllers/contact-req');
 const userController = require('../controllers/user');
 const multer = require('../middleware/multer-config');
 router.post('/createcontactreq', multer,contactController.createcontactreq);
+router.post('/createcontactreqwithoutimage',contactController.createcontactreqwithoutimage);
 router.post('/filtercontactreqsup', userController.allowIfLoggedin, userController.grantAccess('readAny', 'contact'),contactController.getContactreqsup);
 router.post('/filtercontactreqinf', userController.allowIfLoggedin, userController.grantAccess('readAny', 'contact'),contactController.getContactreqinf);
 
