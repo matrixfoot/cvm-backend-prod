@@ -137,4 +137,23 @@ exports.updateContact = async (req, res, next) => {
                ${message}`
     });
   }
+  async function sendconfirmemail(newContact, origin) {
+    let message;
+    if (origin) {
+        const verifycontactUrl = `${origin}`;
+        message = `<p>votre requête a été envoyé avec succès, veuillez rester à l'écoute nous vous informons dès le traitement de votre requête</p>
+                   <p><a href="${verifycontactUrl}">${verifycontactUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: newContact.email,
+        subject: 'Verification de réception de réclamation',
+        html: `<h4>Vérification réclamation</h4>
+               <p>Merci pour votre interaction!</p>
+               ${message}`
+    });
+  }
  
