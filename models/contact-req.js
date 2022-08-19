@@ -9,7 +9,7 @@ const contactSchema = mongoose.Schema({
   mobile: { type: String, required: true },
   ficheUrl: { type: String, required: false },
   description: { type: String, required: true },
-  status: { type: String},
+  statut: { type: String},
   created: { type: Date, default: Date.now },
   updated: { type: Date}
 });
