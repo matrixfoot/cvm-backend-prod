@@ -110,11 +110,13 @@ exports.updateCondidate = async (req, res, next) => {
         await Condidate.findByIdAndUpdate(_id, { ...condidateObject});
         
     condidate.updated = Date.now();
-    await (condidate.save(),sendupdateemail(condidate, origin));
-    res.status(200).json({
+    await (condidate.save(),sendupdateemail(condidate, origin)).
+    then (()=> res.status(200).json({
       data: condidate,
       message: 'Candidature modifié !'
-    });
+    }))
+    .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+    
   } catch (error) {
     res.status(404).json({ error });
   }

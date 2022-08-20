@@ -60,7 +60,9 @@ exports.signup = async (req, res, next) => {
     });
     if (await User.findOne({ email: req.body.email })) {
       // send already registered error in email to prevent account enumeration
-      return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
+      return await (sendAlreadyRegisteredEmail(email, origin)).
+      then (()=> res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
+      .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
       
       
   }
@@ -73,11 +75,14 @@ exports.signup = async (req, res, next) => {
   if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
     newUser.accessToken = accessToken;
     
-    await (newUser.save(),sendVerificationEmail(newUser, origin));
-    res.json({
+    await (newUser.save(),sendVerificationEmail(newUser, origin)).
+    then (()=> res.json({
       data: newUser,
       message: "You have signed up successfully"
-    })
+    }))
+    .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+    
+   
   } catch (error) {
     res.status(31).json({ error });
   }
@@ -122,9 +127,13 @@ try{
   await user.save();
 
   // send email
-  await sendPasswordResetEmail(user, origin);
-res.json({ 
-  message: 'Prière de consulter votre email pour appliquer les instructions' })
+  
+  await sendPasswordResetEmail(user, origin).
+  then (()=>res.json({ 
+    message: 'Prière de consulter votre email pour appliquer les instructions' }))
+  .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+  
+
 }catch (error) {
   res.status(404).json({ error });
 }
@@ -361,12 +370,16 @@ exports.updateUser = async (req, res, next) => {
       matriculefiscale,secteur,civilite,raisonsociale,nomsociete,mobile,clientcode,role});}
     
     user.updated = Date.now();
-    await (user.save(),sendupdatecompleteemail(user, origin));
     
-    res.status(200).json({
+    await (user.save(),sendupdatecompleteemail(user, origin)).
+    then (()=>res.status(200).json({
       data: user,
       message: 'Objet modifié !'
-    });
+    }))
+    .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+    
+    
+    
   } catch (error) {
     res.status(35).json({ error });
   }

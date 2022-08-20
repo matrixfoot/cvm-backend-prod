@@ -124,11 +124,13 @@ exports.updateContact = async (req, res, next) => {
         await Contact.findByIdAndUpdate(_id, { ...contactObject});
         
     contact.updated = Date.now();
-    await (contact.save(),sendupdateemail(contact, origin));
-    res.status(200).json({
+    await (contact.save(),sendupdateemail(contact, origin)).
+    then (()=> res.status(200).json({
       data: contact,
       message: 'Requête traitée!'
-    });
+    }))
+    .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+    
   } catch (error) {
     res.status(404).json({ error });
   }
