@@ -72,6 +72,12 @@ exports.signup = async (req, res, next) => {
     
     
 }
+if (await User.findOne({ clientcode: req.body.cientcode })) {
+    
+    return await (res.status(300).json({ error: 'utilisateur avec ce code client existe déjà' }))
+    
+    
+}
   if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
     newUser.accessToken = accessToken;
     
