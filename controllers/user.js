@@ -72,7 +72,7 @@ exports.signup = async (req, res, next) => {
     
     
 }
-if (await User.findOne({ clientcode: req.body.cientcode })) {
+if (await User.findOne({ clientcode: req.body.clientcode })) {
     
     return await (res.status(300).json({ error: 'utilisateur avec ce code client existe déjà' }))
     
