@@ -49,12 +49,12 @@ exports.allowIfLoggedin = async (req, res, next) => {
 exports.signup = async (req, res, next) => {
   try {
     const origin =req.get('origin');
-    const { email, password,confirmpassword, firstname,lastname,usertype,fonction,secteur,civilite,raisonsociale,mobile,nomsociete,clientcode,role} = req.body
+    const { email, password,confirmpassword, firstname,lastname,usertype,fonction,secteur,civilite,raisonsociale,mobile,adresseactivite,codepostal,nomsociete,clientcode,role} = req.body
     
     const hashedPassword = await hashPassword(password);
     const confirmedhashedPassword = await hashPassword(confirmpassword);
     
-    const newUser = new User({email, password:hashedPassword,confirmpassword:confirmedhashedPassword,firstname,usertype,lastname,mobile,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role: role || "basic" });
+    const newUser = new User({email, password:hashedPassword,confirmpassword:confirmedhashedPassword,firstname,usertype,lastname,mobile,fonction,adresseactivite,codepostal,secteur,civilite,raisonsociale,nomsociete,clientcode,role: role || "basic" });
     const accessToken = jwt.sign({ userId: newUser._id }, 'RANDOM_TOKEN_SECRET', {
       expiresIn: "1d"
     });
@@ -197,7 +197,7 @@ exports.login = async (req, res, next) => {
     await User.findByIdAndUpdate(user._id, { accessToken })
     res.status(200).json({
        userId: user._id, email: user.email,password: user.password,confirmpassword: user.confirmpassword, role: user.role,
-       acceptterms: user.acceptTerms, Firstname: user.firstname, Lastname: user.lastname, 
+       acceptterms: user.acceptTerms, Firstname: user.firstname, Lastname: user.lastname,adresseactivite:user.adresseactivite,codepostal:user.codepostal, 
        fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,usertype:user.usertype,mobile:user.mobile,
        raisonsociale:user.raisonsociale, nomsociete: user.nomsociete,natureactivite:user.natureactivite,
        activite:user.activite,
@@ -344,7 +344,7 @@ exports.updateUser = async (req, res, next) => {
     sousactivite,
     regimefiscalimpot,
     regimefiscaltva,
-    matriculefiscale,fonction,secteur,civilite,raisonsociale,mobile,nomsociete,clientcode,role} = req.body
+    matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
@@ -367,13 +367,13 @@ exports.updateUser = async (req, res, next) => {
       sousactivite,
       regimefiscalimpot,
       regimefiscaltva,
-      matriculefiscale,fonction,secteur,civilite,raisonsociale,nomsociete,clientcode,role});}
+      matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
     else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
       activite,
       sousactivite,
       regimefiscalimpot,
       regimefiscaltva,
-      matriculefiscale,secteur,civilite,raisonsociale,nomsociete,mobile,clientcode,role});}
+      matriculefiscale,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
     
     user.updated = Date.now();
     
@@ -449,7 +449,7 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const verifyUrl = `${origin}/verify-email/${newUser.accessToken}`;
-        message = `<p>Please click the below link to verify your email address:</p>
+        message = `<p>Prière de cliquer sur le lien ci-dessous pour vérifier votre compte</p>
                    <p><a href="${verifyUrl}">${verifyUrl}</a></p>`;
     } else {
         message = `<p>Please use the below token to verify your email address with the <code>/newUser/verify-email</code> api route:</p>
@@ -458,9 +458,9 @@ exports.deleteUser = async (req, res, next) => {
   
     await sendEmail({
         to: newUser.email,
-        subject: 'Sign-up Verification API - Verify Email',
-        html: `<h4>Verify Email</h4>
-               <p>Thanks for registering!</p>
+        subject: 'Vérification inscription - Email de vérification',
+        html: `<h4>Email de vérification</h4>
+               <p>Merci pour votre inscription!</p>
                ${message}`
     });
   }
@@ -468,7 +468,7 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
       const alreadyexistUrl = `${origin}/login/forgot-password`;
-        message = `<p>If you don't know your password please visit the:</p> 
+        message = `<p>Si vous avez oublié votre mot de passe, veuillez cliquez sur le lien:</p> 
         <p><a href="${alreadyexistUrl}">${alreadyexistUrl}</a></p>`
       } else {
         message = `<p>If you don't know your password you can reset it via the <code>/account/forgot-password</code> api route.</p>`;
@@ -476,9 +476,9 @@ exports.deleteUser = async (req, res, next) => {
   
     await sendEmail({
         to: email,
-        subject: 'Sign-up Verification API - Email Already Registered',
-        html: `<h4>Email Already Registered</h4>
-               <p>Your email <strong>${email}</strong> is already registered.</p>
+        subject: 'Compte déjà existant',
+        html: `<h4>Compte existant</h4>
+               <p>votre email <strong>${email}</strong> existe déjà</p>
                ${message}`
     });
   }
@@ -486,7 +486,8 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const resetUrl = `${origin}/reset-password/${user.resetToken.token}`;
-        message = `<p>Please click the below link to reset your password, the link will be valid for 1 day:</p>
+        message = `<p>Merci de cliquer sur le lien ci-dessous pour regénérer votre mot de passe, le lien restera valide durant 24h:</p>
+        
                    <p><a href="${resetUrl}">${resetUrl}</a></p>`;
     } else {
         message = `<p>Please use the below token to reset your password with the <code>/user/reset-password</code> api route:</p>
@@ -495,8 +496,8 @@ exports.deleteUser = async (req, res, next) => {
 
     await sendEmail({
         to: user.email,
-        subject: 'Sign-up Verification API - Reset Password',
-        html: `<h4>Reset Password Email</h4>
+        subject: 'Regénération mot de passe',
+        html: `<h4>email de regénération de mot de passe</h4>
                ${message}`
     });
 }
