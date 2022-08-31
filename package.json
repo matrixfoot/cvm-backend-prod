@@ -4,9 +4,8 @@
   "description": "backend de l'application CVM",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "ng": "ng",
-    "build": "ng build"
+    "test": "echo \"Error: no test specified\" && exit 1"
+    
   },
   "author": "",
   "license": "ISC",
