@@ -410,9 +410,9 @@ exports.deleteUser = async (req, res, next) => {
   async function sendupdatecompleteemail(user, origin) {
     let message;
     if (origin) {
-        const updatecompleteuserUrl = `${origin}/home`;
-        message = `<p>Merci pour votre interaction, nous tenons à vous informer que vous êtes invité une seule fois pour completer votre profil. Toutefois, vous pouvez modifer vos informations personelles quand vous voulez</p>
-                   <p><a href="${updatecompleteuserUrl}">${updatecompleteuserUrl}</a></p>`;
+        const completer = `${origin}/home`;
+        message = `<p>Merci pour votre interaction, nous tenons à vous informer que vous êtes invité une seule fois pour <a href="${completer}"> completer </a> votre profil.
+         Toutefois, vous pouvez modifer vos informations personelles quand vous voulez</p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact#contactid`}</code></p>`;
@@ -430,7 +430,7 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const updateuserUrl = `${origin}/login`;
-        message = `<p>votre profil a été modifiée, veuillez vous connecter pour découvrir les modifications apportées à votre profil<a href="${updateuserUrl}">Se connecter</a></p>`;
+        message = `<p>votre profil a été modifiée, veuillez vous <a href="${updateuserUrl}"> Se connecter </a> pour découvrir les modifications apportées à votre profil</p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact#contactid`}</code></p>`;
@@ -448,7 +448,7 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const verifyUrl = `${origin}/verify-email/${newUser.accessToken}`;
-        message = `<p>Prière de cliquer<a href="${verifyUrl}">ici</a>pour vérifier votre compte</p>`;
+        message = `<p>Prière de cliquer <a href="${verifyUrl}"> ici </a> pour activer votre compte</p>`;
     } else {
         message = `<p>Please use the below token to verify your email address with the <code>/newUser/verify-email</code> api route:</p>
                    <p><code>${newUser.accessToken}</code></p>`;
@@ -483,9 +483,9 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const resetUrl = `${origin}/reset-password/${user.resetToken.token}`;
-        message = `<p>Merci de cliquer sur le lien ci-dessous pour regénérer votre mot de passe, le lien restera valide durant 24h:</p>
+        message = `<p>Merci de cliquer <a href="${resetUrl}"> ici </a> pour regénérer votre mot de passe, le lien restera valide durant 24h!</p>
         
-                   <p><a href="${resetUrl}">${resetUrl}</a></p>`;
+                   <p></p>`;
     } else {
         message = `<p>Please use the below token to reset your password with the <code>/user/reset-password</code> api route:</p>
                    <p><code>${user.resetToken.token}</code></p>`;
