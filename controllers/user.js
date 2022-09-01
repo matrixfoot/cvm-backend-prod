@@ -430,8 +430,7 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const updateuserUrl = `${origin}/login`;
-        message = `<p>votre profil a été modifiée, veuillez vous connecter pour découvrir les modifications apportées à votre profil</p>
-                   <p><a href="${updateuserUrl}">${updateuserUrl}</a></p>`;
+        message = `<p>votre profil a été modifiée, veuillez vous connecter pour découvrir les modifications apportées à votre profil<a href="${updateuserUrl}">Se connecter</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact#contactid`}</code></p>`;
@@ -449,8 +448,7 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const verifyUrl = `${origin}/verify-email/${newUser.accessToken}`;
-        message = `<p>Prière de cliquer sur le lien ci-dessous pour vérifier votre compte</p>
-                   <p><a href="${verifyUrl}">${verifyUrl}</a></p>`;
+        message = `<p>Prière de cliquer<a href="${verifyUrl}">ici</a>pour vérifier votre compte</p>`;
     } else {
         message = `<p>Please use the below token to verify your email address with the <code>/newUser/verify-email</code> api route:</p>
                    <p><code>${newUser.accessToken}</code></p>`;
@@ -467,9 +465,8 @@ exports.deleteUser = async (req, res, next) => {
   async function sendAlreadyRegisteredEmail(email, origin) {
     let message;
     if (origin) {
-      const alreadyexistUrl = `${origin}/login/forgot-password`;
-        message = `<p>Si vous avez oublié votre mot de passe, veuillez cliquez sur le lien:</p> 
-        <p><a href="${alreadyexistUrl}">${alreadyexistUrl}</a></p>`
+      const ici = `${origin}/login/forgot-password`;
+        message = `<p>Si vous avez oublié votre mot de passe, veuillez cliquez <a href="${ici}"> ici </a> </p>`
       } else {
         message = `<p>If you don't know your password you can reset it via the <code>/account/forgot-password</code> api route.</p>`;
     }
