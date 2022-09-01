@@ -20,7 +20,7 @@ router.post('/filteruserchoice', userController.allowIfLoggedin, userController.
 router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'), userController.getUsers);
 
 router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.updateUser);
-router.put('complete/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.completeUser);
+router.put('/complete/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.completeUser);
 router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.deleteUser);
 
 module.exports = router;

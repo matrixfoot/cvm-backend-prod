@@ -387,7 +387,7 @@ exports.completeUser = async (req, res, next) => {
     
     
   } catch (error) {
-    res.status(35).json({ error });
+    res.status(400).json({ error });
   }
 }
 
@@ -448,7 +448,7 @@ exports.updateUser = async (req, res, next) => {
     
     
   } catch (error) {
-    res.status(35).json({ error });
+    res.status(400).json({ error });
   }
 }
 exports.deleteUser = async (req, res, next) => {
@@ -463,7 +463,7 @@ exports.deleteUser = async (req, res, next) => {
         message: 'utilisateur supprimé avec succès'
       });
     } catch (error) {
-      res.status(36).json({ error });
+      res.status(400).json({ error });
     }
   }
   
@@ -471,8 +471,8 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const completer = `${origin}/home`;
-        message = `<p>Merci pour votre interaction, nous tenons à vous informer que vous êtes invité une seule fois pour <a href="${completer}"> completer </a> votre profil.
-         Toutefois, vous pouvez modifer vos informations personelles quand vous voulez</p>`;
+        message = `<p>Merci pour votre interaction, nous tenons à vous informer que vous êtes invité une seule fois pour votre profil.
+         Toutefois, vous pouvez modifer vos informations personelles quand vous voulez <a href="${completer}"> Retour à MaCompta </a> </p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact#contactid`}</code></p>`;
