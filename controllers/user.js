@@ -471,7 +471,7 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const completer = `${origin}/home`;
-        message = `<p>Merci pour votre interaction, nous tenons à vous informer que vous êtes invité une seule fois pour votre profil.
+        message = `<p>Merci pour votre interaction, nous tenons à vous informer que vous êtes invité une seule fois pour compléter votre profil.
          Toutefois, vous pouvez modifer vos informations personelles quand vous voulez <a href="${completer}"> Retour à MaCompta </a> </p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -490,7 +490,7 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const updateuserUrl = `${origin}/login`;
-        message = `<p>votre profil a été modifiée, veuillez vous <a href="${updateuserUrl}"> Se connecter </a> pour découvrir les modifications apportées à votre profil</p>`;
+        message = `<p>votre profil a été modifiée, veuillez vous <a href="${updateuserUrl}"> connecter </a> pour découvrir les modifications apportées à votre profil</p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact#contactid`}</code></p>`;

@@ -9,6 +9,8 @@ ac.grant("basic")
  .updateOwn("condidate")
  .readOwn("contact")
  .updateOwn("contact")
+ .readOwn("event")
+ .updateOwn("event")
  
 
 ac.grant("supervisor")
@@ -16,6 +18,7 @@ ac.grant("supervisor")
  .readAny("profile")
  .readAny("condidate")
  .readAny("contact")
+ .readAny("event")
  
 ac.grant("admin")
  .extend("basic")
@@ -26,6 +29,8 @@ ac.grant("admin")
  .deleteAny("condidate")
  .updateAny("contact")
  .deleteAny("contact")
+ .updateAny("event")
+ .deleteAny("event")
  
 return ac;
 })();
