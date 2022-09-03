@@ -1,17 +1,34 @@
 const Event = require('../models/fiscal-events');
-
+const mongoose = require('mongoose');
 
 /* Fetch all events */
-exports.getEvents = (req, res, next) => {
-    try {
-        const events =  Event.find();
-
-        res.status(200).json(events);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
+exports.getEvents = async (req, res, next) => {
+  await Event.find().then(
+    (events) => {
+      res.status(200).json(events);
     }
-}
-
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+    }
+  );
+};
+exports.getcomingEvents =  (req, res, next) => {
+  
+   Event.find({'date':{ $gte:Date.now()}}).sort({ 'date': 1 }).limit(6).then(
+    (events) => {
+      res.status(200).json(events);
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+    }
+  );
+};
 /* Create new event */
 exports.createEvent = (req, res, next) => {
     const { title, date } = req.body;
@@ -22,8 +39,9 @@ exports.createEvent = (req, res, next) => {
          newEvent.save();
         res.status(201).json(
             {
-                type: "success",
-                message: "Event has been added successfully"
+              data: newEvent,
+                type: "succès",
+                message: "Evenement créé"
             }
         );
     } catch (error) {
@@ -35,11 +53,11 @@ exports.createEvent = (req, res, next) => {
 exports.deleteEvent = (req, res, next) => {
     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No event with id: ${id}`);
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`Evènement introuvable avec cet identifiant: ${id}`);
 
      Event.findByIdAndRemove(id);
 
-    res.json({ message: "Event deleted successfully." });
+    res.json({ message: "Evènement supprimé avec succès" });
 }
 
 exports.geteventbyid = (req, res, next) => {
@@ -58,7 +76,7 @@ exports.geteventbyid = (req, res, next) => {
     );
   }
   
-exports.updateEvent =  (req, res, next) => {
+exports.updateEvent =async  (req, res, next) => {
  
     try {
         
@@ -69,12 +87,12 @@ exports.updateEvent =  (req, res, next) => {
             ficheUrl: `${req.file.url}`
           } : { ...req.body };
         const _id = req.params.id;
-        const event =  Event.findById(_id);
+        const event =  await Event.findById(_id);
         
-             Event.findByIdAndUpdate(_id, { ...eventObject});
+        await Event.findByIdAndUpdate(_id, { ...eventObject});
             
         event.updated = Date.now();
-         (event.save()).
+         await event.save().
         then (()=> res.status(200).json({
           data: event,
           message: 'Evénement modifié !'

@@ -6,12 +6,10 @@ const eventSchema = mongoose.Schema({
         required: true,
     },
     date: {
-        type: String,
+        type: Date,
         required: true,
     },
-    ficheUrl: {
-        type: String
-    },
+    ficheUrl: { type: String, required: false },
     created: { type: Date, default: Date.now },
   updated: { type: Date}
 });
