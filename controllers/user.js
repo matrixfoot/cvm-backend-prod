@@ -407,12 +407,7 @@ exports.updateUser = async (req, res, next) => {
       return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
       
   }
-  if (await User.findOne({ mobile: req.body.mobile })) {
-    
-    return await (res.status(300).json({ error: 'utilisateur avec ce Mobile existe déjà!' }))
-    
-    
-}
+  
     if (req.body.password&&req.body.confirmpassword) {
       
   
