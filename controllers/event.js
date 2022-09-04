@@ -50,14 +50,20 @@ exports.createEvent = (req, res, next) => {
 }
 
 /* Delete singile event */
-exports.deleteEvent = (req, res, next) => {
-    const { id } = req.params;
+exports.deleteEvent = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const event = await Event.findById(id);
+    if (!event) return res.status(401).json({ error: 'Demande non trouvé !' });
+    await Event.findByIdAndDelete(id);
 
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`Evènement introuvable avec cet identifiant: ${id}`);
-
-     Event.findByIdAndRemove(id);
-
-    res.json({ message: "Evènement supprimé avec succès" });
+    res.status(200).json({
+      data: null,
+      message: 'évènement supprimée avec succès'
+    });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 }
 
 exports.geteventbyid = (req, res, next) => {

@@ -134,7 +134,7 @@ exports.deletecondidate = async (req, res, next) => {
         message: 'demande supprimée avec succès'
       });
     } catch (error) {
-      res.status(36).json({ error });
+      res.status(400).json({ error });
     }
   }
   async function sendupdateemail(condidate, origin) {
