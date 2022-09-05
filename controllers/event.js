@@ -1,5 +1,5 @@
 const Event = require('../models/fiscal-events');
-const mongoose = require('mongoose');
+
 
 /* Fetch all events */
 exports.getEvents = async (req, res, next) => {
@@ -17,7 +17,7 @@ exports.getEvents = async (req, res, next) => {
 };
 exports.getcomingEvents =  (req, res, next) => {
   
-   Event.find({'date':{ $gte:Date.now()}}).sort({ 'date': 1 }).limit(6).then(
+   Event.find({'date':{ $gte:Date.now() - 24*60*60*1000}}).sort({ 'date': 1 }).limit(6).then(
     (events) => {
       res.status(200).json(events);
     }
@@ -30,12 +30,18 @@ exports.getcomingEvents =  (req, res, next) => {
   );
 };
 /* Create new event */
-exports.createEvent = (req, res, next) => {
+exports.createEvent = async (req, res, next) => {
     const { title, date } = req.body;
 
     const newEvent = new Event({ title, date })
 
     try {
+      if (await Event.findOne({ title: req.body.title }) &&await Event.findOne({ date: req.body.date })) {
+    
+    return await (res.status(300).json({ error: 'évènement avec ce nom et prévu pour cette date existe déjà!' }))
+    
+    
+}
          newEvent.save();
         res.status(201).json(
             {
