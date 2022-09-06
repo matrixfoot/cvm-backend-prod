@@ -31,9 +31,9 @@ exports.getcomingEvents =  (req, res, next) => {
 };
 /* Create new event */
 exports.createEvent = async (req, res, next) => {
-    const { title, date } = req.body;
+    const { title, date,description } = req.body;
 
-    const newEvent = new Event({ title, date })
+    const newEvent = new Event({ title, date,description })
 
     try {
       if (await Event.findOne({ title: req.body.title }) &&await Event.findOne({ date: req.body.date })) {
