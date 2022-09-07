@@ -192,9 +192,10 @@ exports.login = async (req, res, next) => {
     const validPassword = await validatePassword(password, user.password);
     if (!validPassword) return res.status(401).json({ error: 'Mot de passe incorrect !' });
     const accessToken = jwt.sign({ userId: user._id }, 'RANDOM_TOKEN_SECRET', {
-      expiresIn: "1d"
+      expiresIn: "10000"
     });
     await User.findByIdAndUpdate(user._id, { accessToken })
+    
     res.status(200).json({
        userId: user._id, email: user.email,password: user.password,confirmpassword: user.confirmpassword, role: user.role,
        acceptterms: user.acceptTerms, Firstname: user.firstname, Lastname: user.lastname,adresseactivite:user.adresseactivite,codepostal:user.codepostal, 
@@ -208,6 +209,7 @@ exports.login = async (req, res, next) => {
        verified:user.verified,resettoken:user.resetToken,passwordreset:user.passwordReset,created:user.created,updated:user.updated,
       accessToken
     })
+    
   } catch (error) {
     res.status(500).json({ error });
   }
