@@ -54,7 +54,7 @@ app.use((req, res, next) => {
       
      }}
      catch (error) {
-      res.status(400).json({ error });
+      res.status(415).json({ error });
     }
   });
 
