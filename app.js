@@ -41,14 +41,10 @@ app.use((req, res, next) => {
     try{
     if (req.headers["x-access-token"]) {
       const accessToken = req.headers["x-access-token"];
-      const { userId, exp } = await jwt.verify(accessToken, 'RANDOM_TOKEN_SECRET');
+      const { userId} = await jwt.verify(accessToken, 'RANDOM_TOKEN_SECRET');
       // Check if token has expired
       
-      if (exp < Date.now().valueOf() / 1000) {
-       return res.status(401).json({
-        error: "JWT token has expired, please login to obtain a new one"
-       });
-      }
+      
       res.locals.loggedInUser = await User.findById(userId);
       
       next();
