@@ -21,6 +21,8 @@ router.get('/', userController.allowIfLoggedin, userController.grantAccess('read
 
 router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.updateUser);
 router.put('/complete/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.completeUser);
+router.put('/desactivate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.desactivateUser);
+router.put('/activate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.activateUser);
 router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.deleteUser);
 
 module.exports = router;

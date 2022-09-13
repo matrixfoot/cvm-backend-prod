@@ -189,6 +189,7 @@ exports.login = async (req, res, next) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ error: 'Utilisateur non trouvé !' });
     if (!user.verified) return res.status(401).json({ error: 'Compte pas encore vérifié, veuillez cliquer sur le mail de vérification envoyé à votre adresse: !' });
+    if (user.desactive.statut===true) return res.status(401).json({ error: 'Compte désactivé, veuillez contacter votre cabinet MaCompta pour débloquer la situation!' });
     const validPassword = await validatePassword(password, user.password);
     if (!validPassword) return res.status(401).json({ error: 'Mot de passe incorrect !' });
     const accessToken = jwt.sign({ userId: user._id }, 'RANDOM_TOKEN_SECRET', {
@@ -466,6 +467,58 @@ exports.deleteUser = async (req, res, next) => {
       });
     } catch (error) {
       res.status(400).json({ error });
+    }
+  }
+  exports.desactivateUser = async (req, res, next) => {
+    try {
+        
+        
+      const userObject = req.file ?
+        {
+          ...JSON.parse(req.body.user),
+          ficheUrl: `${req.file.url}`
+        } : { ...req.body };
+      const _id = req.params.id;
+      const user =  await User.findById(_id);
+      
+      await User.findByIdAndUpdate(_id, { ...userObject});
+      user.desactive.statut=true;    
+      user.desactive.date = Date.now();
+       await user.save().
+      then (()=> res.status(200).json({
+        data: user,
+        message: 'Utilisateur désactivé avec succès!'
+      }))
+      .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      
+    } catch (error) {
+      res.status(404).json({ error });
+    }
+  }
+  exports.activateUser = async (req, res, next) => {
+    try {
+        
+        
+      const userObject = req.file ?
+        {
+          ...JSON.parse(req.body.user),
+          ficheUrl: `${req.file.url}`
+        } : { ...req.body };
+      const _id = req.params.id;
+      const user =  await User.findById(_id);
+      
+      await User.findByIdAndUpdate(_id, { ...userObject});
+      user.desactive.statut=false;    
+      user.desactive.date = Date.now();
+       await user.save().
+      then (()=> res.status(200).json({
+        data: user,
+        message: 'Utilisateur restauré avec succès!'
+      }))
+      .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      
+    } catch (error) {
+      res.status(404).json({ error });
     }
   }
   

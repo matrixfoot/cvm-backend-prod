@@ -40,7 +40,11 @@ const userSchema = mongoose.Schema({
     },
     passwordReset: { type: Date},
     created: { type: Date, default: Date.now },
-    updated: { type: Date}
+    updated: { type: Date},
+    desactive: { 
+      statut: Boolean, default: false,
+      date: Date
+  },
 });
 
 userSchema.plugin(uniqueValidator);
