@@ -11,18 +11,20 @@ router.post('/forgot-password', userController.forgotPassword);
 router.post('/validate-reset-token', userController.validateResetToken);
 router.post('/reset-password', userController.resetPassword);
 router.get('/:id', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'profile'),userController.getUser);
+router.get('/deleteduser/:id', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.getUserdeleted);
 router.post('/filteruserrole', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.filteruserrole);
 router.post('/filteruseremail', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.filteruseremail);
 router.post('/filteruserfonction', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.filteruserfonction);
 router.post('/filteruserfirstname', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.filteruserfirstname);
 router.post('/filteruserlastname', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.filteruserlastname);
 router.post('/filteruserchoice', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.filteruserchoice);
+router.get('/deletedusers/all', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'), userController.getUsersdeleted);
 router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'), userController.getUsers);
-
 router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.updateUser);
 router.put('/complete/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.completeUser);
 router.put('/desactivate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.desactivateUser);
 router.put('/activate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.activateUser);
-router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.deleteUser);
-
+router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.deleteUser);
+router.delete('/temporardelete/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.deleteUsertemporare);
+router.delete('/restaure/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.restaureuser);
 module.exports = router;

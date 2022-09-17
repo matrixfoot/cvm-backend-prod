@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Userdeleted = require('../models/user-deleted');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('../config.json');
@@ -187,6 +188,8 @@ exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+    const userdeleted = await Userdeleted.findOne({ email });
+    if (userdeleted) return res.status(401).json({ error: 'Utilisateur supprimé temporairement! veuillez contactez votre cabinet pour débloquer la situation' });
     if (!user) return res.status(401).json({ error: 'Utilisateur non trouvé !' });
     if (!user.verified) return res.status(401).json({ error: 'Compte pas encore vérifié, veuillez cliquer sur le mail de vérification envoyé à votre adresse: !' });
     if (user.desactive.statut===true) return res.status(401).json({ error: 'Compte désactivé, veuillez contacter votre cabinet MaCompta pour débloquer la situation!' });
@@ -228,6 +231,19 @@ exports.getUsers = (req, res, next) => {
   User.find().then(
     (users) => {
       res.status(200).json(users);
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+    }
+  );
+};
+exports.getUsersdeleted = (req, res, next) => {
+  Userdeleted.find().then(
+    (usersdeleted) => {
+      res.status(200).json(usersdeleted);
     }
   ).catch(
     (error) => {
@@ -330,6 +346,21 @@ exports.getUser = (req, res, next) => {
   }).then(
     (user) => {
       res.status(200).json(user);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
+exports.getUserdeleted = (req, res, next) => {
+  Userdeleted.findOne({
+    _id: req.params.id
+  }).then(
+    (userdelted) => {
+      res.status(200).json(userdelted);
     }
   ).catch(
     (error) => {
@@ -464,6 +495,104 @@ exports.deleteUser = async (req, res, next) => {
       res.status(200).json({
         data: null,
         message: 'utilisateur supprimé avec succès'
+      });
+    } catch (error) {
+      res.status(400).json({ error });
+    }
+  }
+  exports.deleteUsertemporare = async (req, res, next) => {
+    
+      const id = req.params.id;
+      const userdeleted=new Userdeleted;
+      const user = await User.findById(id);
+      userdeleted.email = user.email;
+      userdeleted.firstname = user.firstname;
+      userdeleted.lastname = user.lastname;
+      userdeleted._id = user._id;
+      userdeleted.adresseactivite=user.adresseactivite;
+      userdeleted.codepostal=user.codepostal;
+      userdeleted.natureactivite=user.natureactivite;
+      userdeleted.activite=user.activite;
+      userdeleted.sousactivite=user.sousactivite;
+      userdeleted.regimefiscalimpot=user.regimefiscalimpot;
+      userdeleted.regimefiscaltva=user.regimefiscaltva;
+      userdeleted.matriculefiscale=user.matriculefiscale;
+      userdeleted.desactive = user.desactive;
+      userdeleted.password = user.password;
+      userdeleted.confirmpassword = user.confirmpassword;
+      userdeleted.fonction = user.fonction;
+      userdeleted.secteur = user.secteur;
+      userdeleted.civilite = user.civilite;
+      userdeleted.usertype = user.usertype;
+      userdeleted.mobile = user.mobile;
+      userdeleted.raisonsociale = user.raisonsociale;
+      userdeleted.nomsociete = user.nomsociete;
+      userdeleted.clientcode = user.clientcode;
+      userdeleted.role = user.role;
+      userdeleted.created = user.created;
+      userdeleted.accessToken = user.accessToken;
+      userdeleted.resetToken = user.resetToken;
+      userdeleted.verified=user.verified;
+      userdeleted.passwordReset=user.passwordReset;
+      userdeleted.updated=user.updated
+      
+      if (!user) return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+      
+      userdeleted.deleted=Date.now();
+      userdeleted.save();
+      await User.findByIdAndDelete(id);
+
+      res.status(200).json({
+        data: userdeleted,
+        message: 'utilisateur supprimé temporairement avec succès'
+      });
+    
+  }
+  
+  exports.restaureuser = async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const userdeleted = await Userdeleted.findById(id);
+      user =new User;
+      user.email=userdeleted.email;
+      user.firstname=userdeleted.firstname;
+      user.lastname=userdeleted.lastname;
+      user._id=userdeleted._id;
+      user.adresseactivite=userdeleted.adresseactivite;
+      user.codepostal=userdeleted.codepostal;
+      user.natureactivite=userdeleted.natureactivite;
+      user.activite=userdeleted.activite;
+      user.sousactivite=userdeleted.sousactivite;
+      user.regimefiscalimpot=userdeleted.regimefiscalimpot;
+      user.regimefiscaltva=userdeleted.regimefiscaltva;
+      user.matriculefiscale=userdeleted.matriculefiscale;
+      user.desactive = userdeleted.desactive;
+      user.password = userdeleted.password;
+      user.confirmpassword = userdeleted.confirmpassword;
+      user.fonction = userdeleted.fonction;
+      user.secteur = userdeleted.secteur;
+      user.civilite = userdeleted.civilite;
+      user.usertype = userdeleted.usertype;
+      user.mobile = userdeleted.mobile;
+      user.raisonsociale = userdeleted.raisonsociale;
+      user.nomsociete = userdeleted.nomsociete;
+      user.clientcode = userdeleted.clientcode;
+      user.role = userdeleted.role;
+      user.created = userdeleted.created;
+      user.accessToken = userdeleted.accessToken;
+      user.resetToken = userdeleted.resetToken;
+      user.verified=userdeleted.verified;
+      user.passwordReset=userdeleted.passwordReset;
+      user.updated=userdeleted.updated
+      if (!user) return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+      
+      user.restaured=Date.now();
+      user.save();
+      await Userdeleted.findByIdAndDelete(id);
+
+      res.status(200).json({
+        data: user,
+        message: 'utilisateur restauré avec succès'
       });
     } catch (error) {
       res.status(400).json({ error });

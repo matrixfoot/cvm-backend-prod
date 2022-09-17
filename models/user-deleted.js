@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const userSchema = mongoose.Schema({
+const userdeletedSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   confirmpassword: { type: String, required: true },
@@ -27,8 +27,7 @@ const userSchema = mongoose.Schema({
   
   role: {
     type: String,
-    default: 'basic',
-    enum: ["basic", "supervisor", "admin"]
+   
    },
    accessToken: {
     type: String
@@ -39,15 +38,18 @@ const userSchema = mongoose.Schema({
         expires: Date
     },
     passwordReset: { type: Date},
-    created: { type: Date, default: Date.now },
+    created: { type: Date},
     updated: { type: Date},
     desactive: { 
-      statut: Boolean, default: false,
+      statut: Boolean,
       date: Date
   },
-  restaured: { type: Date},
+  deleted: { 
+    
+    type: Date
+}
 });
 
-userSchema.plugin(uniqueValidator);
+userdeletedSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Userdeleted', userdeletedSchema);
