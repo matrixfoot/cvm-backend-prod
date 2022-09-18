@@ -82,7 +82,7 @@ if (await User.findOne({ clientcode: req.body.clientcode })) {
   if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
     newUser.accessToken = accessToken;
     
-    await (newUser.save(),sendVerificationEmail(newUser, origin)).
+    await (user.desactive.statut=false, user.desactive.date = Date.now(),newUser.save(),sendVerificationEmail(newUser, origin)).
     then (()=> res.json({
       data: newUser,
       message: "You have signed up successfully"
