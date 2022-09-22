@@ -1,0 +1,44 @@
+
+const mongoose = require('mongoose');
+
+
+const decfiscmensSchema = mongoose.Schema({
+  userId: { type: String},
+  mois: { type: String},
+  annee: { type: String},
+  impottype1: {
+    type:{ type: String},
+    traitementetsalaire:{
+    salairebrut:{type:Number},
+    salaireimposable:{type:Number},
+    retenuealasource:{type:Number},
+    contributionsociale:{type:Number}
+    },
+    location:{
+        montantbrut:{type:Number},
+        montantnet:{type:Number},
+        montantretenue:{type:Number},
+        },
+    honoraire:{
+            montantbrut:{type:Number},
+            montantnet:{type:Number},
+            montantretenue:{type:Number},
+            },
+    montant1000:{
+            montantbrut:{type:Number},
+            montantnet:{type:Number},
+            montantretenue:{type:Number},
+            },
+    autre:{
+                titre:{type:String},
+                montant:{type:Number},
+                description:{type:Number},
+                },
+  statut: { type: String},
+  ficheUrl: { type: String},
+  created: { type: Date, default: Date.now },
+  updated: { type: Date}
+}});
+
+
+module.exports = mongoose.model('Decfiscmens', decfiscmensSchema);

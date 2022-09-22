@@ -13,7 +13,7 @@ const userRoutes = require('./routes/user');
 const condidateRoutes = require('./routes/career-condidate');
 const contactRoutes = require('./routes/contact-req');
 const eventRoutes = require('./routes/event');
-
+const decfiscmensRoutes = require('./routes/dec-fisc-mens');
 const app = express();
 
 mongoose.connect('mongodb+srv://'+process.env.USERNAMEMONGO+':'+process.env.PASSWORDMONGO+process.env.URIMONGO,
@@ -63,6 +63,7 @@ app.use((req, res, next) => {
  app.use('/api/condidates', condidateRoutes);
  app.use('/api/contactreqs', contactRoutes);
  app.use('/api/events', eventRoutes);
+ app.use('/api/decfiscmens', decfiscmensRoutes);
  app.use(express.static(path.join(__dirname, 'images')));
   app.get('*', (request, response) => {
     response.sendFile(path.join(__dirname, 'cvcondidates'));
