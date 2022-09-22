@@ -11,7 +11,7 @@ const sendEmail = require('../send-email');
 
 
 
-  exports.createdecfiscmens = (req, res, next) => {
+  exports.createdecfiscmens = async (req, res, next) => {
     
     const origin =req.get('origin');
      
