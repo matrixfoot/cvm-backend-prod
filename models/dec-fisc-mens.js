@@ -26,16 +26,19 @@ const decfiscmensSchema = mongoose.Schema({
     contributionsociale:{type:Number}
     },
     location:{
+        type:{ type: String},
         montantbrut:{type:Number},
         montantnet:{type:Number},
         montantretenue:{type:Number},
         },
     honoraire:{
+            type:{ type: String},
             montantbrut:{type:Number},
             montantnet:{type:Number},
             montantretenue:{type:Number},
             },
     montant1000:{
+            type:{ type: String},
             montantbrut:{type:Number},
             montantnet:{type:Number},
             montantretenue:{type:Number},
