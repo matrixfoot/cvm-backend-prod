@@ -4,11 +4,11 @@ const decfiscmensController = require('../controllers/dec-fisc-mens');
 const userController = require('../controllers/user');
 const multer = require('../middleware/multer-config');
 router.post('/createdecfiscmens', multer,decfiscmensController.createdecfiscmens);
-router.post('/decfiscmens', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'condidate'),decfiscmensController.getDecfiscmens);
+router.post('/decfiscmens', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'decfiscmens'),decfiscmensController.getDecfiscmens);
 
-router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'contact'), decfiscmensController.getDecfiscmens);
-router.get('/:id', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'contact'),decfiscmensController.getdecfiscmensbyid);
-router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'contact'),decfiscmensController.updatedecfiscmens);
+router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'decfiscmens'), decfiscmensController.getDecfiscmens);
+router.get('/:id', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'decfiscmens'),decfiscmensController.getdecfiscmensbyid);
+router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'decfiscmens'),decfiscmensController.updatedecfiscmens);
 
 
 
