@@ -113,8 +113,8 @@ exports.updatedecfiscmens = async (req, res, next) => {
   async function sendupdateemail(sendemail, origin) {
     let message;
     if (origin) {
-        const updatedecfiscmensUrl = `${origin}`;
-        message = `<p>votre déclaration a été crée, veuillez nous rendre visite pour statut de votre déclaration</p>
+        const updatedecfiscmensUrl = `${origin}/user-board`;
+        message = `<p>le statut de votre déclaration a été modifié, veuillez nous rendre visite pour statut de votre déclaration</p>
                    <p><a href="${updatedecfiscmensUrl}">${updatedecfiscmensUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -132,7 +132,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
   async function sendconfirmemail(sendemail, origin) {
     let message;
     if (origin) {
-        const verifydecfiscmensUrl = `${origin}`;
+        const verifydecfiscmensUrl = `${origin}/user-board`;
         message = `<p>votre déclaration a été crée avec succès, veuillez rester à l'écoute nous vous informons dès le traitement de votre déclaration</p>
                    <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
     } else {
