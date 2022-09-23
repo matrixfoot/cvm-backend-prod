@@ -65,7 +65,7 @@ exports.getdecfiscmensbyid = (req, res, next) => {
 };
 exports.getdecfiscmens = (req, res, next) => {
   const {userId} = req.body
-  Decfiscmens.find({ userId}).then(
+  Decfiscmens.find({userId}).then(
     (decfiscmens) => {
       res.status(200).json(decfiscmens);
     }
