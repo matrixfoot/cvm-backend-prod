@@ -6,6 +6,17 @@ const decfiscmensSchema = mongoose.Schema({
   userId: { type: String},
   mois: { type: String},
   annee: { type: String},
+  registrecommerce: { type: String},
+  matriculefiscale: { type: String},
+  codetva: { type: String},
+  codegenre: { type: String},
+  firstname: { type: String},
+  lastname: { type: String},
+  raisonsociale: { type: String},
+  adresse: { type: String},
+  codepostal: { type: String},
+  activite: { type: String},
+  datearretactivite: { type: Date},
   impottype1: {
     type:{ type: String},
     traitementetsalaire:{
