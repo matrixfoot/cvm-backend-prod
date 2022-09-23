@@ -63,6 +63,20 @@ exports.getdecfiscmensbyid = (req, res, next) => {
     }
   );
 };
+exports.getdecfiscmens = (req, res, next) => {
+  const {userId} = req.body
+  Decfiscmens.find({ userId}).then(
+    (decfiscmens) => {
+      res.status(200).json(decfiscmens);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
 
 
 exports.updatedecfiscmens = async (req, res, next) => {

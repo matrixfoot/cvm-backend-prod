@@ -4,7 +4,7 @@ const decfiscmensController = require('../controllers/dec-fisc-mens');
 const userController = require('../controllers/user');
 const multer = require('../middleware/multer-config');
 router.post('/createdecfiscmens', multer,decfiscmensController.createdecfiscmens);
-
+router.post('/decfiscmens', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'condidate'),decfiscmensController.getDecfiscmens);
 
 router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'contact'), decfiscmensController.getDecfiscmens);
 router.get('/:id', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'contact'),decfiscmensController.getdecfiscmensbyid);
