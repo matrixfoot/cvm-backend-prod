@@ -86,14 +86,14 @@ exports.updatedecfiscmens = async (req, res, next) => {
     
     const decfiscmensObject = req.file ?
       {
-        ...JSON.parse(req.body.decfiscmens),
+        ...JSON.parse(decfiscmensObject.userId),
         ficheUrl: `${req.file.url}`
       } : { ...req.body };
-      const {userId} = req.body
-      const user = await User.findById(userId);
+     
     const _id = req.params.id;
     const decfiscmens = await Decfiscmens.findById(_id);
     
+    const user = await User.findById(decfiscmens.userId);
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
         
     decfiscmens.updated = Date.now();
@@ -103,10 +103,11 @@ exports.updatedecfiscmens = async (req, res, next) => {
       message: 'déclaration modifée!'
     }))
     .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
-    
-  } catch (error) {
-    res.status(404).json({ error });
   }
+  catch (error) {
+    res.status(404).json({ error });
+  } 
+  
 }
 
 
