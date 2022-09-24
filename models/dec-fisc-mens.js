@@ -48,8 +48,8 @@ const decfiscmensSchema = mongoose.Schema({
                 montant:{type:Number},
                 description:{type:Number},
                 },
-  statut: { type: String},
-  motif: { type: String},
+  statut: { type: String,default:''},
+  motif: { type: String,default:''},
   ficheUrl: { type: String},
   created: { type: Date, default: Date.now },
   updated: { type: Date}

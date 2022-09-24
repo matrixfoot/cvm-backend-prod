@@ -86,7 +86,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
     
     const decfiscmensObject = req.file ?
       {
-        ...JSON.parse(decfiscmensObject.userId),
+        ...JSON.parse(req.body.decfiscmens), 
         ficheUrl: `${req.file.url}`
       } : { ...req.body };
      
@@ -96,7 +96,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
     const user = await User.findById(decfiscmens.userId);
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
         
-    decfiscmens.updated = Date.now();
+    decfiscmens.impottype1.updated = Date.now();
     await (decfiscmens.save(),sendupdateemail(user.email, origin)).
     then (()=> res.status(200).json({
       data: decfiscmens,
