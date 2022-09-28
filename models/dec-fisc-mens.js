@@ -17,6 +17,11 @@ const decfiscmensSchema = mongoose.Schema({
   codepostal: { type: String},
   activite: { type: String},
   datearretactivite: { type: Date},
+  statut: { type: String,default:''},
+  motif: { type: String,default:''},
+  ficheUrl: { type: String},
+  created: { type: Date, default: Date.now },
+  updated: { type: Date},
   impottype1: {
     type:{ type: String},
     traitementetsalaire:{
@@ -25,34 +30,78 @@ const decfiscmensSchema = mongoose.Schema({
     retenuealasource:{type:Number},
     contributionsociale:{type:Number}
     },
-    location:{
+    location1:{
         type:{ type: String},
         montantbrut:{type:Number},
         montantnet:{type:Number},
         montantretenue:{type:Number},
         },
-    honoraire:{
+        location2:{
+                type:{ type: String},
+                montantbrut:{type:Number},
+                montantnet:{type:Number},
+                montantretenue:{type:Number},
+                },
+                location3:{
+                        type:{ type: String},
+                        montantbrut:{type:Number},
+                        montantnet:{type:Number},
+                        montantretenue:{type:Number},
+                        },
+                        location4:{
+                                type:{ type: String},
+                                montantbrut:{type:Number},
+                                montantnet:{type:Number},
+                                montantretenue:{type:Number},
+                                },
+    honoraire1:{
             type:{ type: String},
             montantbrut:{type:Number},
             montantnet:{type:Number},
             montantretenue:{type:Number},
             },
-    montant1000:{
+            honoraire2:{
+                type:{ type: String},
+                montantbrut:{type:Number},
+                montantnet:{type:Number},
+                montantretenue:{type:Number},
+                },
+                honoraire3:{
+                        type:{ type: String},
+                        montantbrut:{type:Number},
+                        montantnet:{type:Number},
+                        montantretenue:{type:Number},
+                        },
+    montant10001:{
             type:{ type: String},
             montantbrut:{type:Number},
             montantnet:{type:Number},
             montantretenue:{type:Number},
             },
+            montant10002:{
+                type:{ type: String},
+                montantbrut:{type:Number},
+                montantnet:{type:Number},
+                montantretenue:{type:Number},
+                },
+                montant10003:{
+                        type:{ type: String},
+                        montantbrut:{type:Number},
+                        montantnet:{type:Number},
+                        montantretenue:{type:Number},
+                        },
+                        montant10004:{
+                                type:{ type: String},
+                                montantbrut:{type:Number},
+                                montantnet:{type:Number},
+                                montantretenue:{type:Number},
+                                },
     autre:{
                 titre:{type:String},
                 montant:{type:Number},
                 description:{type:Number},
                 },
-  statut: { type: String,default:''},
-  motif: { type: String,default:''},
-  ficheUrl: { type: String},
-  created: { type: Date, default: Date.now },
-  updated: { type: Date}
+  
 }});
 
 
