@@ -16,16 +16,23 @@ const sendEmail = require('../send-email');
     const origin =req.get('origin');
      
     const newDecfiscmens = new Decfiscmens({...req.body});
+   
     const {userId} = req.body
-    const user = await User.findById(userId);
+    let filtreddec=Decfiscmens.find({userId})
     
+    const user = await User.findById(userId);
+    if (await filtreddec.clone().findOne({ mois:req.body.mois}) &&await filtreddec.clone().findOne({ annee:req.body.annee })) {
+    
+      return await (res.status(300).json({ error: 'déclaration pour ce mois et cette année existe déjà! vous pouvez par ailleurs la modifier à travers votre tableau de bord' }),filtreddec.clone())
+      
+    }
      (newDecfiscmens.save(),sendconfirmemail(user.email, origin)).
       then (()=>res.status(200).json({
         data: newDecfiscmens,
         message: "Votre déclaration a été crée avec succès"
       }))
       
-      .catch(error => res.status(400).json({ error }));
+      .catch(error => res.status(404).json({ error }));
  
   
 }
@@ -48,6 +55,34 @@ exports.getDecfiscmens = (req, res, next) => {
     }
   );
 };
+exports.deletedecfiscmens = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const decfismens = await Decfiscmens.findById(id);
+    if (!decfismens) return res.status(401).json({ error: 'déclaration non trouvé !' });
+    await Decfiscmens.findByIdAndDelete(id);
+
+    res.status(200).json({
+      data: null,
+      message: 'déclaration supprimé avec succès'
+    });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+}
+exports.deletedecfiscmenss = async (req, res, next) => {
+  try {
+    
+    await Decfiscmens.remove();
+
+    res.status(200).json({
+      data: null,
+      message: 'toutes les déclarations sont supprimés avec succès'
+    });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+}
 exports.getdecfiscmensbyid = (req, res, next) => {
   Decfiscmens.findOne({
     _id: req.params.id

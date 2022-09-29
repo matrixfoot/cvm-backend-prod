@@ -9,7 +9,7 @@ router.post('/', userController.allowIfLoggedin, userController.grantAccess('rea
 router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'decfiscmens'), decfiscmensController.getDecfiscmens);
 router.get('/:id', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'decfiscmens'),decfiscmensController.getdecfiscmensbyid);
 router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'decfiscmens'),decfiscmensController.updatedecfiscmens);
-
-
+router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'decfiscmens'),decfiscmensController.deletedecfiscmens);
+router.delete('/', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'decfiscmens'),decfiscmensController.deletedecfiscmenss);
 
 module.exports = router;
