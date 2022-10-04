@@ -131,7 +131,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
     const user = await User.findById(decfiscmens.userId);
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
         
-    decfiscmens.impottype1.updated = Date.now();
+    decfiscmens.updated = Date.now();
     await (decfiscmens.save(),sendupdateemail(user.email, origin)).
     then (()=> res.status(200).json({
       data: decfiscmens,
@@ -161,7 +161,7 @@ exports.completedecfiscmens = async (req, res, next) => {
     const user = await User.findById(decfiscmens.userId);
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
         
-    decfiscmens.impottype1.updated = Date.now();
+    decfiscmens.updated = Date.now();
     await (decfiscmens.save(),sendupdateemail(user.email, origin)).
     then (()=> res.status(200).json({
       data: decfiscmens,
