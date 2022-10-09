@@ -102,7 +102,101 @@ const decfiscmensSchema = mongoose.Schema({
                 description:{type:Number},
                 },
   
-}});
+},
+
+impottype2: {
+        type:{ type: String},
+        reporttvamoisprecedent:{ type: String},
+        tvacollecter:{
+                type:{ type: String},
+                chiffreaffaireht:{ type: String},
+                tvaammount:{ type: String},
+                ammountttc:{ type: String},
+                
+                },
+        tvarecuperableimmobilier:{
+                        type:{ type: String},
+                    achatlocauxht:{ type: String},
+                    achatlocauxtva:{ type: String},
+                    
+                    
+                    },
+        tvarecuperableequipement:{
+                        type:{ type: String},
+                    achatlocauxht:{ type: String},
+                    achatlocauxtva:{ type: String},
+                    achatimporteht:{ type: String},
+                    achatimportetva:{ type: String},
+                    
+                    
+                    },
+        tvarecuperableautreachat:{
+                        type:{ type: String},
+                    achatlocauxht:{ type: String},
+                    achatlocauxtva:{ type: String},
+                    achatimporteht:{ type: String},
+                    achatimportetva:{ type: String},
+                    
+                    
+                    },
+        locationhabitationmeuble:{
+                        type:{ type: String},
+                        htammount:{ type: String},
+                        tvaammount:{ type: String},
+                        ttcammount:{ type: String},
+                        },
+                        locationusagecommercial:{
+                                type:{ type: String},
+                                    htammount:{ type: String},
+                                    tvaammount:{ type: String},
+                                    ttcammount:{ type: String},
+                                    },
+                            operationlotissement:{
+                                type:{ type: String},
+                                        htammount:{ type: String},
+                                        tvaammount:{ type: String},
+                                        ttcammount:{ type: String},
+                                        },
+                            interetpercue:{
+                                type:{ type: String},
+                                            htammount:{ type: String},
+                                            tvaammount:{ type: String},
+                                            ttcammount:{ type: String},
+                                            },
+                            autretvaspecial:{
+                                type:{ type: String},
+                                                htammount:{ type: String},
+                                                tvaammount:{ type: String},
+                                                ttcammount:{ type: String},
+                                                }       
+                                        },
+impottype3: {
+                                                type:{ type: String},
+                                                basetfp:{ type: String},
+                                                montanttfpmois:{ type: String},
+                                                reporttfpmoisprecedent:{ type: String},
+                                                montantavance:{ type: String},
+                                                tfppayer:{ type: String},
+                                                tfpreporter:{ type: String},      
+        },
+impottype4: {
+        type:{ type: String},
+        basefoprolos:{ type: String},
+        montantfoprolos:{ type: String},     
+},
+impottype5: {
+
+        type:{ type: String},
+        nombrenotehonoraire:{ type: String},
+        totaldroittimbre:{ type: String},
+        },
+impottype6: {
+
+                type:{ type: String},
+                chiffreaffairettc:{ type: String},
+                tclpayer:{ type: String},
+                }
+});
 
 
 module.exports = mongoose.model('Decfiscmens', decfiscmensSchema);
