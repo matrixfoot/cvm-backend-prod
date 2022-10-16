@@ -168,6 +168,7 @@ impottype2: {
                                                 htammount:{ type: String},
                                                 tvaammount:{ type: String},
                                                 ttcammount:{ type: String},
+                                                taux:{ type: String},
                                                 }       
                                         },
 impottype3: {
@@ -177,12 +178,14 @@ impottype3: {
                                                 reporttfpmoisprecedent:{ type: String},
                                                 montantavance:{ type: String},
                                                 tfppayer:{ type: String},
-                                                tfpreporter:{ type: String},      
+                                                tfpreporter:{ type: String},
+                                                salairesnonsoumistfp:{ type: String},      
         },
 impottype4: {
         type:{ type: String},
         basefoprolos:{ type: String},
-        montantfoprolos:{ type: String},     
+        montantfoprolos:{ type: String},
+        salairesnonsoumisfoprolos:{ type: String},     
 },
 impottype5: {
 
