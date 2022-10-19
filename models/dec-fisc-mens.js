@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const decfiscmensSchema = mongoose.Schema({
   userId: { type: String},
+  nature: { type: String},
   mois: { type: String},
   annee: { type: String},
   registrecommerce: { type: String},
