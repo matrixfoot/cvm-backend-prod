@@ -73,7 +73,7 @@ exports.deletedecfiscmens = async (req, res, next) => {
 exports.deletedecfiscmenss = async (req, res, next) => {
   try {
     
-    await Decfiscmens.remove();
+    await Decfiscmens.deleteMany();
 
     res.status(200).json({
       data: null,
