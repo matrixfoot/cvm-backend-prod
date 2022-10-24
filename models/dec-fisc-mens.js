@@ -174,6 +174,7 @@ impottype2: {
                                         },
 impottype3: {
                                                 type:{ type: String},
+                                                tfpsalairebrut:{ type: String},
                                                 basetfp:{ type: String},
                                                 montanttfpmois:{ type: String},
                                                 reporttfpmoisprecedent:{ type: String},
@@ -184,6 +185,7 @@ impottype3: {
         },
 impottype4: {
         type:{ type: String},
+        foprolossalairebrut:{ type: String},
         basefoprolos:{ type: String},
         montantfoprolos:{ type: String},
         salairesnonsoumisfoprolos:{ type: String},     
