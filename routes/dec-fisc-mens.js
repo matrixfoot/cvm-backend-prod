@@ -5,6 +5,7 @@ const userController = require('../controllers/user');
 const multer = require('../middleware/multer-config');
 router.post('/createdecfiscmens', multer,decfiscmensController.createdecfiscmens);
 router.post('/', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'decfiscmens'),decfiscmensController.getdecfiscmens);
+router.post('/filterdecfiscmens', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'decfiscmens'),decfiscmensController.getexistentdecfiscmens);
 
 router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'decfiscmens'), decfiscmensController.getDecfiscmens);
 router.get('/:id', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'decfiscmens'),decfiscmensController.getdecfiscmensbyid);

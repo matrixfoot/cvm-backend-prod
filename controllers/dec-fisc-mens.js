@@ -40,7 +40,17 @@ const sendEmail = require('../send-email');
 
 
 
-
+exports.getexistentdecfiscmens = async (req, res, next) => {
+  const {userId} = req.body
+  let filtreddec=Decfiscmens.find({userId})
+  
+  if (await filtreddec.clone().findOne({ mois:req.body.mois}) &&await filtreddec.clone().findOne({ annee:req.body.annee })) 
+  {
+  
+    return await (res.status(300).json({ error: 'déclaration pour ce mois et cette année existe déjà! vous pouvez par ailleurs la modifier à travers votre tableau de bord' }),filtreddec.clone())
+    
+  }
+};
 
 exports.getDecfiscmens = (req, res, next) => {
   Decfiscmens.find().then(
