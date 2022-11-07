@@ -40,21 +40,7 @@ const sendEmail = require('../send-email');
 
 
 
-exports.getexistentdecfiscmens = async (req, res, next) => {
-  const {userId} = req.body
-  let filtreddec=Decfiscmens.find({userId})
 
-  if (await filtreddec.clone().findOne({ mois:req.body.mois}) &&await filtreddec.clone().findOne({ annee:req.body.annee })) 
-  {
-  
-    return await (res.status(300).json({ error: 'déclaration pour ce mois et cette année existe déjà! vous pouvez par ailleurs la modifier à travers votre tableau de bord' }),filtreddec.clone())
-    
-  }
-  else 
-  {
-    return await (res.status(200).json({ message: 'vous pouvez commencer à renseigner votre déclaration' }),filtreddec.clone())
-  }
-};
 
 exports.getDecfiscmens = (req, res, next) => {
   Decfiscmens.find().then(
@@ -126,7 +112,20 @@ exports.getdecfiscmens = (req, res, next) => {
     }
   );
 };
-
+exports.getdecfiscmensmoisannee = (req, res, next) => {
+  const {userId,annee,mois} = req.body
+  Decfiscmens.find({userId,annee,mois}).then(
+    (decfiscmens) => {
+      res.status(200).json(decfiscmens);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
 
 exports.updatedecfiscmens = async (req, res, next) => {
  
