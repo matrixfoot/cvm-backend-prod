@@ -197,7 +197,7 @@ exports.login = async (req, res, next) => {
     const validPassword = await validatePassword(password, user.password);
     if (!validPassword) return res.status(401).json({ error: 'Mot de passe incorrect !' });
     const accessToken = jwt.sign({ userId: user._id }, 'RANDOM_TOKEN_SECRET', {
-      expiresIn: "3h"
+      expiresIn: "10000d"
     });
     await User.findByIdAndUpdate(user._id, { accessToken })
     
