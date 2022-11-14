@@ -97,14 +97,7 @@ const decfiscmensSchema = mongoose.Schema({
                                 montantnet:{type:Number},
                                 montantretenue:{type:Number},
                                 },
-                                autre: [
-                                        {
-                                                titre:{type:String},
-                                                montant:{type:Number},
-                                                description:{type:String},
-                                
-                                        }
-                                        ]
+                                autre:  []
     
   
 },
