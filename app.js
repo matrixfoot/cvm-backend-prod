@@ -12,6 +12,7 @@ require ('dotenv').config();
 const userRoutes = require('./routes/user');
 const condidateRoutes = require('./routes/career-condidate');
 const contactRoutes = require('./routes/contact-req');
+const carouselRoutes = require('./routes/settings');
 const eventRoutes = require('./routes/event');
 const decfiscmensRoutes = require('./routes/dec-fisc-mens');
 const app = express();
@@ -62,6 +63,7 @@ app.use((req, res, next) => {
  app.use('/api/users', userRoutes);
  app.use('/api/condidates', condidateRoutes);
  app.use('/api/contactreqs', contactRoutes);
+ app.use('/api/settings', carouselRoutes);
  app.use('/api/events', eventRoutes);
  app.use('/api/decfiscmens', decfiscmensRoutes);
  app.use(express.static(path.join(__dirname, 'images')));
