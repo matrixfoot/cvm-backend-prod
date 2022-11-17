@@ -82,7 +82,7 @@ exports.updateCarouseldata = async (req, res, next) => {
         await Carousel.findByIdAndUpdate(_id, { ...carouselObject});
         
     carousel.updated = Date.now();
-    await (carousel.save(),sendupdateemail(carousel, origin)).
+    await (carousel.save()).
     then (()=> res.status(200).json({
       data: carousel,
       message: 'Actualitée modifiée!'
