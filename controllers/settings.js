@@ -19,7 +19,7 @@ exports.createcarouseldata = (req, res, next) => {
       
       
       
-      (newCarousel.save(),sendconfirmemail(newCarousel, origin)).
+      newCarousel.save().
       then (()=>res.status(200).json({
         data: newCarousel,
         message: "Votre actualité a été crée avec succès"
