@@ -24,7 +24,7 @@ const userSchema = mongoose.Schema({
   raisonsociale: { type: String,},
   nomsociete: { type: String,},
   clientcode:{ type: String, required: true },
-  
+  choixfacture:{type:String},
   role: {
     type: String,
     default: 'basic',
