@@ -15,6 +15,8 @@ const contactRoutes = require('./routes/contact-req');
 const carouselRoutes = require('./routes/settings');
 const eventRoutes = require('./routes/event');
 const decfiscmensRoutes = require('./routes/dec-fisc-mens');
+const deccomptabiliteRoutes = require('./routes/dec-comptabilite');
+
 const app = express();
 
 mongoose.connect('mongodb+srv://'+process.env.USERNAMEMONGO+':'+process.env.PASSWORDMONGO+process.env.URIMONGO,
@@ -66,6 +68,8 @@ app.use((req, res, next) => {
  app.use('/api/settings', carouselRoutes);
  app.use('/api/events', eventRoutes);
  app.use('/api/decfiscmens', decfiscmensRoutes);
+ app.use('/api/deccomptabilite', deccomptabiliteRoutes);
+
  app.use(express.static(path.join(__dirname, 'images')));
   app.get('*', (request, response) => {
     response.sendFile(path.join(__dirname, 'cvcondidates'));

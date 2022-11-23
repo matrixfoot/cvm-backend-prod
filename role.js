@@ -15,7 +15,8 @@ ac.grant("basic")
  .updateOwn("event")
  .readOwn("decfiscmens")
  .updateOwn("decfiscmens")
- 
+ .readOwn("deccomptabilite")
+ .updateOwn("decomptabilite")
 
 ac.grant("supervisor")
  .extend("basic")
@@ -25,7 +26,8 @@ ac.grant("supervisor")
  .readAny("carousel")
  .readAny("event")
  .readAny("decfiscmens")
- 
+ .readAny("deccomptabilite")
+
 ac.grant("admin")
  .extend("basic")
  .extend("supervisor")
@@ -41,6 +43,7 @@ ac.grant("admin")
  .deleteAny("event")
  .updateAny("decfiscmens")
  .deleteAny("decfiscmens")
- 
+ .updateAny("deccomptabilite")
+ .deleteAny("deccomptabilite")
 return ac;
 })();
