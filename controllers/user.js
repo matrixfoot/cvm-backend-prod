@@ -206,7 +206,7 @@ exports.login = async (req, res, next) => {
        acceptterms: user.acceptTerms, Firstname: user.firstname, Lastname: user.lastname,adresseactivite:user.adresseactivite,codepostal:user.codepostal, 
        fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,usertype:user.usertype,mobile:user.mobile,
        raisonsociale:user.raisonsociale, nomsociete: user.nomsociete,natureactivite:user.natureactivite,
-       activite:user.activite,choixfacture:user.choixfacture,
+       activite:user.activite,choixfacture:user.choixfacture,numeronote:user.numeronote,
        sousactivite:user.sousactivite,
        regimefiscalimpot:user.regimefiscalimpot,
        regimefiscaltva:user.regimefiscaltva,
@@ -378,7 +378,7 @@ exports.completeUser = async (req, res, next) => {
     activite,
     sousactivite,
     regimefiscalimpot,
-    regimefiscaltva,
+    regimefiscaltva,numeronote,
     matriculefiscale,choixfacture,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
@@ -401,13 +401,13 @@ exports.completeUser = async (req, res, next) => {
       activite,
       sousactivite,
       regimefiscalimpot,
-      regimefiscaltva,choixfacture,
+      regimefiscaltva,choixfacture,numeronote,
       matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
     else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
       activite,
       sousactivite,
       regimefiscalimpot,
-      regimefiscaltva,choixfacture,
+      regimefiscaltva,choixfacture,numeronote,
       matriculefiscale,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
     
     user.updated = Date.now();

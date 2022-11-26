@@ -25,6 +25,8 @@ const userSchema = mongoose.Schema({
   nomsociete: { type: String,},
   clientcode:{ type: String, required: true },
   choixfacture:{type:String},
+  numeronote:{type:String},
+
   role: {
     type: String,
     default: 'basic',
