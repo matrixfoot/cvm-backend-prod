@@ -20,7 +20,6 @@ exports.grantAccess = function(action, resource) {
   return async (req, res, next) => {
     try {
       const permission = roles.can(req.user.role)[action](resource);
-      const permission2 = roles.can(req.user.role)[action](resource);
       if (!permission.granted) {
         return res.status(401).json({
           error: "vous n'avez pas la permission d'éxécuter cette action"
@@ -28,11 +27,20 @@ exports.grantAccess = function(action, resource) {
       }
       if (action=='updateOwn'||action=='readOwn'||action=='deleteOwn')
       {
+        if (req.params.id)
+        {
         if (res.locals.loggedInUser._id != req.params.id) 
-        { return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'});
-          
+        { return (res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'}),console.log(res.locals.loggedInUser._id),
+        console.log(req.params.id),console.log(req.body.userId));
         }
-        
+      } 
+      else 
+      {
+        if (res.locals.loggedInUser._id != req.body.userId) 
+        { return (res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'}),console.log(res.locals.loggedInUser._id),
+        console.log(req.params.id),console.log(req.body.userId));
+        }
+      }
       }
      
 
