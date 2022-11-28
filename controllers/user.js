@@ -27,14 +27,12 @@ exports.grantAccess = function(action, resource) {
       }
       if (action=='updateOwn'||action=='readOwn'||action=='deleteOwn')
       {
-        if (req.params.id)
+        if (req.params.id && req.baseUrl=='/api/users')
         {
         if (res.locals.loggedInUser._id != req.params.id) 
-        { return (res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'}),console.log(res.locals.loggedInUser._id),
-        console.log(req.params.id),console.log(req.body.userId));
-        }
+        { return (console.log(req.baseUrl),res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'}))}
       } 
-      else 
+      else if (!req.params.id)
       {
         if (res.locals.loggedInUser._id != req.body.userId) 
         { return (res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'}),console.log(res.locals.loggedInUser._id),
@@ -46,7 +44,7 @@ exports.grantAccess = function(action, resource) {
 
       next()
     } catch (error) {
-      res.status(33).json({ error });
+      res.status(404).json({ error });
     }
   }
 }
