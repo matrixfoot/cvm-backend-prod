@@ -84,10 +84,15 @@ exports.deletedecfiscmenss = async (req, res, next) => {
   }
 }
 exports.getdecfiscmensbyid = (req, res, next) => {
+  
   Decfiscmens.findOne({
     _id: req.params.id
   }).then(
     (decfiscmens) => {
+      if (res.locals.loggedInUser._id != decfiscmens.userId)
+  {
+return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'})
+  }
       res.status(200).json(decfiscmens);
     }
   ).catch(
@@ -97,6 +102,7 @@ exports.getdecfiscmensbyid = (req, res, next) => {
       });
     }
   );
+  
 };
 exports.getdecfiscmens = (req, res, next) => {
   const {userId} = req.body
@@ -172,6 +178,10 @@ exports.completedecfiscmens = async (req, res, next) => {
     const decfiscmens = await Decfiscmens.findById(_id);
     
     const user = await User.findById(decfiscmens.userId);
+    if (res.locals.loggedInUser._id != decfiscmens.userId)
+  {
+return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'})
+  }
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
         
     decfiscmens.updated = Date.now();

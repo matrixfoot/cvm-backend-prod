@@ -59,6 +59,10 @@ exports.deletedeccomptabilite = async (req, res, next) => {
   try {
     const id = req.params.id;
     const deccomptabilite = await Deccomptabilite.findById(id);
+    if (res.locals.loggedInUser._id != deccomptabilite.userId)
+  {
+return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'})
+  }
     if (!deccomptabilite) return res.status(401).json({ error: 'fichier comptable non trouvé !' });
     await Deccomptabilite.findByIdAndDelete(id);
 
@@ -88,6 +92,10 @@ exports.getdeccomptabilitebyid = (req, res, next) => {
     _id: req.params.id
   }).then(
     (deccomptabilite) => {
+      if (res.locals.loggedInUser._id != deccomptabilite.userId)
+  {
+return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'})
+  }
       res.status(200).json(deccomptabilite);
     }
   ).catch(
@@ -142,6 +150,10 @@ exports.updatedeccomptabilite = async (req, res, next) => {
     const deccomptabilite = await Deccomptabilite.findById(_id);
     
     const user = await User.findById(deccomptabilite.userId);
+    if (res.locals.loggedInUser._id != deccomptabilite.userId)
+  {
+return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'})
+  }
         await Deccomptabilite.findByIdAndUpdate(_id, { ...deccomptabiliteObject});
         
     deccomptabilite.updated = Date.now();
@@ -172,6 +184,10 @@ exports.completedeccomptabilite = async (req, res, next) => {
     const deccomptabilite = await Deccomptabilite.findById(_id);
     
     const user = await User.findById(deccomptabilite.userId);
+    if (res.locals.loggedInUser._id != deccomptabilite.userId)
+  {
+return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'})
+  }
         await Deccomptabilite.findByIdAndUpdate(_id, { ...deccomptabiliteObject});
         
     deccomptabilite.updated = Date.now();
