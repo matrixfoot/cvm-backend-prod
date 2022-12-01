@@ -12,7 +12,13 @@ const deccomptabiliteSchema = mongoose.Schema({
   ficheUrl: { type: String},
   created: { type: Date, default: Date.now },
   updated: { type: Date},
-  autre: []
+  autre1: [],
+  autre2: [],
+  autre3: [],
+  autre4: [],
+  autre5: [],
+  autre6: []
+
 });
 
 
