@@ -16,17 +16,12 @@ const sendEmail = require('../send-email');
     const origin =req.get('origin');
      
     const newDeccomptabilite = new Deccomptabilite({...req.body});
-   
+    
     const {userId} = req.body
-    let filtreddec=Deccomptabilite.find({userId})
     
     const user = await User.findById(userId);
-    if (await filtreddec.clone().findOne({ mois:req.body.mois}) &&await filtreddec.clone().findOne({ annee:req.body.annee })) {
-    
-      return await (res.status(300).json({ error: 'fichier comptable pour ce mois et cette année existe déjà!' }),filtreddec.clone())
-      
-    }
-     (newDeccomptabilite.save(),sendconfirmemail(user.email, origin)).
+   
+     (newDeccomptabilite.save()).
       then (()=>res.status(200).json({
         data: newDeccomptabilite,
         message: "Votre fichier comptable a été crée avec succès"
