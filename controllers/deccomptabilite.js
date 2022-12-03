@@ -12,12 +12,16 @@ const sendEmail = require('../send-email');
 
 
   exports.createdeccomptabilite = async (req, res, next) => {
-    
+
     const origin =req.get('origin');
-     
-    const newDeccomptabilite = new Deccomptabilite({...req.body});
-    
-    const {userId} = req.body
+    const deccomptabiliteObject= JSON.parse(req.body.deccomptabilite);
+    let autre3 = deccomptabiliteObject.autre3
+ autre3.forEach((item, index) => { 
+ item.ficheUrl =`${req.file.url}` 
+})
+    const newDeccomptabilite = new Deccomptabilite({...deccomptabiliteObject,
+      autre3 }); 
+    const {userId} = req.body 
     
     const user = await User.findById(userId);
    
