@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const deccomptabiliteController = require('../controllers/deccomptabilite');
 const userController = require('../controllers/user');
-const multer = require('../middleware/multer-config');
+const multer = require('../middleware/multer-config-2');
 router.post('/createdeccomptabilite', multer,deccomptabiliteController.createdeccomptabilite);
 router.post('/', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'deccomptabilite'),deccomptabiliteController.getdeccomptabilite);
 router.post('/anneemois', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'deccomptabilite'),deccomptabiliteController.getdeccomptabilitemoisannee);

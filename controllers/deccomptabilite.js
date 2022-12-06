@@ -16,11 +16,12 @@ const sendEmail = require('../send-email');
     const origin =req.get('origin');
     const deccomptabiliteObject= JSON.parse(req.body.deccomptabilite);
     let autre3 = deccomptabiliteObject.autre3
- autre3.forEach((item, index) => { 
- item.ficheUrl =`${req.file.url}` 
-})
-    const newDeccomptabilite = new Deccomptabilite({...deccomptabiliteObject,
-      autre3 }); 
+    autre3.forEach((item, index) => { 
+    item.ficheUrl =`${req.files[index].url}` 
+   })
+   const newDeccomptabilite = new Deccomptabilite({...deccomptabiliteObject,
+    autre3 }); 
+   
     const {userId} = req.body 
     
     const user = await User.findById(userId);
