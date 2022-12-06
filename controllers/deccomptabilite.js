@@ -19,8 +19,12 @@ const sendEmail = require('../send-email');
     autre3.forEach((item, index) => { 
     item.ficheUrl =`${req.files[index].url}` 
    })
+   let autre5 = deccomptabiliteObject.autre5
+    autre5.forEach((key, number) => { 
+    key.ficheUrl =`${req.files[autre3.length+number].url}` 
+   })
    const newDeccomptabilite = new Deccomptabilite({...deccomptabiliteObject,
-    autre3 }); 
+    autre3,autre5 }); 
    
     const {userId} = req.body 
     
