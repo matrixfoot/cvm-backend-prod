@@ -15,6 +15,9 @@ const sendEmail = require('../send-email');
 
     const origin =req.get('origin');
     const deccomptabiliteObject= JSON.parse(req.body.deccomptabilite);
+    let autre1 = deccomptabiliteObject.autre1
+    let autre2 = deccomptabiliteObject.autre2
+    let autre4 = deccomptabiliteObject.autre4
     let autre3 = deccomptabiliteObject.autre3
     let files3= filterByValue(req.files, 't3')
     autre3.forEach((item, index) => { 
@@ -39,9 +42,24 @@ const sendEmail = require('../send-email');
       else 
       {
         key.ficheUrl=''
-      }   })
+      }   
+    })
+      let autre6 = deccomptabiliteObject.autre6
+      let files6= filterByValue(req.files, 't6')
+      autre6.forEach((item, index) => { 
+        if(filterByValue2(files6,'t6'+item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
+        {
+          item.ficheUrl =`${files6[index].url}` 
+        }
+        else 
+        {
+          item.ficheUrl=''
+        }
+        console.log(`'t6${item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee}'`)
+  
+     })
    const newDeccomptabilite = new Deccomptabilite({...deccomptabiliteObject,
-    autre3,autre5 }); 
+    autre3,autre5,autre6,autre1,autre2,autre4 }); 
    
     const {userId} = req.body 
     
