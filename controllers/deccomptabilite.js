@@ -16,13 +16,30 @@ const sendEmail = require('../send-email');
     const origin =req.get('origin');
     const deccomptabiliteObject= JSON.parse(req.body.deccomptabilite);
     let autre3 = deccomptabiliteObject.autre3
+    let files3= filterByValue(req.files, 't3')
     autre3.forEach((item, index) => { 
-    item.ficheUrl =`${req.files[index].url}` 
+      if(filterByValue2(files3,'t3'+item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
+      {
+        item.ficheUrl =`${files3[index].url}` 
+      }
+      else 
+      {
+        item.ficheUrl=''
+      }
+      console.log(`'t3${item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee}'`)
+
    })
    let autre5 = deccomptabiliteObject.autre5
+   let files5= filterByValue(req.files, 't5')
     autre5.forEach((key, number) => { 
-    key.ficheUrl =`${req.files[autre3.length+number].url}` 
-   })
+      if(filterByValue2(files5, 't5'+key.annee+key.mois))
+      {
+        key.ficheUrl =`${files5[number].url}` 
+      }
+      else 
+      {
+        key.ficheUrl=''
+      }   })
    const newDeccomptabilite = new Deccomptabilite({...deccomptabiliteObject,
     autre3,autre5 }); 
    
@@ -207,8 +224,12 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
   } 
   
 }
-
-
+function filterByValue(array, value) {
+  return array.filter((data) =>  JSON.stringify(data).toLowerCase().indexOf(value.toLowerCase()) !== -1);
+}
+function filterByValue2(array, value) {
+  return array.find((data) =>  JSON.stringify(data).toLowerCase().indexOf(value.toLowerCase()) !== -1);
+}
   async function sendupdateemail(sendemail, origin) {
     let message;
     if (origin) {
