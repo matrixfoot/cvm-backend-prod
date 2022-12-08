@@ -20,6 +20,9 @@ const sendEmail = require('../send-email');
     let autre4 = deccomptabiliteObject.autre4
     let autre3 = deccomptabiliteObject.autre3
     let autre3filtred=filterByValue(deccomptabiliteObject.autre3,'true')
+    let autre5filtred=filterByValue(deccomptabiliteObject.autre5,'true')
+    let autre6filtred=filterByValue(deccomptabiliteObject.autre6,'true')
+
     let files3= filterByValue(req.files, 't3')
     autre3filtred.forEach((item, index) => { 
       if(filterByValue2(files3,'t3'+item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
@@ -35,7 +38,7 @@ const sendEmail = require('../send-email');
    })
    let autre5 = deccomptabiliteObject.autre5
    let files5= filterByValue(req.files, 't5')
-    autre5.forEach((key, number) => { 
+   autre5filtred.forEach((key, number) => { 
       if(filterByValue2(files5, 't5'+key.annee+key.mois))
       {
         key.ficheUrl =`${files5[number].url}` 
@@ -47,7 +50,7 @@ const sendEmail = require('../send-email');
     })
       let autre6 = deccomptabiliteObject.autre6
       let files6= filterByValue(req.files, 't6')
-      autre6.forEach((item, index) => { 
+      autre6filtred.forEach((item, index) => { 
         if(filterByValue2(files6,'t6'+item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
         {
           item.ficheUrl =`${files6[index].url}` 
