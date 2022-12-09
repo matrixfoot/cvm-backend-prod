@@ -152,7 +152,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
         
     decfiscmens.updated = Date.now();
-    await (decfiscmens.save(),sendupdateemail(user.email, origin)).
+    await (decfiscmens.save(),sendvalidateemail(user.email, origin)).
     then (()=> res.status(200).json({
       data: decfiscmens,
       message: 'déclaration modifée!'
@@ -204,8 +204,27 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
     let message;
     if (origin) {
         const updatedecfiscmensUrl = `${origin}/user-board`;
-        message = `<p>le statut de votre déclaration a été modifié, veuillez nous rendre visite pour statut de votre déclaration</p>
+        message = `<p>Votre déclaration a été modifié, veuillez nous rendre visite pour suivre votre déclaration</p>
                    <p><a href="${updatedecfiscmensUrl}">${updatedecfiscmensUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact#contactid`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: sendemail,
+        subject: 'Suivi de votre déclaration',
+        html: `<h4>Suivi déclaration</h4>
+               <p>Merci pour votre interaction!</p>
+               ${message}`
+    });
+  }
+  async function sendvalidateemail(sendemail, origin) {
+    let message;
+    if (origin) {
+        const validatedecfiscmensUrl = `${origin}/user-board`;
+        message = `<p>le statut de votre déclaration a été modifié, veuillez nous rendre visite pour statut de votre déclaration</p>
+                   <p><a href="${validatedecfiscmensUrl}">${validatedecfiscmensUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact#contactid`}</code></p>`;
