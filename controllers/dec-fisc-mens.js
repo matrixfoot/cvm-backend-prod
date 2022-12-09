@@ -89,7 +89,8 @@ exports.getdecfiscmensbyid = (req, res, next) => {
     _id: req.params.id
   }).then(
     (decfiscmens) => {
-      if (res.locals.loggedInUser._id != decfiscmens.userId)
+      console.log(req.user.role)
+      if (res.locals.loggedInUser._id != decfiscmens.userId&&req.user.role!='admin')
   {
 return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'})
   }
@@ -178,7 +179,7 @@ exports.completedecfiscmens = async (req, res, next) => {
     const decfiscmens = await Decfiscmens.findById(_id);
     
     const user = await User.findById(decfiscmens.userId);
-    if (res.locals.loggedInUser._id != decfiscmens.userId)
+    if (res.locals.loggedInUser._id != decfiscmens.userId&&req.user.role!='admin')
   {
 return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'})
   }
