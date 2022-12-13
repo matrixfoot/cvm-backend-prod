@@ -198,7 +198,13 @@ impottype6: {
                 type:{ type: String},
                 chiffreaffairettc:{ type: String},
                 tclpayer:{ type: String},
-                }
+                },
+                impottype7: {
+
+                        type:{ type: String},
+                        chiffreaffaireht:{ type: String},
+                        montantcontribution:{ type: String},
+                        }
 });
 
 
