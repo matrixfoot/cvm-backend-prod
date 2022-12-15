@@ -391,11 +391,12 @@ exports.getUserdeleted = (req, res, next) => {
 exports.completeUser = async (req, res, next) => {
   try {
     const origin =req.get('origin');
-    const userObject = req.file ?
-      {
-        ...JSON.parse(req.body.user), 
-        ficheUrl: `${req.file.url}`
-      } : { ...req.body };
+    const { email, password,confirmpassword, firstname,lastname, natureactivite,
+    activite,
+    sousactivite,
+    regimefiscalimpot,
+    regimefiscaltva,numeronote,
+    matriculefiscale,choixfacture,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
@@ -413,11 +414,21 @@ exports.completeUser = async (req, res, next) => {
 
 
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
-    await User.findByIdAndUpdate(_id, { ...userObject,password:hashedPassword,confirmpassword:confirmedhashedPassword});}
-    else {    await User.findByIdAndUpdate(_id, { ...userObject});}
-    
+    await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
+      activite,
+      sousactivite,
+      regimefiscalimpot,
+      regimefiscaltva,choixfacture,numeronote,
+      matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
+    else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
+      activite,
+      sousactivite,
+      regimefiscalimpot,
+      regimefiscaltva,choixfacture,numeronote,
+      matriculefiscale,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
+
     user.updated = Date.now();
-    
+
     await (user.save(),sendupdatecompleteemail(user, origin)).
     then (()=>res.status(200).json({
       data: user,
@@ -435,11 +446,12 @@ exports.completeUser = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   try {
     const origin =req.get('origin');
-    const userObject = req.file ?
-    {
-      ...JSON.parse(req.body.user), 
-      ficheUrl: `${req.file.url}`
-    } : { ...req.body };
+    const { email, password,confirmpassword, firstname,lastname, natureactivite,
+    activite,
+    sousactivite,
+    regimefiscalimpot,
+    regimefiscaltva,
+    matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
@@ -463,12 +475,21 @@ exports.updateUser = async (req, res, next) => {
 
 
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
-    await User.findByIdAndUpdate(_id, { ...userObject,password:hashedPassword,confirmpassword:confirmedhashedPassword});}
-    else {    await User.findByIdAndUpdate(_id, { ...userObject});}
+    await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
+      activite,
+      sousactivite,
+      regimefiscalimpot,
+      regimefiscaltva,
+      matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
+    else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
+      activite,
+      sousactivite,
+      regimefiscalimpot,
+      regimefiscaltva,
+      matriculefiscale,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
 
-    
     user.updated = Date.now();
-    
+
     await (user.save(),sendupdateemail(user, origin)).
     then (()=>res.status(200).json({
       data: user,
