@@ -452,6 +452,11 @@ exports.updateUser = async (req, res, next) => {
     regimefiscalimpot,
     regimefiscaltva,
     matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
+    const userObject = req.file ?
+    {
+      ...JSON.parse(req.body),
+      ficheUrl: `${req.file.url}`
+    } : { ...req.body };    
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
@@ -475,13 +480,13 @@ exports.updateUser = async (req, res, next) => {
 
 
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
-    await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
+    await User.findByIdAndUpdate(_id,userObject, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
       activite,
       sousactivite,
       regimefiscalimpot,
       regimefiscaltva,
       matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
-    else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
+    else {await User.findByIdAndUpdate(_id,userObject, { email, firstname,lastname,fonction,natureactivite,
       activite,
       sousactivite,
       regimefiscalimpot,
