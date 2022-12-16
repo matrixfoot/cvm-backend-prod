@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user');
-
+const multer = require('../middleware/multer-config');
 router.post('/signup', userController.signup);
 
 router.post('/login', userController.login);
@@ -20,7 +20,7 @@ router.post('/filteruserlastname', userController.allowIfLoggedin, userControlle
 router.post('/filteruserchoice', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.filteruserchoice);
 router.get('/deletedusers/all', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'), userController.getUsersdeleted);
 router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'), userController.getUsers);
-router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.updateUser);
+router.put('/:id', userController.allowIfLoggedin,multer, userController.grantAccess('updateOwn', 'profile'), userController.updateUser);
 router.put('/complete/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.completeUser);
 router.put('/desactivate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.desactivateUser);
 router.put('/activate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.activateUser);

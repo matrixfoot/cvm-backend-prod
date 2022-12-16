@@ -444,19 +444,61 @@ exports.completeUser = async (req, res, next) => {
 }
 
 exports.updateUser = async (req, res, next) => {
-  try {
-    const origin =req.get('origin');
-    const { email, password,confirmpassword, firstname,lastname, natureactivite,
-    activite,
-    sousactivite,
-    regimefiscalimpot,
-    regimefiscaltva,
-    matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
+
+
+  
+    /*const origin =req.get('origin');
+    let  { email, password,confirmpassword, firstname,lastname, natureactivite,
+      activite,
+      sousactivite,
+      regimefiscalimpot,
+      regimefiscaltva,
+      matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} =req.body
     const userObject = req.file ?
-    {
-      ...JSON.parse(req.body),
-      ficheUrl: `${req.file.url}`
-    } : { ...req.body };    
+      {
+        ...JSON.parse(req.body),
+        ficheUrl: `${req.file.url}`
+      } : { ...req.body };
+    const _id = req.params.id;
+    const user = await User.findById(_id);
+    if (req.body.password&&req.body.confirmpassword) {
+      
+  
+      const hashedPassword = await hashPassword(userObject.password);
+      const confirmedhashedPassword = await hashPassword(userObject.confirmpassword);
+        await User.findByIdAndUpdate(_id,userObject, { hashedPassword,confirmedhashedPassword,});
+    }
+    else {await User.findByIdAndUpdate(_id,userObject, { email, firstname,lastname,fonction,natureactivite,
+      activite,
+      sousactivite,
+      regimefiscalimpot,
+      regimefiscaltva,
+      matriculefiscale,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
+    console.log(userObject)
+    console.log(req.file)
+    user.updated = Date.now();
+    await (user.save()).
+    then (()=> res.status(200).json({
+      data: user,
+      message: 'Actualitée modifiée!'
+    }))
+    .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+    */
+ 
+
+
+
+    const origin =req.get('origin');
+    const userObject = req.file ?
+      {
+        ...JSON.parse(req.body.user),
+        ficheUrl: `${req.file.url}`
+      } : { email, password,confirmpassword, firstname,lastname, natureactivite,
+        activite,
+        sousactivite,
+        regimefiscalimpot,
+        regimefiscaltva,
+        matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role}=req.body;
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
@@ -470,43 +512,30 @@ exports.updateUser = async (req, res, next) => {
     
     
 }
-    if (req.body.password&&req.body.confirmpassword) {
+    if (userObject.password&&userObject.confirmpassword) {
       
   
-    const hashedPassword = await hashPassword(password);
-    const confirmedhashedPassword = await hashPassword(confirmpassword);
-    
+    const hashedPassword = await hashPassword(userObject.password);
+    const confirmedhashedPassword = await hashPassword(userObject.confirmpassword);
+    const codepostal = userObject.codepostal;
+
     
 
 
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
-    await User.findByIdAndUpdate(_id,userObject, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
-      activite,
-      sousactivite,
-      regimefiscalimpot,
-      regimefiscaltva,
-      matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
-    else {await User.findByIdAndUpdate(_id,userObject, { email, firstname,lastname,fonction,natureactivite,
-      activite,
-      sousactivite,
-      regimefiscalimpot,
-      regimefiscaltva,
-      matriculefiscale,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
-
+    await User.findByIdAndUpdate(_id, { userObject:userObject,codepostal:codepostal, password:hashedPassword,confirmpassword:confirmedhashedPassword});}
+    else {await User.findByIdAndUpdate(_id, { userObject:userObject,codepostal:codepostal});}
+    
     user.updated = Date.now();
-
+    console.log(userObject)
+    //console.log(req.body)
+    //console.log(req.file)
     await (user.save(),sendupdateemail(user, origin)).
     then (()=>res.status(200).json({
       data: user,
       message: 'Objet modifié !'
     }))
     .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
-    
-    
-    
-  } catch (error) {
-    res.status(400).json({ error });
-  }
 }
 exports.deleteUser = async (req, res, next) => {
     try {
