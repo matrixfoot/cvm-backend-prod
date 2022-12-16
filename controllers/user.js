@@ -498,9 +498,12 @@ exports.updateUser = async (req, res, next) => {
         sousactivite,
         regimefiscalimpot,
         regimefiscaltva,
-        matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role}=req.body;
+        matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role,ficheUrl}=req.body;
     const _id = req.params.id;
     const user = await User.findById(_id);
+    const codepostal = userObject.codepostal;
+    const adresseactivite = userObject.adresseactivite;
+    const ficheUrl = userObject.ficheUrl;
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
       // send already registered error in email to prevent account enumeration
       return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
@@ -517,14 +520,13 @@ exports.updateUser = async (req, res, next) => {
   
     const hashedPassword = await hashPassword(userObject.password);
     const confirmedhashedPassword = await hashPassword(userObject.confirmpassword);
-    const codepostal = userObject.codepostal;
 
     
 
 
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
-    await User.findByIdAndUpdate(_id, { userObject:userObject,codepostal:codepostal, password:hashedPassword,confirmpassword:confirmedhashedPassword});}
-    else {await User.findByIdAndUpdate(_id, { userObject:userObject,codepostal:codepostal});}
+    await User.findByIdAndUpdate(_id, { userObject:userObject,ficheUrl:ficheUrl,adresseactivite:adresseactivite ,codepostal:codepostal, password:hashedPassword,confirmpassword:confirmedhashedPassword});}
+    else {await User.findByIdAndUpdate(_id, { userObject:userObject,ficheUrl:ficheUrl,adresseactivite:adresseactivite,codepostal:codepostal});}
     
     user.updated = Date.now();
     console.log(userObject)
