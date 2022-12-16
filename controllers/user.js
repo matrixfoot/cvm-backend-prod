@@ -514,6 +514,22 @@ if (req.body.mobile && user.mobile !== req.body.mobile &&await User.findOne({ mo
     const adresseactivite = userObject.adresseactivite;
     const ficheUrl = userObject.ficheUrl;
     const activite=userObject.activite
+    const email=userObject.email
+    const firstname=userObject.firstname
+    const lastname=userObject.lastname
+    const natureactivite=userObject.natureactivite
+    const sousactivite=userObject.sousactivite
+    const regimefiscalimpot=userObject.regimefiscalimpot
+    const regimefiscaltva=userObject.regimefiscaltva
+    const matriculefiscale=userObject.matriculefiscale
+    const fonction=userObject.fonction
+    const secteur=userObject.secteur
+    const civilite=userObject.civilite
+    const raisonsociale=userObject.raisonsociale
+    const mobile=userObject.mobile
+    const nomsociete=userObject.nomsociete
+    const clientcode=userObject.clientcode
+    const role=userObject.role
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
       // send already registered error in email to prevent account enumeration
       return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
@@ -535,8 +551,8 @@ if (req.body.mobile && user.mobile !== req.body.mobile &&await User.findOne({ mo
 
 
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
-    await User.findByIdAndUpdate(_id, { userObject:userObject,ficheUrl:ficheUrl,activite:activite,adresseactivite:adresseactivite ,codepostal:codepostal, password:hashedPassword,confirmpassword:confirmedhashedPassword});}
-    else {await User.findByIdAndUpdate(_id, { userObject:userObject,ficheUrl:ficheUrl,activite:activite,adresseactivite:adresseactivite,codepostal:codepostal});}
+    await User.findByIdAndUpdate(_id, { ...userObject,password:hashedPassword,confirmpassword:confirmedhashedPassword});}
+    else {await User.findByIdAndUpdate(_id, { ...userObject});}
     
     user.updated = Date.now();
     console.log(userObject)
