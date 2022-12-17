@@ -389,62 +389,46 @@ exports.getUserdeleted = (req, res, next) => {
   );
 };
 exports.completeUser = async (req, res, next) => {
-  try{
+  try {
     const origin =req.get('origin');
-    const userObject = req.file ?
-      {
-        ...JSON.parse(req.body.user),
-        ficheUrl: `${req.file.url}`
-      } : { ...req.body};
+    const { email, password,confirmpassword, firstname,lastname, natureactivite,
+    activite,
+    sousactivite,
+    regimefiscalimpot,
+    regimefiscaltva,
+    matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
-    const codepostal = userObject.codepostal;
-    const adresseactivite = userObject.adresseactivite;
-    const ficheUrl = userObject.ficheUrl;
-    const activite=userObject.activite
-    const email=userObject.email
-    const firstname=userObject.firstname
-    const lastname=userObject.lastname
-    const natureactivite=userObject.natureactivite
-    const sousactivite=userObject.sousactivite
-    const regimefiscalimpot=userObject.regimefiscalimpot
-    const regimefiscaltva=userObject.regimefiscaltva
-    const matriculefiscale=userObject.matriculefiscale
-    const fonction=userObject.fonction
-    const secteur=userObject.secteur
-    const civilite=userObject.civilite
-    const raisonsociale=userObject.raisonsociale
-    const mobile=userObject.mobile
-    const nomsociete=userObject.nomsociete
-    const clientcode=userObject.clientcode
-    const role=userObject.role
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
       // send already registered error in email to prevent account enumeration
       return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
       
   }
-  if (req.body.mobile && user.mobile !== req.body.mobile &&await User.findOne({ mobile: req.body.mobile })) {
-    
-    return await (res.status(300).json({ error: 'utilisateur avec ce Mobile existe déjà!' }))
-    
-    
-}
-    if (userObject.password&&userObject.confirmpassword) {
+    if (req.body.password&&req.body.confirmpassword) {
       
   
-    const hashedPassword = await hashPassword(userObject.password);
-    const confirmedhashedPassword = await hashPassword(userObject.confirmpassword);
-
+    const hashedPassword = await hashPassword(password);
+    const confirmedhashedPassword = await hashPassword(confirmpassword);
+    
     
 
 
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
-    await User.findByIdAndUpdate(_id, { ...userObject,password:hashedPassword,confirmpassword:confirmedhashedPassword});}
-    else {await User.findByIdAndUpdate(_id, { ...userObject});}
+    await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
+      activite,
+      sousactivite,
+      regimefiscalimpot,
+      regimefiscaltva,
+      matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
+    else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
+      activite,
+      sousactivite,
+      regimefiscalimpot,
+      regimefiscaltva,
+      matriculefiscale,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
     
     user.updated = Date.now();
-    console.log(userObject)
-
+    
     await (user.save(),sendupdatecompleteemail(user, origin)).
     then (()=>res.status(200).json({
       data: user,
