@@ -21,7 +21,7 @@ router.post('/filteruserchoice', userController.allowIfLoggedin, userController.
 router.get('/deletedusers/all', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'), userController.getUsersdeleted);
 router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'), userController.getUsers);
 router.put('/:id', userController.allowIfLoggedin,multer, userController.grantAccess('updateOwn', 'profile'), userController.updateUser);
-router.put('/complete/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'profile'), userController.completeUser);
+router.put('/complete/:id', userController.allowIfLoggedin, multer,userController.grantAccess('updateOwn', 'profile'), userController.completeUser);
 router.put('/desactivate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.desactivateUser);
 router.put('/activate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.activateUser);
 router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.deleteUser);
