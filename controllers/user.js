@@ -495,7 +495,26 @@ exports.updateUser = async (req, res, next) => {
 
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
     await User.findByIdAndUpdate(_id, { ...userObject,password:hashedPassword,confirmpassword:confirmedhashedPassword});}
-    else {await User.findByIdAndUpdate(_id, { ...userObject});}
+    else {await User.findByIdAndUpdate(_id, {  codepostal : userObject.codepostal,
+       adresseactivite : userObject.adresseactivite,
+       ficheUrl : userObject.ficheUrl,
+       activite:userObject.activite,
+       email:userObject.email,
+       firstname:userObject.firstname,
+       lastname:userObject.lastname,
+       natureactivite:userObject.natureactivite,
+       sousactivite:userObject.sousactivite,
+       regimefiscalimpot:userObject.regimefiscalimpot,
+       regimefiscaltva:userObject.regimefiscaltva,
+       matriculefiscale:userObject.matriculefiscale,
+       fonction:userObject.fonction,
+       secteur:userObject.secteur,
+       civilite:userObject.civilite,
+       raisonsociale:userObject.raisonsociale,
+       mobile:userObject.mobile,
+       nomsociete:userObject.nomsociete,
+       clientcode:userObject.clientcode,
+       role:userObject.role})}
     
     user.updated = Date.now();
     console.log(userObject)
