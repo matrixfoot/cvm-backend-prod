@@ -7,7 +7,8 @@ router.get('/', eventController.getEvents);
 router.get('/coming_events', eventController.getcomingEvents);
 router.get('/:id', eventController.geteventbyid);
 router.post('/add_events', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'event'),eventController.createEvent);
+router.post('/add_multiple_events', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'event'),eventController.createmultipleEvent);
 router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'event'),eventController.deleteEvent);
 router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'event'),eventController.updateEvent);
-
+router.delete('/', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'event'),eventController.deleteevents);
 module.exports = router;

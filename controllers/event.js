@@ -55,6 +55,29 @@ exports.createEvent = async (req, res, next) => {
     }
 }
 
+/*insert many events*/
+exports.createmultipleEvent = async (req, res, next) => {
+let newevents= req.body
+  //const newEvent = new Event({ title, date,description })
+ 
+  
+newevents.forEach((item, index) => {
+item.title=`${newevents[index].title}`
+item.date=`${newevents[index].date}`
+item.description=`${newevents[index].description}`
+const newEvent = new Event({title:item.title,date:item.date,description:item.description});
+console.log(newEvent)
+newEvent.save();
+   })
+  res.status(201).json(
+    {
+      data: newevents,
+        type: "succès",
+        message: "Evenements créés"
+    }
+);
+}
+
 /* Delete singile event */
 exports.deleteEvent = async (req, res, next) => {
   try {
@@ -115,7 +138,19 @@ exports.updateEvent =async  (req, res, next) => {
         res.status(404).json({ error });
       }
   }
-
+  exports.deleteevents = async (req, res, next) => {
+    try {
+      
+      await Event.deleteMany();
+  
+      res.status(200).json({
+        data: null,
+        message: 'toutes les évènements sont supprimés avec succès'
+      });
+    } catch (error) {
+      res.status(400).json({ error });
+    }
+  }
 
 
 
