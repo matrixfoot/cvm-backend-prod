@@ -57,6 +57,7 @@ exports.createEvent = async (req, res, next) => {
 
 /*insert many events*/
 exports.createmultipleEvent = async (req, res, next) => {
+  try {
 let newevents= req.body
   //const newEvent = new Event({ title, date,description })
  
@@ -76,6 +77,9 @@ newEvent.save();
         message: "Evenements créés"
     }
 );
+} catch (error) {
+  res.status(409).json({ message: error.message });
+}
 }
 
 /* Delete singile event */
