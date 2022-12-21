@@ -25,7 +25,7 @@ const sendEmail = require('../send-email');
 
     let files3= filterByValue(req.files, 't3')
     autre3filtred.forEach((item, index) => { 
-      if(filterByValue2(files3,'t3'+item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
+      if(filterByValue2(files3,'t3'+item.fournisseur+item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
       {
         item.ficheUrl =`${files3[index].url}` 
       }
@@ -46,7 +46,8 @@ const sendEmail = require('../send-email');
       else 
       {
         key.ficheUrl=''
-      }   
+      }
+      console.log(`'t5${key.mois+key.annee}'`)   
     })
       let autre6 = deccomptabiliteObject.autre6
       let files6= filterByValue(req.files, 't6')
