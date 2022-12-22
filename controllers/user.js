@@ -32,11 +32,11 @@ exports.grantAccess = function(action, resource) {
         if (res.locals.loggedInUser._id != req.params.id&&req.user.role!='admin') 
         { return (console.log(req.baseUrl),res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'}))}
       } 
-      else if (!req.params.id)
+      else if (!req.params.id&&req.body.userId)
       {
         if (res.locals.loggedInUser._id != req.body.userId&&req.user.role!='admin') 
         { return (res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'}),console.log(res.locals.loggedInUser._id),
-        console.log(req.params.id),console.log(req.body.userId));
+        console.log(req.body));
         }
       }
       }
