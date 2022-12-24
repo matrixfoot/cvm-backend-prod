@@ -223,7 +223,7 @@ exports.login = async (req, res, next) => {
        acceptterms: user.acceptTerms, Firstname: user.firstname, Lastname: user.lastname,adresseactivite:user.adresseactivite,codepostal:user.codepostal, 
        fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,usertype:user.usertype,mobile:user.mobile,
        raisonsociale:user.raisonsociale, nomsociete: user.nomsociete,natureactivite:user.natureactivite,
-       activite:user.activite,choixfacture:user.choixfacture,numeronote:user.numeronote,
+       activite:user.activite,specialite:user.specialite,sousspecialite:user.sousspecialite,choixfacture:user.choixfacture,numeronote:user.numeronote,
        sousactivite:user.sousactivite,
        regimefiscalimpot:user.regimefiscalimpot,
        regimefiscaltva:user.regimefiscaltva,
@@ -392,7 +392,7 @@ exports.completeUser = async (req, res, next) => {
   try {
     const origin =req.get('origin');
     const { email, password,confirmpassword, firstname,lastname, natureactivite,
-    activite,
+    activite,specialite,sousspecialite,
     sousactivite,
     regimefiscalimpot,
     regimefiscaltva,
@@ -415,13 +415,13 @@ exports.completeUser = async (req, res, next) => {
 
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
     await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
-      activite,
+      activite,specialite,sousspecialite,
       sousactivite,
       regimefiscalimpot,
       regimefiscaltva,
       matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
     else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
-      activite,
+      activite,specialite,sousspecialite,
       sousactivite,
       regimefiscalimpot,
       regimefiscaltva,
@@ -457,6 +457,8 @@ exports.updateUser = async (req, res, next) => {
     const adresseactivite = userObject.adresseactivite;
     const ficheUrl = userObject.ficheUrl;
     const activite=userObject.activite
+    const specialite=userObject.specialite
+    const sousspecialite=userObject.sousspecialite
     const email=userObject.email
     const firstname=userObject.firstname
     const lastname=userObject.lastname
@@ -498,7 +500,7 @@ exports.updateUser = async (req, res, next) => {
     else {await User.findByIdAndUpdate(_id, {  codepostal : userObject.codepostal,
        adresseactivite : userObject.adresseactivite,
        ficheUrl : userObject.ficheUrl,
-       activite:userObject.activite,
+       activite:userObject.activite,specialite:userObject.specialite,sousspecialite:userObject.sousspecialite,
        email:userObject.email,
        firstname:userObject.firstname,
        lastname:userObject.lastname,
@@ -558,6 +560,8 @@ exports.deleteUser = async (req, res, next) => {
       userdeleted.codepostal=user.codepostal;
       userdeleted.natureactivite=user.natureactivite;
       userdeleted.activite=user.activite;
+      userdeleted.specialite=user.specialite;
+      userdeleted.sousspecialite=user.sousspecialite;
       userdeleted.sousactivite=user.sousactivite;
       userdeleted.regimefiscalimpot=user.regimefiscalimpot;
       userdeleted.regimefiscaltva=user.regimefiscaltva;
@@ -607,6 +611,8 @@ exports.deleteUser = async (req, res, next) => {
       user.codepostal=userdeleted.codepostal;
       user.natureactivite=userdeleted.natureactivite;
       user.activite=userdeleted.activite;
+      user.specialite=userdeleted.specialite;
+      user.sousspecialite=userdeleted.sousspecialite;
       user.sousactivite=userdeleted.sousactivite;
       user.regimefiscalimpot=userdeleted.regimefiscalimpot;
       user.regimefiscaltva=userdeleted.regimefiscaltva;
