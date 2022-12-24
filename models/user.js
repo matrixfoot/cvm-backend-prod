@@ -16,6 +16,8 @@ const userSchema = mongoose.Schema({
   natureactivite: { type: String,},
   activite: { type: String,},
   sousactivite: { type: String,},
+  specialite: { type: String,},
+  sousspecialite: { type: String,},
   regimefiscalimpot: { type: String,},
   regimefiscaltva: { type: String,},
   matriculefiscale: { type: String,},
