@@ -15,7 +15,7 @@ const deccomptabiliteSchema = mongoose.Schema({
   debitmoisprecedent:{ type: String},
   creditmoisprecedent:{ type: String},
   moisreleve:{ type: String},
-  annee:{ type: String},
+  anneereleve:{ type: String},
   autre1: [],
   autre2: [],
   autre3: [],
