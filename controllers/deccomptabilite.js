@@ -62,13 +62,19 @@ const sendEmail = require('../send-email');
         }
         console.log(`'t6${item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee}'`)
   
-     })
+     }) 
    const newDeccomptabilite = new Deccomptabilite({...deccomptabiliteObject,
     autre3,autre5,autre6,autre1,autre2,autre4 }); 
    
-    const {userId} = req.body 
+    const {userId} = deccomptabiliteObject.userId
+    let filtreddec=Deccomptabilite.find({userId})
     
     const user = await User.findById(userId);
+    if (await filtreddec.clone().findOne({ mois:deccomptabiliteObject.mois}) &&await filtreddec.clone().findOne({ annee:deccomptabiliteObject.annee })) {
+    
+      return await (res.status(300).json({ error: 'déclaration pour ce mois et cette année existe déjà! vous pouvez par ailleurs la modifier à travers votre tableau de bord' }),filtreddec.clone())
+      
+    }
    
      (newDeccomptabilite.save()).
       then (()=>res.status(200).json({
