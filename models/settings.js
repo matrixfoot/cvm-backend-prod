@@ -5,6 +5,7 @@ const carouselSchema = mongoose.Schema({
   titre: { type: String},
   commentaire: { type: String},
   description: { type: String},
+  rang: { type: Number},
   ficheUrl: { type: String},
   created: { type: Date, default: Date.now },
   updated: { type: Date}

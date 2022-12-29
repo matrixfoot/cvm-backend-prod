@@ -29,7 +29,23 @@ exports.createcarouseldata = (req, res, next) => {
     
   }
  
-
+  exports.createactualitewithoutimage = (req, res, next) => {
+    
+    const origin =req.get('origin');
+     
+    const newCarousel = new Carousel({...req.body});
+    
+    
+    
+    (newCarousel.save()).
+    then (()=>res.status(200).json({
+      data: newCarousel,
+      message: "Votre actualité a été crée avec succès"
+    }))
+    .catch(error => res.status(400).json({ error }));
+ 
+  
+}
 
 
 
