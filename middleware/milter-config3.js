@@ -1,4 +1,4 @@
-const multer = require('multer');
+/*const multer = require('multer');
 const ftpStorage = require("multer-ftp");
 const MIME_TYPES = {
     'image/jpg': 'jpg',
@@ -36,4 +36,4 @@ const storage = new ftpStorage({
 
 
 
-module.exports = multer({storage: storage}).single('image');
+module.exports = multer({storage: storage}).single('image');*/

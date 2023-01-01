@@ -72,7 +72,7 @@ app.use((req, res, next) => {
 
  app.use(express.static(path.join(__dirname, 'images')));
   app.get('*', (request, response) => {
-    response.sendFile(path.join(__dirname, 'cvcondidates'));
+    response.sendFile(path.join(__dirname, 'images'));
   })
 
 module.exports = app;
