@@ -12,5 +12,6 @@ router.get('/', userController.allowIfLoggedin, userController.grantAccess('read
 router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'condidate'),condidateController.updateCondidate);
 
 router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'condidate'), condidateController.deletecondidate);
+router.delete('/', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'condidate'), condidateController.deletecondidates);
 
 module.exports = router;

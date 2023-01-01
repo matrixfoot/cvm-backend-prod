@@ -22,7 +22,7 @@ const storage = new ftpStorage({
         callback(
           null,
           '/uploads/'  +
-            file.fieldname +
+            file.originalname +
             "-" +
             Date.now() +
             "." +

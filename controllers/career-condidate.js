@@ -15,7 +15,7 @@ exports.createcondidate = (req, res, next) => {
       const origin =req.get('origin');
       const condidateObject= JSON.parse(req.body.condidate);
       const newCondidate = new Condidate({...condidateObject,
-        ficheUrl:`${req.file.url}`});
+        ficheUrl: `${req.protocol}://www.macompta.com.tn/${req.file.path}`});
       
       
       
@@ -137,6 +137,19 @@ exports.deletecondidate = async (req, res, next) => {
       res.status(400).json({ error });
     }
   }
+  exports.deletecondidates = async (req, res, next) => {
+    try {
+      
+      await Condidate.deleteMany();
+  
+      res.status(200).json({
+        data: null,
+        message: 'toutes les candidatures sont supprimés avec succès'
+      });
+    } catch (error) {
+      res.status(400).json({ error });
+    }
+  } 
   async function sendupdateemail(condidate, origin) {
     let message;
     if (origin) {
