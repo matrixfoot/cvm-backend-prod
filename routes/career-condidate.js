@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const condidateController = require('../controllers/career-condidate');
 const userController = require('../controllers/user');
-const multer = require('../middleware/multer-config');
+const multer = require('../middleware/milter-config3');
 router.post('/createcondidate', multer,condidateController.createcondidate);
 router.post('/filtercondidatechoice', userController.allowIfLoggedin, userController.grantAccess('readAny', 'condidate'),condidateController.filtercondidatechoice);
 router.post('/condidate', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'condidate'),condidateController.getCondidate);

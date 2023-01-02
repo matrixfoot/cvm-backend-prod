@@ -15,8 +15,8 @@ exports.createcondidate = (req, res, next) => {
       const origin =req.get('origin');
       const condidateObject= JSON.parse(req.body.condidate);
       const newCondidate = new Condidate({...condidateObject,
-        /*ficheUrl: `${req.protocol}://www.macompta.com.tn/${req.file.path}`});*/
-        ficheUrl: `${req.file.url}`});
+        ficheUrl: `${req.protocol}://www.macompta.com.tn/${req.file.path}`});
+        /*ficheUrl: `${req.file.url}`});*/
       
       
       (newCondidate.save(),sendconfirmemail(newCondidate, origin)).
