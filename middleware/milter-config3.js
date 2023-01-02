@@ -20,8 +20,9 @@ const storage = new ftpStorage({
       secure: false, // enables FTPS/FTP with TLS
       user: 'macompta',
       password: '2?1VgMx?02jOqW',
-      timeout: 30000,
-    },
+      connTimeout: 60000,
+      pasvTimeout: 60000,
+        },
     destination: function (req, file, options, callback) {
         callback(
           null,
