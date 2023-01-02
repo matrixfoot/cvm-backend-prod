@@ -21,7 +21,8 @@ const storage = new ftpStorage({
       user: 'macompta',
       password: '2?1VgMx?02jOqW',
       connTimeout: 60000,
-      pasvTimeout: 60000,
+    pasvTimeout: 60000,
+    aliveTimeout: 60000
         },
     destination: function (req, file, options, callback) {
         callback(
