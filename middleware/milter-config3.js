@@ -1,5 +1,6 @@
-const multer = require('multer');
+/*const multer = require('multer');
 const ftpStorage = require("multer-ftp");
+require ('dotenv').config();
 const MIME_TYPES = {
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
@@ -16,10 +17,10 @@ try{
  
 const storage = new ftpStorage({
     ftp: {
-      host: 'www.macompta.com.tn',
+      host: process.env.host,
       secure: false, // enables FTPS/FTP with TLS
-      user: 'macompta',
-      password: '2?1VgMx?02jOqW',
+      user: process.env.ftpuser,
+      password: process.env.ftppassword,
       connTimeout: 60000,
     pasvTimeout: 60000,
     aliveTimeout: 60000
@@ -41,7 +42,7 @@ const storage = new ftpStorage({
 }
 catch (error) {
   res.status(404).json({ error });
-}
+}*/
 
 
 
