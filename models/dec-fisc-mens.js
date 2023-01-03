@@ -17,6 +17,7 @@ const decfiscmensSchema = mongoose.Schema({
   adresse: { type: String},
   codepostal: { type: String},
   activite: { type: String},
+  sousactivite: { type: String},
   datearretactivite: { type: Date},
   statut: { type: String,default:''},
   motif: { type: String,default:''},
@@ -112,6 +113,13 @@ impottype2: {
                 ammountttc:{ type: String},
                 
                 },
+                tvacollecter19:{
+                        type:{ type: String},
+                        chiffreaffaireht:{ type: String},
+                        tvaammount:{ type: String},
+                        ammountttc:{ type: String},
+                        
+                        },
         tvarecuperableimmobilier:{
                         type:{ type: String},
                     achatlocauxht:{ type: String},
