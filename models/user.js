@@ -22,6 +22,7 @@ const userSchema = mongoose.Schema({
   regimefiscaltva: { type: String,},
   matriculefiscale: { type: String,},
   civilite: { type: String, required: true },
+  nature: { type: String, required: true },
   usertype: { type: String, required: true },
   mobile: { type: String, required: true },
   raisonsociale: { type: String,},
@@ -29,7 +30,6 @@ const userSchema = mongoose.Schema({
   clientcode:{ type: String, required: true },
   choixfacture:{type:String},
   numeronote:{type:String},
-
   role: {
     type: String,
     default: 'basic',

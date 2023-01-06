@@ -67,12 +67,12 @@ exports.allowIfLoggedin = async (req, res, next) => {
 exports.signup = async (req, res, next) => {
   try {
     const origin =req.get('origin');
-    const { email, password,confirmpassword, firstname,lastname,usertype,fonction,secteur,civilite,raisonsociale,mobile,adresseactivite,codepostal,desactive,nomsociete,clientcode,role} = req.body
+    const { email, password,confirmpassword, firstname,lastname,usertype,fonction,secteur,civilite,nature,raisonsociale,mobile,adresseactivite,codepostal,desactive,nomsociete,clientcode,role} = req.body
     
     const hashedPassword = await hashPassword(password);
     const confirmedhashedPassword = await hashPassword(confirmpassword);
     
-    const newUser = new User({email, password:hashedPassword,confirmpassword:confirmedhashedPassword,firstname,usertype,lastname,mobile,fonction,adresseactivite,desactive,codepostal,secteur,civilite,raisonsociale,nomsociete,clientcode,role: role || "basic" });
+    const newUser = new User({email, password:hashedPassword,confirmpassword:confirmedhashedPassword,firstname,usertype,lastname,mobile,fonction,adresseactivite,desactive,codepostal,secteur,civilite,nature,raisonsociale,nomsociete,clientcode,role: role || "basic" });
     const accessToken = jwt.sign({ userId: newUser._id }, 'RANDOM_TOKEN_SECRET', {
       expiresIn: "1d"
     });
@@ -221,7 +221,7 @@ exports.login = async (req, res, next) => {
     res.status(200).json({
        userId: user._id, email: user.email,password: user.password,confirmpassword: user.confirmpassword, role: user.role,
        acceptterms: user.acceptTerms, Firstname: user.firstname, Lastname: user.lastname,adresseactivite:user.adresseactivite,codepostal:user.codepostal, 
-       fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,usertype:user.usertype,mobile:user.mobile,
+       fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,nature:user.nature,usertype:user.usertype,mobile:user.mobile,
        raisonsociale:user.raisonsociale, nomsociete: user.nomsociete,natureactivite:user.natureactivite,
        activite:user.activite,specialite:user.specialite,sousspecialite:user.sousspecialite,choixfacture:user.choixfacture,numeronote:user.numeronote,
        sousactivite:user.sousactivite,
@@ -342,11 +342,11 @@ exports.filteruserlastname = (req, res, next) => {
   );
 };
 exports.filteruserchoice = async (req, res, next) => {
-  const {email,firstname,lastname,fonction,secteur,civilite,raisonsociale,mobile,usertype,nomsociete,clientcode,role} = req.body;
+  const {email,firstname,lastname,fonction,secteur,civilite,nature,raisonsociale,mobile,usertype,nomsociete,clientcode,role} = req.body;
   
   
   await 
-  User.find({$or:[{email},{firstname},{fonction},{lastname},{secteur},{mobile},{civilite},{usertype},{raisonsociale},{nomsociete},{role}]}).then(
+  User.find({$or:[{email},{firstname},{fonction},{lastname},{secteur},{mobile},{civilite},{nature},{usertype},{raisonsociale},{nomsociete},{role}]}).then(
     (users) => {
       res.status(200).json(users);
     }
@@ -396,7 +396,7 @@ exports.completeUser = async (req, res, next) => {
     sousactivite,
     regimefiscalimpot,
     regimefiscaltva,
-    matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
+    matriculefiscale,fonction,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
@@ -419,13 +419,13 @@ exports.completeUser = async (req, res, next) => {
       sousactivite,
       regimefiscalimpot,
       regimefiscaltva,
-      matriculefiscale,fonction,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
+      matriculefiscale,fonction,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
     else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
       activite,specialite,sousspecialite,
       sousactivite,
       regimefiscalimpot,
       regimefiscaltva,
-      matriculefiscale,secteur,civilite,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
+      matriculefiscale,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
     
     user.updated = Date.now();
     
@@ -470,6 +470,7 @@ exports.updateUser = async (req, res, next) => {
     const fonction=userObject.fonction
     const secteur=userObject.secteur
     const civilite=userObject.civilite
+    const nature=userObject.nature
     const raisonsociale=userObject.raisonsociale
     const mobile=userObject.mobile
     const nomsociete=userObject.nomsociete
@@ -511,7 +512,8 @@ exports.updateUser = async (req, res, next) => {
        matriculefiscale:userObject.matriculefiscale,
        fonction:userObject.fonction,
        secteur:userObject.secteur,
-       civilite:userObject.civilite,
+       civilite:userObject.civilite,nature:userObject.nature,
+
        raisonsociale:userObject.raisonsociale,
        mobile:userObject.mobile,
        nomsociete:userObject.nomsociete,
@@ -572,6 +574,7 @@ exports.deleteUser = async (req, res, next) => {
       userdeleted.fonction = user.fonction;
       userdeleted.secteur = user.secteur;
       userdeleted.civilite = user.civilite;
+      userdeleted.nature = user.nature;
       userdeleted.usertype = user.usertype;
       userdeleted.mobile = user.mobile;
       userdeleted.raisonsociale = user.raisonsociale;
@@ -623,6 +626,8 @@ exports.deleteUser = async (req, res, next) => {
       user.fonction = userdeleted.fonction;
       user.secteur = userdeleted.secteur;
       user.civilite = userdeleted.civilite;
+      user.nature = userdeleted.nature;
+
       user.usertype = userdeleted.usertype;
       user.mobile = userdeleted.mobile;
       user.raisonsociale = userdeleted.raisonsociale;
