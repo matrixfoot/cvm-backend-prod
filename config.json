@@ -1,0 +1,12 @@
+{
+    
+    "emailFrom": "kammounomarindus@gmail.com",
+    "smtpOptions": {
+        "service": "Gmail",
+       
+        "auth": {
+            "user": "kammounomarindus@gmail.com",
+            "pass": "nloowsqfdqicyttp"
+        }
+    }
+}
