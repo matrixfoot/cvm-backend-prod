@@ -189,11 +189,58 @@ exports.updatedeccomptabilite = async (req, res, next) => {
  
   try {
     const origin =req.get('origin');
-    
+    let autre1 = deccomptabiliteObject.autre1
+    let autre2 = deccomptabiliteObject.autre2
+    let autre4 = deccomptabiliteObject.autre4
+    let autre3 = deccomptabiliteObject.autre3
+    let autre3filtred=filterByValue(deccomptabiliteObject.autre3,'true')
+    let autre5filtred=filterByValue(deccomptabiliteObject.autre5,'true')
+    let autre6filtred=filterByValue(deccomptabiliteObject.autre6,'true')
+
+    let files3= filterByValue(req.files, 't3')
+    autre3filtred.forEach((item, index) => { 
+      if(filterByValue2(files3,'t3'+item.fournisseur+item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
+      {
+        item.ficheUrl =`${files3[index].url}` 
+      }
+      else 
+      {
+        item.ficheUrl=''
+      }
+      console.log(`'t3${item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee}'`)
+
+   })
+   let autre5 = deccomptabiliteObject.autre5
+   let files5= filterByValue(req.files, 't5')
+   autre5filtred.forEach((key, number) => { 
+      if(filterByValue2(files5, 't5'+key.annee+key.mois))
+      {
+        key.ficheUrl =`${files5[number].url}` 
+      }
+      else 
+      {
+        key.ficheUrl=''
+      }
+      console.log(`'t5${key.mois+key.annee}'`)   
+    })
+      let autre6 = deccomptabiliteObject.autre6
+      let files6= filterByValue(req.files, 't6')
+      autre6filtred.forEach((item, index) => { 
+        if(filterByValue2(files6,'t6'+item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
+        {
+          item.ficheUrl =`${files6[index].url}` 
+        }
+        else 
+        {
+          item.ficheUrl=''
+        }
+        console.log(`'t6${item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee}'`)
+  
+     })
     const deccomptabiliteObject = req.file ?
       {
         ...JSON.parse(req.body.deccomptabilite), 
-        ficheUrl: `${req.file.url}`
+        autre3,autre5,autre6,autre1,autre2,autre4 
       } : { ...req.body };
      
     const _id = req.params.id;
@@ -207,7 +254,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
         await Deccomptabilite.findByIdAndUpdate(_id, { ...deccomptabiliteObject});
         
     deccomptabilite.updated = Date.now();
-    await (deccomptabilite.save(),sendupdateemail(user.email, origin)).
+    await (deccomptabilite.save()).
     then (()=> res.status(200).json({
       data: deccomptabilite,
       message: 'déclaration modifée!'
@@ -218,7 +265,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
     res.status(404).json({ error });
   } 
   
-}
+} 
 exports.completedeccomptabilite = async (req, res, next) => {
  
   try {

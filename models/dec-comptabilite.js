@@ -6,6 +6,8 @@ const deccomptabiliteSchema = mongoose.Schema({
   userId: { type: String},
   nature: { type: String},
   mois: { type: String},
+  activite: { type: String},
+  sousactivite: { type: String},
   annee: { type: String},
   statut: { type: String,default:''},
   motif: { type: String,default:''},
