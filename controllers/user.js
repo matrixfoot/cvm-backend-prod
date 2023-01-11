@@ -114,7 +114,41 @@ if (await User.findOne({ clientcode: req.body.clientcode })) {
  
   
 }
+/*insert many users*/
+exports.createmultipleusers = async (req, res, next) => {
+  try {
+let newusers= req.body
+  //const newEvent = new Event({ title, date,description })
+ 
+  
+newusers.forEach(async (item, index) => {
+item.email=`${newusers[index].email}`
+item.password=await hashPassword(`${newusers[index].password}`)
+item.confirmpassword=await hashPassword(`${newusers[index].confirmpassword}`)
+item.nature=`${newusers[index].nature}`
+item.firstname=`${newusers[index].firstname}`
+item.lastname=`${newusers[index].lastname}`
+item.usertype=`${newusers[index].usertype}`
+item.clientcode=`${newusers[index].clientcode}`
+item.role=`${newusers[index].role}`
+item.verified=`${newusers[index].verified}`
+const newuser = new User({email:item.email,password:item.password,confirmpassword:item.confirmpassword,nature:item.nature,firstname:item.firstname,lastname:item.lastname,
+  usertype:item.usertype,clientcode:item.clientcode,role:item.role,verified:item.verified});
+console.log(newuser)
 
+newuser.save();
+   })
+  res.status(201).json(
+    {
+      data: newusers,
+        type: "succès",
+        message: "utilisateurs créés"
+    }
+);
+} catch (error) {
+  res.status(409).json({ message: error.message });
+}
+}
 
 exports.verifyEmail= async (req, res, next) => {
   try {
