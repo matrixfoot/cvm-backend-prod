@@ -430,7 +430,7 @@ exports.completeUser = async (req, res, next) => {
     sousactivite,
     regimefiscalimpot,
     regimefiscaltva,
-    matriculefiscale,fonction,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
+    matriculefiscale,fonction,secteur,choixfacture,numeronote,civilite,nature,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
@@ -451,13 +451,13 @@ exports.completeUser = async (req, res, next) => {
     await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
       activite,specialite,sousspecialite,
       sousactivite,
-      regimefiscalimpot,
+      regimefiscalimpot,choixfacture,numeronote,
       regimefiscaltva,
       matriculefiscale,fonction,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
     else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
       activite,specialite,sousspecialite,
       sousactivite,
-      regimefiscalimpot,
+      regimefiscalimpot,choixfacture,numeronote,
       regimefiscaltva,
       matriculefiscale,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
     
