@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
   firstname: { type: String},
   lastname: { type: String},
   fonction: { type: String,},
-  secteur: { type: String,},
+  secteur: { type: String,}, 
   adresseactivite: { type: String,},
   codepostal: { type: String,},
   ficheUrl: { type: String,},
