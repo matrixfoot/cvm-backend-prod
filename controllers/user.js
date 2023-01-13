@@ -132,8 +132,13 @@ item.usertype=`${newusers[index].usertype}`
 item.clientcode=`${newusers[index].clientcode}`
 item.role=`${newusers[index].role}`
 item.verified=`${newusers[index].verified}`
+item.desactive.statut=`${newusers[index].desactive}`
+item.raisonsociale=`${newusers[index].raisonsociale}`
+
 const newuser = new User({email:item.email,password:item.password,confirmpassword:item.confirmpassword,nature:item.nature,firstname:item.firstname,lastname:item.lastname,
-  usertype:item.usertype,clientcode:item.clientcode,role:item.role,verified:item.verified});
+  usertype:item.usertype,clientcode:item.clientcode,role:item.role,verified:item.verified,raisonsociale:item.raisonsociale});
+newuser.desactive.statut=`${newusers[index].desactive}`
+console.log(newuser.desactive.statut)  
 console.log(newuser)
 
 newuser.save();
