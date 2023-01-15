@@ -114,7 +114,46 @@ if (await User.findOne({ clientcode: req.body.clientcode })) {
  
   
 }
+/*insert many users*/
+exports.createmultipleusers = async (req, res, next) => {
+  try {
+let newusers= req.body
+  //const newEvent = new Event({ title, date,description })
+ 
+  
+newusers.forEach(async (item, index) => {
+item.email=`${newusers[index].email}`
+item.password=await hashPassword(`${newusers[index].password}`)
+item.confirmpassword=await hashPassword(`${newusers[index].confirmpassword}`)
+item.nature=`${newusers[index].nature}`
+item.firstname=`${newusers[index].firstname}`
+item.lastname=`${newusers[index].lastname}`
+item.usertype=`${newusers[index].usertype}`
+item.clientcode=`${newusers[index].clientcode}`
+item.role=`${newusers[index].role}`
+item.verified=`${newusers[index].verified}`
+item.desactive.statut=`${newusers[index].desactive}`
+item.raisonsociale=`${newusers[index].raisonsociale}`
 
+const newuser = new User({email:item.email,password:item.password,confirmpassword:item.confirmpassword,nature:item.nature,firstname:item.firstname,lastname:item.lastname,
+  usertype:item.usertype,clientcode:item.clientcode,role:item.role,verified:item.verified,raisonsociale:item.raisonsociale});
+newuser.desactive.statut=`${newusers[index].desactive}`
+console.log(newuser.desactive.statut)  
+console.log(newuser)
+
+newuser.save();
+   })
+  res.status(201).json(
+    {
+      data: newusers,
+        type: "succès",
+        message: "utilisateurs créés"
+    }
+);
+} catch (error) {
+  res.status(409).json({ message: error.message });
+}
+}
 
 exports.verifyEmail= async (req, res, next) => {
   try {
@@ -396,7 +435,7 @@ exports.completeUser = async (req, res, next) => {
     sousactivite,
     regimefiscalimpot,
     regimefiscaltva,
-    matriculefiscale,fonction,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
+    matriculefiscale,fonction,secteur,choixfacture,numeronote,civilite,nature,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
@@ -417,13 +456,13 @@ exports.completeUser = async (req, res, next) => {
     await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
       activite,specialite,sousspecialite,
       sousactivite,
-      regimefiscalimpot,
+      regimefiscalimpot,choixfacture,numeronote,
       regimefiscaltva,
       matriculefiscale,fonction,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
     else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
       activite,specialite,sousspecialite,
       sousactivite,
-      regimefiscalimpot,
+      regimefiscalimpot,choixfacture,numeronote,
       regimefiscaltva,
       matriculefiscale,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
     
