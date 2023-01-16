@@ -1,4 +1,5 @@
 const Decfiscmens = require('../models/dec-fisc-mens');
+const user = require('../models/user');
 const User = require('../models/user');
 
 const sendEmail = require('../send-email');
@@ -26,7 +27,7 @@ const sendEmail = require('../send-email');
       return await (res.status(300).json({ error: 'déclaration pour ce mois et cette année existe déjà! vous pouvez par ailleurs la modifier à travers votre tableau de bord' }),filtreddec.clone())
       
     }
-     (newDecfiscmens.save(),sendconfirmemail(user.email, origin)).
+     (newDecfiscmens.save(),sendconfirmemail(user.email, origin),sendcreationemail('tn.macompta@gmail.com',user.email,newDecfiscmens._id, origin)).
       then (()=>res.status(200).json({
         data: newDecfiscmens,
         message: "Votre déclaration a été crée avec succès"
@@ -186,7 +187,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
         
     decfiscmens.updated = Date.now();
-    await (decfiscmens.save(),sendupdateemail(user.email, origin)).
+    await (decfiscmens.save(),sendupdateemail(user.email, origin),sendmodificationemail('tn.macompta@gmail.com',user.email,decfiscmens._id, origin)).
     then (()=> res.status(200).json({
       data: decfiscmens,
       message: 'déclaration modifée!'
@@ -257,4 +258,41 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
                ${message}`
     });
   }
- 
+  async function sendcreationemail(sendemail,email,id, origin) {
+    let message;
+    if (origin) {
+        const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
+        message = `<p>une déclaration a été crée par ${email} avec succès, veuillez la consulter pour décider le sort de la déclaration</p>
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: sendemail,
+        subject: 'évaluation de la déclaration',
+        html: `<h4>évaluation de la déclaration</h4>
+               <p>Merci pour votre interaction!</p>
+               ${message}`
+    });
+  }
+  async function sendmodificationemail(sendemail,email,id, origin) {
+    let message;
+    if (origin) {
+        const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
+        message = `<p>une déclaration a été complétée par ${email} avec succès, veuillez la consulter pour décider le sort de la déclaration</p>
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: sendemail,
+        subject: 'évaluation de la déclaration',
+        html: `<h4>évaluation de la déclaration</h4>
+               <p>Merci pour votre interaction!</p>
+               ${message}`
+    });
+  }
