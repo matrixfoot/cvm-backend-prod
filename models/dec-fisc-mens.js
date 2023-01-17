@@ -22,6 +22,8 @@ const decfiscmensSchema = mongoose.Schema({
   statut: { type: String,default:''},
   motif: { type: String,default:''},
   ficheUrl: { type: String},
+  affecte: { type: String},
+  dateaffectation: { type: Date},
   created: { type: Date, default: Date.now },
   updated: { type: Date},
   impottype1: {

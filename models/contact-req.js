@@ -10,6 +10,8 @@ const contactSchema = mongoose.Schema({
   ficheUrl: { type: String, required: false },
   description: { type: String, required: true },
   statut: { type: String},
+  affecte: { type: String},
+  dateaffectation: { type: Date},
   created: { type: Date, default: Date.now },
   updated: { type: Date}
 });

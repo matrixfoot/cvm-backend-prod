@@ -9,9 +9,11 @@ const condidateSchema = mongoose.Schema({
   mobile: { type: String, required: true },
   ficheUrl: { type: String, required: false },
   description: { type: String, required: true },
-  specialite: { type: String,  },
+  specialite: { type: String,},
   decision: { type: String},
   motif: { type: String},
+  affecte: { type: String},
+  dateaffectation: { type: Date},
   created: { type: Date, default: Date.now },
   updated: { type: Date}
 });
