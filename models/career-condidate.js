@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 
 const condidateSchema = mongoose.Schema({
+  type: { default:'candidature'},
   email: { type: String, required: true},
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
