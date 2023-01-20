@@ -29,12 +29,12 @@ exports.grantAccess = function(action, resource) {
       {
         if (req.params.id && req.baseUrl=='/api/users')
         {
-        if (res.locals.loggedInUser._id != req.params.id&&req.user.role!='admin') 
+        if (res.locals.loggedInUser._id != req.params.id&&req.user.role!='admin'&&req.user.role!='supervisor') 
         { return (console.log(req.baseUrl),res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'}))}
       } 
       else if (!req.params.id&&req.body.userId)
       {
-        if (res.locals.loggedInUser._id != req.body.userId&&req.user.role!='admin') 
+        if (res.locals.loggedInUser._id != req.body.userId&&req.user.role!='admin'&&req.user.role!='supervisor') 
         { return (res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'}),console.log(res.locals.loggedInUser._id),
         console.log(req.body));
         }
