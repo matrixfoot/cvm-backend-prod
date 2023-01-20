@@ -11,6 +11,8 @@ const deccomptabiliteSchema = mongoose.Schema({
   annee: { type: String},
   statut: { type: String,default:''},
   motif: { type: String,default:''},
+  statutcoll: { type: String,default:''},
+  motifcoll: { type: String,default:''},
   ficheUrl: { type: String},
   affecte: { type: String},
   dateaffectation: { type: Date},

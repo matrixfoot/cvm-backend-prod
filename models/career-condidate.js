@@ -13,6 +13,8 @@ const condidateSchema = mongoose.Schema({
   specialite: { type: String,},
   decision: { type: String},
   motif: { type: String},
+  decisioncoll: { type: String},
+  motifcoll: { type: String},
   affecte: { type: String},
   dateaffectation: { type: Date},
   created: { type: Date, default: Date.now },
