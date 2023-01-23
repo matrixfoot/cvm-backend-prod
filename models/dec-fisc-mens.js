@@ -17,6 +17,7 @@ const decfiscmensSchema = mongoose.Schema({
   adresse: { type: String},
   codepostal: { type: String},
   activite: { type: String},
+  regimefiscalimpot: { type: String},
   sousactivite: { type: String},
   datearretactivite: { type: Date},
   statut: { type: String,default:''},
