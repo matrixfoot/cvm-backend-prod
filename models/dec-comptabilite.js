@@ -18,6 +18,8 @@ const deccomptabiliteSchema = mongoose.Schema({
   dateaffectation: { type: Date},
   created: { type: Date, default: Date.now },
   updated: { type: Date},
+  statutadmin:  [],
+  statutcollab:  [],
   debitmoisprecedent:{ type: String},
   creditmoisprecedent:{ type: String},
   moisreleve:{ type: String},

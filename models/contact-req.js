@@ -16,7 +16,9 @@ const contactSchema = mongoose.Schema({
   affecte: { type: String},
   dateaffectation: { type: Date},
   created: { type: Date, default: Date.now },
-  updated: { type: Date}
+  updated: { type: Date},
+  statutadmin:  [],
+  statutcollab:  [],
 });
 
 
