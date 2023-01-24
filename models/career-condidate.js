@@ -19,7 +19,7 @@ const condidateSchema = mongoose.Schema({
   dateaffectation: { type: Date},
   created: { type: Date, default: Date.now },
   updated: { type: Date},
-  dateouverturedossier:{type:Date},
+  dateouverturedossier:{type:Number},
   statutadmin:  [],
   statutcollab:  [],
 });
