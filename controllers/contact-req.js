@@ -19,7 +19,7 @@ exports.createcontactreq = (req, res, next) => {
       
       
       
-      (newContact.save(),sendconfirmemail(newContact, origin)).
+      (newContact.save(),sendconfirmemail(newContact, origin),sendmodificationemail('tn.macompta@gmail.com',newContact.email,newContact._id, origin)).
       then (()=>res.status(200).json({
         data: newContact,
         message: "Votre requête a été crée avec succès"
@@ -172,6 +172,25 @@ exports.updateContact = async (req, res, next) => {
         to: newContact.email,
         subject: 'Verification de réception de réclamation',
         html: `<h4>Vérification réclamation</h4>
+               <p>Merci pour votre interaction!</p>
+               ${message}`
+    });
+  }
+  async function sendmodificationemail(sendemail,email,id, origin) {
+    let message;
+    if (origin) {
+        const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
+        message = `<p>une réclamation a été complétée par ${email} avec succès, veuillez la consulter pour la traiter</p>
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: sendemail,
+        subject: 'traitement de réclamation',
+        html: `<h4>évaluation de la réclamation</h4>
                <p>Merci pour votre interaction!</p>
                ${message}`
     });
