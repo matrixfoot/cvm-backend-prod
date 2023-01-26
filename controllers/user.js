@@ -29,12 +29,12 @@ exports.grantAccess = function(action, resource) {
       {
         if (req.params.id && req.baseUrl=='/api/users')
         {
-        if (res.locals.loggedInUser._id != req.params.id&&req.user.role!='admin') 
+        if (res.locals.loggedInUser._id != req.params.id&&req.user.role!='admin'&&req.user.role!='supervisor') 
         { return (console.log(req.baseUrl),res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'}))}
       } 
       else if (!req.params.id&&req.body.userId)
       {
-        if (res.locals.loggedInUser._id != req.body.userId&&req.user.role!='admin') 
+        if (res.locals.loggedInUser._id != req.body.userId&&req.user.role!='admin'&&req.user.role!='supervisor') 
         { return (res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'}),console.log(res.locals.loggedInUser._id),
         console.log(req.body));
         }
@@ -435,7 +435,7 @@ exports.completeUser = async (req, res, next) => {
     sousactivite,
     regimefiscalimpot,
     regimefiscaltva,
-    matriculefiscale,fonction,secteur,choixfacture,numeronote,civilite,nature,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
+    matriculefiscale,fonction,secteur,choixfacture,numeronote,usertype,civilite,nature,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
@@ -455,13 +455,13 @@ exports.completeUser = async (req, res, next) => {
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
     await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
       activite,specialite,sousspecialite,
-      sousactivite,
+      sousactivite,usertype,
       regimefiscalimpot,choixfacture,numeronote,
       regimefiscaltva,
       matriculefiscale,fonction,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
     else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
       activite,specialite,sousspecialite,
-      sousactivite,
+      sousactivite,usertype,
       regimefiscalimpot,choixfacture,numeronote,
       regimefiscaltva,
       matriculefiscale,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}

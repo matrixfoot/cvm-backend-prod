@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 
 const contactSchema = mongoose.Schema({
+  type: { type: String,default:'réclamation'},
   email: { type: String, required: true},
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
@@ -10,8 +11,15 @@ const contactSchema = mongoose.Schema({
   ficheUrl: { type: String, required: false },
   description: { type: String, required: true },
   statut: { type: String},
+  statutcoll: { type: String},
+  motifcoll: { type: String},
+  affecte: { type: String},
+  dateaffectation: { type: Date},
   created: { type: Date, default: Date.now },
-  updated: { type: Date}
+  updated: { type: Date},
+  dateouverturedossier:{type:Number},
+  statutadmin:  [],
+  statutcollab:  [],
 });
 
 

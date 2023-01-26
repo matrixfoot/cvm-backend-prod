@@ -10,6 +10,15 @@ async function sendEmail({ to, subject, html, from = process.env.EMAILFROM}) {
             user: process.env.USER,
             pass : process.env.PASS
         }
+        /*host: 'smtp.gnet.tn',
+           port: 465,
+           auth: {
+             user: process.env.USER, 
+             pass: process.env.PASS 
+           },
+           tls: {
+            secure:true,
+        },*/
     })
     await transporter.sendMail({ from, to, subject, html });
 }
