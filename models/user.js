@@ -30,6 +30,7 @@ const userSchema = mongoose.Schema({
   clientcode:{ type: String },
   choixfacture:{type:String},
   numeronote:{type:String},
+  droitcompta:{type:String,default:''},
   role: {
     type: String,
     default: 'basic',
