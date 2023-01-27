@@ -31,6 +31,7 @@ const userdeletedSchema = mongoose.Schema({
   choixfacture:{type:String},
   numeronote:{type:String},
   droitcompta:{type:String,default:''},
+  rolesuperviseur:{type:String,default:''},
   role: {
     type: String,
    
