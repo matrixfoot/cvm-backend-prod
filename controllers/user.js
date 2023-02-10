@@ -443,6 +443,12 @@ exports.completeUser = async (req, res, next) => {
       return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
       
   }
+  if (await User.findOne({ matriculefiscale: req.body.matriculefiscale })) {
+    
+    return await (res.status(300).json({ error: 'utilisateur avec ce Matricule fiscale existe déjà!' }))
+    
+    
+}
     if (req.body.password&&req.body.confirmpassword) {
       
   
@@ -523,6 +529,12 @@ exports.updateUser = async (req, res, next) => {
       return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
       
   }
+  if (await User.findOne({ matriculefiscale: req.body.matriculefiscale })) {
+    
+    return await (res.status(300).json({ error: 'utilisateur avec ce Matricule fiscale existe déjà!' }))
+    
+    
+}
   if (req.body.mobile && user.mobile !== req.body.mobile &&await User.findOne({ mobile: req.body.mobile })) {
     
     return await (res.status(300).json({ error: 'utilisateur avec ce Mobile existe déjà!' }))
