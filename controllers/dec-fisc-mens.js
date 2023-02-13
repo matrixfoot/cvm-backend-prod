@@ -217,7 +217,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
         
     decfiscmens.updated = Date.now();
-    await (decfiscmens.save(),sendupdateemail(user.email, origin),sendmodificationemailadmin('tn.macompta@gmail.com',user.email,decfiscmens._id, origin)).
+    await (decfiscmens.save(),sendmodificationemailadmin('tn.macompta@gmail.com',user.email,decfiscmens._id, origin)).
     then (()=> res.status(200).json({
       data: decfiscmens,
       message: 'déclaration modifée!'
@@ -245,7 +245,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
     await sendEmail({
         to: sendemail,
         subject: 'Fin de traitement de votre déclaration',
-        html: `<p>>Merci pour l'intérêt que vous accordez au cabinet!</p>
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });
   }
@@ -264,7 +264,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
     await sendEmail({
         to: sendemail,
         subject: 'confirmation de la réception des données de déclaration',
-        html: `<p>>Merci pour l'intérêt que vous accordez au cabinet!</p>
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });
   }
@@ -282,7 +282,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
     await sendEmail({
         to: sendemail,
         subject: 'réception des données de déclaration',
-        html: `<p>>Merci pour l'intérêt que vous accordez au cabinet!</p>
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });
   }
@@ -290,7 +290,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
     let message;
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
-        message = `<p>une déclaration a été complétée par ${email} avec succès, veuillez la consulter pour décider le sort de la déclaration</p>
+        message = `<p>une déclaration a été déposée par ${email} avec succès, veuillez la consulter pour décider le sort de la déclaration</p>
                    <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>

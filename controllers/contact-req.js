@@ -189,7 +189,7 @@ exports.updateContact = async (req, res, next) => {
     await sendEmail({
         to: contact.email,
         subject: 'Suivi de requête',
-        html: `<p>>Merci pour l'intérêt que vous accordez au cabinet!</p>
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });
   }
@@ -207,7 +207,7 @@ exports.updateContact = async (req, res, next) => {
     await sendEmail({
         to: newContact.email,
         subject: 'confirmation de réception de requête',
-        html: `<p>>Merci pour l'intérêt que vous accordez au cabinet!</p>
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });
   }
@@ -225,7 +225,7 @@ exports.updateContact = async (req, res, next) => {
     await sendEmail({
         to: sendemail,
         subject: 'réception de requête',
-        html: `<p>>Merci pour l'intérêt que vous accordez au cabinet!</p>
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });
   }
