@@ -19,7 +19,7 @@ exports.createcontactreq = (req, res, next) => {
       
       
       
-      (newContact.save(),sendconfirmemail(newContact, origin),sendmodificationemail('tn.macompta@gmail.com',newContact.email,newContact._id, origin)).
+      (newContact.save(),sendconfirmemail(newContact, origin),sendcreationemail('tn.macompta@gmail.com',newContact.email,newContact._id, origin)).
       then (()=>res.status(200).json({
         data: newContact,
         message: "Votre requête a été crée avec succès"
@@ -142,7 +142,7 @@ exports.updateContact = async (req, res, next) => {
     {
       if(contactObject.statutadmin[contactObject.statutadmin.length-1].statut=='clôturé')
       {
-        await (contact.save(),sendupdateemail(contact, origin)).
+        await (contact.save(),sendupdateemail(contact, origin),sendmodifemailadmin('tn.macompta@gmail.com',contact.email,contact._id, origin)).
         then (()=> res.status(200).json({
           data: updatedcontact,
           message: 'Requête traitée!'
@@ -151,7 +151,7 @@ exports.updateContact = async (req, res, next) => {
       }
       else if(contactObject.statutadmin[contactObject.statutadmin.length-1].statut!='clôturé')
       {
-        await (contact.save()).
+        await (contact.save(),sendmodifemailadmin('tn.macompta@gmail.com',contact.email,contact._id, origin)).
         then (()=> res.status(200).json({
           data: updatedcontact,
           message: 'Requête traitée!'
@@ -161,7 +161,7 @@ exports.updateContact = async (req, res, next) => {
     }
     else 
       {
-        await (contact.save()).
+        await (contact.save(),sendmodifemailadmin('tn.macompta@gmail.com',contact.email,contact._id, origin)).
         then (()=> res.status(200).json({
           data: updatedcontact,
           message: 'Requête traitée!'
@@ -211,10 +211,10 @@ exports.updateContact = async (req, res, next) => {
                ${message}`
     });
   }
-  async function sendmodificationemail(sendemail,email,id, origin) {
+  async function sendcreationemail(sendemail,email,id, origin) {
     let message;
     if (origin) {
-        const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
+        const verifydecfiscmensUrl = `${origin}/view-contact/${id}`;
         message = `<p>une requête a été déposée par ${email} avec succès, veuillez la consulter pour la traiter</p>
                    <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
     } else {
@@ -225,6 +225,24 @@ exports.updateContact = async (req, res, next) => {
     await sendEmail({
         to: sendemail,
         subject: 'réception de requête',
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
+               ${message}`
+    });
+  }
+  async function sendmodifemailadmin(sendemail,email,id, origin) {
+    let message;
+    if (origin) {
+        const verifydecfiscmensUrl = `${origin}/view-contact/${id}`;
+        message = `<p>une requête de l'utilisateur ${email} a été modifiée suite à un traitement, veuillez la consulter pour la traiter</p>
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: sendemail,
+        subject: 'évaluation de requête',
         html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });

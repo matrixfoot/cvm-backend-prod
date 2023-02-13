@@ -290,7 +290,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
     let message;
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
-        message = `<p>une déclaration a été déposée par ${email} avec succès, veuillez la consulter pour décider le sort de la déclaration</p>
+        message = `<p>une déclaration du client ${email} a été modifiée suite à un traitement, veuillez la consulter pour décider le sort de la déclaration</p>
                    <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>

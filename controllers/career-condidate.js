@@ -118,7 +118,7 @@ exports.updateCondidate = async (req, res, next) => {
       if(condidateObject.statutadmin[condidateObject.statutadmin.length-1].statut=='clôturé')
       {
         console.log('clot')
-        await (condidate.save(),sendupdateemail(condidate, origin)).
+        await (condidate.save(),sendupdateemail(condidate, origin),sendmodifadmin('tn.macompta@gmail.com',condidate.email,condidate._id, origin)).
         then (()=> res.status(200).json({
           data: condidateupdated,
           message: 'Candidature modifié !'
@@ -128,7 +128,7 @@ exports.updateCondidate = async (req, res, next) => {
       else if(condidateObject.statutadmin[condidateObject.statutadmin.length-1].statut!='clôturé')
       {
         console.log('autreclot')
-        await (condidate.save()).
+        await (condidate.save(),sendmodifadmin('tn.macompta@gmail.com',condidate.email,condidate._id, origin)).
         then (()=> res.status(200).json({
           data: condidateupdated,
           message: 'Candidature modifié !'
@@ -140,7 +140,7 @@ exports.updateCondidate = async (req, res, next) => {
       {
         console.log('here')
 
-        await (condidate.save()).
+        await (condidate.save(),sendmodifadmin('tn.macompta@gmail.com',condidate.email,condidate._id, origin)).
         then (()=> res.status(200).json({
           data: condidateupdated,
           message: 'Candidature modifié !'
@@ -235,5 +235,23 @@ exports.deletecondidate = async (req, res, next) => {
                ${message}`
     });
   }
- 
+  async function sendmodifadmin(sendemail,email,id, origin) {
+    let message;
+    if (origin) {
+        const verifycondidateUrl = `${origin}/view-condidate/${id}`;
+        message = `<p>une candidature de l'utilisateur ${email} a été modifiée suite à un traitement, veuillez la consulter pour en décider le sort</p>
+                   <p><a href="${verifycondidateUrl}">${verifycondidateUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: sendemail,
+        subject: 'évaluation de candidature',
+        html: `<h4>évaluation de candidature</h4>
+               <p>Merci pour votre interaction!</p>
+               ${message}`
+    });
+  }
 
