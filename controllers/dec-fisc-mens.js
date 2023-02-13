@@ -157,14 +157,38 @@ exports.updatedecfiscmens = async (req, res, next) => {
     
     const user = await User.findById(decfiscmens.userId);
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
-        
+        const updateddecfiscmens = await Decfiscmens.findById(_id);    
     decfiscmens.updated = Date.now();
-    await (decfiscmens.save(),sendupdateemail(user.email, origin),sendmodificationemail('tn.macompta@gmail.com',user.email,decfiscmens._id, origin)).
-    then (()=> res.status(200).json({
-      data: decfiscmens,
-      message: 'déclaration modifée!'
-    }))
-    .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+    if(decfiscmensObject.statutadmin.length>0)
+    {
+      if(decfiscmensObject.statutadmin[decfiscmensObject.statutadmin.length-1].statut=='clôturé')
+      {
+        await (decfiscmens.save(),sendupdateemail(user.email, origin),sendmodificationemailadmin('tn.macompta@gmail.com',user.email,decfiscmens._id, origin)).
+        then (()=> res.status(200).json({
+          data: updateddecfiscmens,
+          message: 'déclaration modifée!'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      }
+      else if(decfiscmensObject.statutadmin[decfiscmensObject.statutadmin.length-1].statut!='clôturé')
+      {
+        await (decfiscmens.save(),sendmodificationemailadmin('tn.macompta@gmail.com',user.email,decfiscmens._id, origin)).
+        then (()=> res.status(200).json({
+          data: updateddecfiscmens,
+          message: 'déclaration modifée!'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      }
+    }
+    else
+    {
+      await (decfiscmens.save(),sendmodificationemailadmin('tn.macompta@gmail.com',user.email,decfiscmens._id, origin)).
+        then (()=> res.status(200).json({
+          data: updateddecfiscmens,
+          message: 'déclaration modifée!'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+    }
   }
   catch (error) {
     res.status(404).json({ error });
@@ -262,7 +286,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
                ${message}`
     });
   }
-  async function sendmodificationemail(sendemail,email,id, origin) {
+  async function sendmodificationemailadmin(sendemail,email,id, origin) {
     let message;
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;

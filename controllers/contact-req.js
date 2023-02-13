@@ -36,7 +36,7 @@ exports.createcontactreq = (req, res, next) => {
     
     
     
-    (newContact.save(),sendconfirmemail(newContact, origin)).
+    (newContact.save(),sendconfirmemail(newContact, origin),sendmodificationemail('tn.macompta@gmail.com',newContact.email,newContact._id, origin)).
     then (()=>res.status(200).json({
       data: newContact,
       message: "Votre requête a été crée avec succès"
@@ -121,16 +121,39 @@ exports.updateContact = async (req, res, next) => {
       } : { ...req.body };
     const _id = req.params.id;
     const contact = await Contact.findById(_id);
-    
-        await Contact.findByIdAndUpdate(_id, { ...contactObject});
-        
+    await Contact.findByIdAndUpdate(_id, { ...contactObject});
+    const updatedcontact = await Contact.findById(_id);    
     contact.updated = Date.now();
-    await (contact.save(),sendupdateemail(contact, origin)).
-    then (()=> res.status(200).json({
-      data: contact,
-      message: 'Requête traitée!'
-    }))
-    .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+    if(contactObject.statutadmin.length>0)
+    {
+      if(contactObject.statutadmin[contactObject.statutadmin.length-1].statut=='clôturé')
+      {
+        await (contact.save(),sendupdateemail(contact, origin)).
+        then (()=> res.status(200).json({
+          data: updatedcontact,
+          message: 'Requête traitée!'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      }
+      else if(contactObject.statutadmin[contactObject.statutadmin.length-1].statut!='clôturé')
+      {
+        await (contact.save()).
+        then (()=> res.status(200).json({
+          data: updatedcontact,
+          message: 'Requête traitée!'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      }
+    }
+    else 
+      {
+        await (contact.save()).
+        then (()=> res.status(200).json({
+          data: updatedcontact,
+          message: 'Requête traitée!'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      }
     
   } catch (error) {
     res.status(404).json({ error });
