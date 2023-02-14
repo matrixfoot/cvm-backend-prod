@@ -62,6 +62,58 @@ app.use((req, res, next) => {
   });
 
 
+  /*sendSMS(myMobile, mySms)
+  { 
+    const mySender = 'omar kammoun';
+    const myDate = '14/02/2023';
+    const myTime = '16:37';
+  
+    const Url_str ="https://www.tunisiesms.tn/client/Api/Api.aspx?fct=sms&key=MYKEY&mobile=216XXXXXXXX&sms=Hello+World&sender=YYYYYYY&date=jj/mm/aaaa&heure=hh:mm:ss";
+                    
+    Url_str = Url_str.replace("216XXXXXXXX",myMobile)
+    Url_str = Url_str.replace("Hello+World",mySms);
+    Url_str = Url_str.replace("YYYYYYY",mySender);
+    Url_str = Url_str.replace("jj/mm/aaaa",myDate,Url_str);
+    Url_str = Url_str.replace("hh:mm:ss",myTime,Url_str);
+                    
+    console.log(http_response(Url_str)) ;
+  }
+  
+  function http_response(url)
+  { 
+     ch = curl_init(); 
+     options = array( 
+     CURLOPT_URL            = url , 
+     CURLOPT_RETURNTRANSFER == true, 
+     CURLOPT_HEADER         == false, 
+     CURLOPT_FOLLOWLOCATION == true, 
+     CURLOPT_ENCODING       == '', 
+     CURLOPT_AUTOREFERER    == true, 
+     CURLOPT_CONNECTTIMEOUT == 120, 
+     CURLOPT_TIMEOUT        == 120,  
+     CURLOPT_MAXREDIRS      == 10,  
+     CURLOPT_SSL_VERIFYPEER == false, 
+     ); 
+     curl_setopt_array( ch, options );  
+     response = curl_exec(ch); 
+     httpCode = curl_getinfo(ch, CURLINFO_HTTP_CODE); 
+     if ( httpCode != 200 ) 
+     { 
+     return 'Return code is {httpCode}' 
+     .curl_error(ch); 
+     } 
+    else  
+     { 
+     return response; 
+    } 
+     curl_close(ch);
+  }*/
+          
+
+
+
+
+
  app.use('/api/users', userRoutes);
  app.use('/api/condidates', condidateRoutes);
  app.use('/api/contactreqs', contactRoutes);
@@ -75,4 +127,5 @@ app.use((req, res, next) => {
     response.sendFile(path.join(__dirname, 'images'));
   })
 
+  
 module.exports = app;
