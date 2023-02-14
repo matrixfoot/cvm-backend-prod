@@ -529,7 +529,7 @@ exports.updateUser = async (req, res, next) => {
       return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
       
   }
-  if (await User.findOne({ matriculefiscale: req.body.matriculefiscale })) {
+  if (req.body.matriculefiscale && user.matriculefiscale !== req.body.matriculefiscale &&await User.findOne({ matriculefiscale: req.body.matriculefiscale })) {
     
     return await (res.status(300).json({ error: 'utilisateur avec ce Matricule fiscale existe déjà!' }))
     
