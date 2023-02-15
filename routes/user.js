@@ -25,6 +25,9 @@ router.put('/:id', userController.allowIfLoggedin,multer, userController.grantAc
 router.put('/complete/:id', userController.allowIfLoggedin,userController.grantAccess('updateOwn', 'profile'), userController.completeUser);
 router.put('/desactivate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.desactivateUser);
 router.put('/activate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.activateUser);
+router.put('/connect/:id', userController.connected);
+router.put('/disconnect/:id', userController.disconnected);
+
 router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.deleteUser);
 router.delete('/temporardelete/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.deleteUsertemporare);
 router.delete('/restaure/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.restaureuser);

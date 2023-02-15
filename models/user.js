@@ -1,3 +1,4 @@
+const { boolean } = require('joi');
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
@@ -48,6 +49,7 @@ const userSchema = mongoose.Schema({
     passwordReset: { type: Date},
     created: { type: Date, default: Date.now },
     updated: { type: Date},
+    connected: { type: Boolean, default:false},
     desactive: { 
       statut: Boolean, default: false,
       date: Date

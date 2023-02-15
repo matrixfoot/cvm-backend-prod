@@ -47,6 +47,7 @@ const userdeletedSchema = mongoose.Schema({
     passwordReset: { type: Date},
     created: { type: Date},
     updated: { type: Date},
+    connected: { type: Boolean, default:false},
     desactive: { 
       statut: Boolean,
       date: Date

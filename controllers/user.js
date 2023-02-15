@@ -766,7 +766,52 @@ exports.deleteUser = async (req, res, next) => {
       res.status(404).json({ error });
     }
   }
-  
+  exports.connected = async (req, res, next) => {
+    try {   
+      const userObject = req.file ?
+        {
+          ...JSON.parse(req.body.user),
+          ficheUrl: `${req.file.url}`
+        } : { ...req.body };
+      const _id = req.params.id;
+      const user =  await User.findById(_id);
+      
+      await User.findByIdAndUpdate(_id, { ...userObject});
+      user.connected=true;    
+      await user.save().
+      then (()=> res.status(200).json({
+        data: user,
+        message: 'Utilisateur connecté avec succès!'
+      }))
+      .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      
+    } catch (error) {
+      res.status(404).json({ error });
+    }
+  }
+  exports.disconnected = async (req, res, next) => {
+    try {   
+      const userObject = req.file ?
+        {
+          ...JSON.parse(req.body.user),
+          ficheUrl: `${req.file.url}`
+        } : { ...req.body };
+      const _id = req.params.id;
+      const user =  await User.findById(_id);
+      
+      await User.findByIdAndUpdate(_id, { ...userObject});
+      user.connected=false;    
+      await user.save().
+      then (()=> res.status(200).json({
+        data: user,
+        message: 'Utilisateur déconnecté avec succès!'
+      }))
+      .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      
+    } catch (error) {
+      res.status(404).json({ error });
+    }
+  }
   async function sendupdatecompleteemail(user, origin) {
     let message;
     if (origin) {
