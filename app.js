@@ -4,11 +4,11 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const User = require('./models/user');
+const event = require('./models/fiscal-events');
 const cors = require('cors');
 const isJwtExpired =require ('jwt-check-expiration');
 require ('dotenv').config();
-
-
+const fetch =require('node-fetch');
 const userRoutes = require('./routes/user');
 const condidateRoutes = require('./routes/career-condidate');
 const contactRoutes = require('./routes/contact-req');
@@ -16,6 +16,7 @@ const carouselRoutes = require('./routes/settings');
 const eventRoutes = require('./routes/event');
 const decfiscmensRoutes = require('./routes/dec-fisc-mens');
 const deccomptabiliteRoutes = require('./routes/dec-comptabilite');
+const cron = require("node-cron");
 
 const app = express();
 
@@ -62,58 +63,61 @@ app.use((req, res, next) => {
   });
 
 
-  /*sendSMS(myMobile, mySms)
-  { 
-    const mySender = 'omar kammoun';
-    const myDate = '14/02/2023';
-    const myTime = '16:37';
-  
-    const Url_str ="https://www.tunisiesms.tn/client/Api/Api.aspx?fct=sms&key=MYKEY&mobile=216XXXXXXXX&sms=Hello+World&sender=YYYYYYY&date=jj/mm/aaaa&heure=hh:mm:ss";
-                    
-    Url_str = Url_str.replace("216XXXXXXXX",myMobile)
-    Url_str = Url_str.replace("Hello+World",mySms);
-    Url_str = Url_str.replace("YYYYYYY",mySender);
-    Url_str = Url_str.replace("jj/mm/aaaa",myDate,Url_str);
-    Url_str = Url_str.replace("hh:mm:ss",myTime,Url_str);
-                    
-    console.log(http_response(Url_str)) ;
-  }
-  
-  function http_response(url)
-  { 
-     ch = curl_init(); 
-     options = array( 
-     CURLOPT_URL            = url , 
-     CURLOPT_RETURNTRANSFER == true, 
-     CURLOPT_HEADER         == false, 
-     CURLOPT_FOLLOWLOCATION == true, 
-     CURLOPT_ENCODING       == '', 
-     CURLOPT_AUTOREFERER    == true, 
-     CURLOPT_CONNECTTIMEOUT == 120, 
-     CURLOPT_TIMEOUT        == 120,  
-     CURLOPT_MAXREDIRS      == 10,  
-     CURLOPT_SSL_VERIFYPEER == false, 
-     ); 
-     curl_setopt_array( ch, options );  
-     response = curl_exec(ch); 
-     httpCode = curl_getinfo(ch, CURLINFO_HTTP_CODE); 
-     if ( httpCode != 200 ) 
-     { 
-     return 'Return code is {httpCode}' 
-     .curl_error(ch); 
-     } 
-    else  
-     { 
-     return response; 
-    } 
-     curl_close(ch);
-  }*/
+  async function makeRequest() {
+    User.find().then(
+      (users) => {
+        users.forEach(async (element, key) => {
+          event.find().then(
+            (events) => {
+              events.forEach(async (item, index) => {
+                const currentdate=new Date()
+                const mySender = 'TunSMS Test';
+               /* const Url_str_accuse ="https://www.tunisiesms.tn/client/Api/Api.aspx?fct=dlr&key=8Xt1bBmrfe9Fuxj1tnAu9EXxNQmD9ilyxd2nzJ/ft5vUcv8d0FlnUbD/-/xkjFm6xYJgrZQib3Xq9c1qDuQfPIVaaOqRtTK9SD&msg_id=XXXX;YYYY";   */               
+                const Url_str ="https://www.tunisiesms.tn/client/Api/Api.aspx?fct=sms&key=8Xt1bBmrfe9Fuxj1tnAu9EXxNQmD9ilyxd2nzJ/ft5vUcv8d0FlnUbD/-/xkjFm6xYJgrZQib3Xq9c1qDuQfPIVaaOqRtTK9SD&mobile=216XXXXXXXX&sms=Hello+World&sender=YYYYYYY&date=jj/mm/aaaa&heure=hh:mm:ss";                  
+                const Url_str1 = Url_str.replace("216XXXXXXXX",element.mobile)
+                const Url_str2 = Url_str1.replace("Hello+World",`veuillez noter que la date du ${item.date.getDate()/item.date.getMonth() +1/item.date.getFullYear()}est la date du ${item.title}`);
+                const Url_str3 = Url_str2.replace("YYYYYYY",mySender);
+                const finalurl=Url_str3
+                /*const Url_str_accuse1 = Url_str_accuse.replace("216XXXXXXXX",element.mobile)
+                const Url_str_accuse2 = Url_str_accuse1.replace("Hello+World",`veuillez noter que la date du ${item.date.split('T')[0]}est la date du ${item.title}`);
+                const Url_str_accuse3 = Url_str_accuse2.replace("YYYYYYY",mySender);
+                const Url_str_accuse4 = Url_str_accuse3.replace("jj/mm/aaaa",myDate);
+                const Url_str_accuse5 = Url_str_accuse4.replace("hh:mm:ss",myTime);
+                const finalurlaccuse=Url_str_accuse5*/
+                /*console.log(finalurlaccuse);*/
+                if(`${item.date.getDate()}`==currentdate.getDate() -1&&`${item.date.getMonth()}`==currentdate.getMonth()&&`${item.date.getFullYear()}`==currentdate.getFullYear())
+                {
+                  const response = await fetch(finalurl);
+                  /*const response2 = await fetch(finalurl);*/
+                  console.log('status code: ', response); // 👉️ 200
+                  if (!response.ok) {
+                    console.log(response);
+                    throw new Error(`Error! status: ${response.status}`);
+                  } 
+                }
+                
+                 }) 
+            }
+          ).catch(
+            (error) => {
+              console.log(error)
+              });
           
-
-
-
-
-
+         })
+      }
+    ).catch(
+      (error) => {
+        console.log(error)
+        });
+       
+           
+       
+   
+      
+  }
+ /*cron.schedule('0 30 16 * * *', () => {
+      makeRequest();
+ });*/
  app.use('/api/users', userRoutes);
  app.use('/api/condidates', condidateRoutes);
  app.use('/api/contactreqs', contactRoutes);
