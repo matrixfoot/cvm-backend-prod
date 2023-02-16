@@ -75,7 +75,7 @@ app.use((req, res, next) => {
                /* const Url_str_accuse ="https://www.tunisiesms.tn/client/Api/Api.aspx?fct=dlr&key=8Xt1bBmrfe9Fuxj1tnAu9EXxNQmD9ilyxd2nzJ/ft5vUcv8d0FlnUbD/-/xkjFm6xYJgrZQib3Xq9c1qDuQfPIVaaOqRtTK9SD&msg_id=XXXX;YYYY";   */               
                 const Url_str ="https://www.tunisiesms.tn/client/Api/Api.aspx?fct=sms&key=8Xt1bBmrfe9Fuxj1tnAu9EXxNQmD9ilyxd2nzJ/ft5vUcv8d0FlnUbD/-/xkjFm6xYJgrZQib3Xq9c1qDuQfPIVaaOqRtTK9SD&mobile=216XXXXXXXX&sms=Hello+World&sender=YYYYYYY&date=jj/mm/aaaa&heure=hh:mm:ss";                  
                 const Url_str1 = Url_str.replace("216XXXXXXXX",element.mobile)
-                const Url_str2 = Url_str1.replace("Hello+World",`veuillez noter que la date du ${item.date.getDate()/item.date.getMonth() +1/item.date.getFullYear()}est la date du ${item.title}`);
+                const Url_str2 = Url_str1.replace("Hello+World",`cher client${item.title}: dernier délai ${item.date.getFullYear()/item.date.getMonth() +1/item.date.getDate()} `);
                 const Url_str3 = Url_str2.replace("YYYYYYY",mySender);
                 const finalurl=Url_str3
                 /*const Url_str_accuse1 = Url_str_accuse.replace("216XXXXXXXX",element.mobile)
@@ -85,7 +85,7 @@ app.use((req, res, next) => {
                 const Url_str_accuse5 = Url_str_accuse4.replace("hh:mm:ss",myTime);
                 const finalurlaccuse=Url_str_accuse5*/
                 /*console.log(finalurlaccuse);*/
-                if(`${item.date.getDate()}`==currentdate.getDate() -1&&`${item.date.getMonth()}`==currentdate.getMonth()&&`${item.date.getFullYear()}`==currentdate.getFullYear())
+                if(`${item.date.getDate()}`==currentdate.getDate() -4&&`${item.date.getMonth()}`==currentdate.getMonth()&&`${item.date.getFullYear()}`==currentdate.getFullYear())
                 {
                   const response = await fetch(finalurl);
                   /*const response2 = await fetch(finalurl);*/
@@ -115,7 +115,7 @@ app.use((req, res, next) => {
    
       
   }
- /*cron.schedule('0 30 16 * * *', () => {
+ /*cron.schedule('0 30 09 * * *', () => {
       makeRequest();
  });*/
  app.use('/api/users', userRoutes);
