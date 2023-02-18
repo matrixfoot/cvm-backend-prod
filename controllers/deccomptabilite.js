@@ -285,10 +285,10 @@ exports.completedeccomptabilite = async (req, res, next) => {
     const deccomptabilite = await Deccomptabilite.findById(_id);
     
     const user = await User.findById(deccomptabilite.userId);
-    if (res.locals.loggedInUser._id != deccomptabilite.userId&&req.user.role!='admin'&&req.user.role!='supervisor')
+    /*if (res.locals.loggedInUser._id != deccomptabilite.userId&&req.user.role!='admin'&&req.user.role!='supervisor')
   {
 return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'})
-  }
+  }*/
         await Deccomptabilite.findByIdAndUpdate(_id, { ...deccomptabiliteObject});
         
     deccomptabilite.updated = Date.now();
