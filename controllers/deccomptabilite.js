@@ -193,11 +193,7 @@ exports.updatedeccomptabilite = async (req, res, next) => {
  
   
     const origin =req.get('origin');
-    const deccomptabiliteObject = req.file ?
-      {
-        ...JSON.parse(req.body.deccomptabilite), 
-        autre3,autre5,autre6,autre1,autre2,autre4 
-      } : { ...req.body };
+    const deccomptabiliteObject= JSON.parse(req.body.deccomptabilite);
     let autre1 = deccomptabiliteObject.autre1
     let autre2 = deccomptabiliteObject.autre2
     let autre4 = deccomptabiliteObject.autre4
@@ -254,10 +250,10 @@ exports.updatedeccomptabilite = async (req, res, next) => {
     const deccomptabilite = await Deccomptabilite.findById(_id);
     
     const user = await User.findById(deccomptabilite.userId);
-    /*if (res.locals.loggedInUser._id != deccomptabilite.userId&&req.user.role!='admin'&&req.user.role!='supervisor')
+    if (res.locals.loggedInUser._id != deccomptabilite.userId&&req.user.role!='admin'&&req.user.role!='supervisor')
   {
 return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'})
-  }*/
+  }
         await Deccomptabilite.findByIdAndUpdate(_id, { ...deccomptabiliteObject});
         
     deccomptabilite.updated = Date.now();
@@ -285,10 +281,10 @@ exports.completedeccomptabilite = async (req, res, next) => {
     const deccomptabilite = await Deccomptabilite.findById(_id);
     
     const user = await User.findById(deccomptabilite.userId);
-    /*if (res.locals.loggedInUser._id != deccomptabilite.userId&&req.user.role!='admin'&&req.user.role!='supervisor')
+    if (res.locals.loggedInUser._id != deccomptabilite.userId&&req.user.role!='admin'&&req.user.role!='supervisor')
   {
 return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécuter cette action'})
-  }*/
+  }
         await Deccomptabilite.findByIdAndUpdate(_id, { ...deccomptabiliteObject});
         
     deccomptabilite.updated = Date.now();

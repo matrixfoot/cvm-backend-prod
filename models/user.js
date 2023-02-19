@@ -29,7 +29,7 @@ const userSchema = mongoose.Schema({
   raisonsociale: { type: String,},
   nomsociete: { type: String,},
   clientcode:{ type: String },
-  choixfacture:{type:String},
+  choixfacture:[],
   numeronote:{type:String},
   droitcompta:{type:String},
   rolesuperviseur:{type:String},

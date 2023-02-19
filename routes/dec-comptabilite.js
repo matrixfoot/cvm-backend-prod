@@ -9,8 +9,8 @@ router.post('/anneemois', userController.allowIfLoggedin, userController.grantAc
 
 router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'deccomptabilite'), deccomptabiliteController.getDeccomptabilite);
 router.get('/:id', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'deccomptabilite'),deccomptabiliteController.getdeccomptabilitebyid);
-router.put('/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'deccomptabilite'),deccomptabiliteController.updatedeccomptabilite);
-router.put('/modify/:id', userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'deccomptabilite'),deccomptabiliteController.completedeccomptabilite);
+router.put('/:id', multer, userController.allowIfLoggedin, userController.grantAccess('updateOwn', 'deccomptabilite'),deccomptabiliteController.updatedeccomptabilite);
+router.put('/modify/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'deccomptabilite'),deccomptabiliteController.completedeccomptabilite);
 router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'deccomptabilite'),deccomptabiliteController.deletedeccomptabilite);
 router.delete('/', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'deccomptabilite'),deccomptabiliteController.deletedeccomptabilites);
 

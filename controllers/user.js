@@ -432,7 +432,7 @@ exports.completeUser = async (req, res, next) => {
     const origin =req.get('origin');
     const { email, password,confirmpassword, firstname,lastname, natureactivite,
     activite,specialite,sousspecialite,
-    sousactivite,droitcompta,rolesuperviseur,
+    sousactivite,droitcompta,rolesuperviseur, 
     regimefiscalimpot,
     regimefiscaltva,
     matriculefiscale,fonction,secteur,choixfacture,numeronote,usertype,civilite,nature,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
