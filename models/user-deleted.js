@@ -11,6 +11,7 @@ const userdeletedSchema = mongoose.Schema({
   fonction: { type: String,},
   secteur: { type: String,},
   adresseactivite: { type: String,},
+  dateeffet: { type: Date,},
   codepostal: { type: String,},
   ficheUrl: { type: String,},
   natureactivite: { type: String,},
