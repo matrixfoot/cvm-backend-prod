@@ -67,7 +67,7 @@ app.use((req, res, next) => {
     User.find().then(
       (users) => {
         let filtredusers=users.filter((e => e.usertype=='Client'&&e.desactive.statut==false))
-        console.log(filtredusers)
+        console.log(filtredusers.length)
         filtredusers.forEach(async (element, key) => {
           event.find().then(
             (events) => {
@@ -85,7 +85,7 @@ app.use((req, res, next) => {
                 const Url_str_accuse5 = Url_str_accuse4.replace("hh:mm:ss",myTime);
                 const finalurlaccuse=Url_str_accuse5*/
                 /*console.log(finalurlaccuse);*/
-                if(`${item.date.getDate()}`==currentdate.getDate() -4&&`${item.date.getMonth()}`==currentdate.getMonth()&&`${item.date.getFullYear()}`==currentdate.getFullYear())
+                if(`${item.date.getDate()}`==currentdate.getDate() +3&&`${item.date.getMonth()}`==currentdate.getMonth()&&`${item.date.getFullYear()}`==currentdate.getFullYear())
                 {
                   if(item.nature.split(';').find(element.nature)||item.nature==''&&item.natureactivite.split(';').find(element.natureactivite)||item.natureactivite==''
                     &&item.activite.split(';').find(element.activite)||item.activite==''&&item.sousactivite.split(';').find(element.sousactivite)||item.sousactivite==''&&
@@ -123,6 +123,7 @@ app.use((req, res, next) => {
    
       
   }
+
  /*cron.schedule('0 30 09 * * *', () => {
       makeRequest();
  });*/
