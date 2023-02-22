@@ -123,9 +123,9 @@ app.use((req, res, next) => {
    
       
   }
- cron.schedule('0 33 16 * * *', () => {
+ /*cron.schedule('0 30 09 * * *', () => {
       makeRequest();
- });
+ });*/
  app.use('/api/users', userRoutes);
  app.use('/api/condidates', condidateRoutes);
  app.use('/api/contactreqs', contactRoutes);
