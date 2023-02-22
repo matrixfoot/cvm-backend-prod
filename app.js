@@ -17,6 +17,7 @@ const eventRoutes = require('./routes/event');
 const decfiscmensRoutes = require('./routes/dec-fisc-mens');
 const deccomptabiliteRoutes = require('./routes/dec-comptabilite');
 const cron = require("node-cron");
+const { stringify } = require('querystring');
 
 const app = express();
 
@@ -85,19 +86,18 @@ app.use((req, res, next) => {
                 const Url_str_accuse5 = Url_str_accuse4.replace("hh:mm:ss",myTime);
                 const finalurlaccuse=Url_str_accuse5*/
                 /*console.log(finalurlaccuse);*/
-                if(`${item.date.getDate()}`==currentdate.getDate() +3&&`${item.date.getMonth()}`==currentdate.getMonth()&&`${item.date.getFullYear()}`==currentdate.getFullYear())
+                if(`${item.date.getDate()}`==currentdate.getDate() +4&&`${item.date.getMonth()}`==currentdate.getMonth()&&`${item.date.getFullYear()}`==currentdate.getFullYear())
                 {
-                  if(item.nature.split(';').find(element.nature)||item.nature==''&&item.natureactivite.split(';').find(element.natureactivite)||item.natureactivite==''
-                    &&item.activite.split(';').find(element.activite)||item.activite==''&&item.sousactivite.split(';').find(element.sousactivite)||item.sousactivite==''&&
-                    item.regimefiscal.split(';').find(element.regimefiscalimpot)||item.regimefiscal=='')
+                  if(item.nature.split(';').find(x=>x==`${element.nature}`)||item.nature==''&&item.natureactivite.split(';').find(x=>x==`${element.natureactivite}`)||item.natureactivite==''
+                    &&item.activite.split(';').find(x=>x==`${element.activite}`)||item.activite==''&&item.sousactivite.split(';').find(x=>x==`${element.sousactivite}`)||item.sousactivite==''&&
+                    item.regimefiscal.split(';').find(x=>x==`${element.regimefiscalimpot}`)||item.regimefiscal=='')
                     {
-                      const Url_str1 = Url_str3.replace("XXXXXXXX",element.mobile)
+                      const Url_str1 = Url_str3.replace("216XXXXXXXX",element.mobile)
                       const finalurl=Url_str1
                       const response = await fetch(finalurl);
                       /*const response2 = await fetch(finalurl);*/
                       console.log('status code: ', response); // 👉️ 200
                       if (!response.ok) {
-                        console.log(response);
                         throw new Error(`Error! status: ${response.status}`);
                       } 
                     }
@@ -123,6 +123,8 @@ app.use((req, res, next) => {
    
       
   }
+
+      /*makeRequest();*/
 
  /*cron.schedule('0 30 09 * * *', () => {
       makeRequest();
