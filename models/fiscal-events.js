@@ -6,6 +6,22 @@ const eventSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    nature: {
+        type: String,
+    },
+    
+    natureactivite: {
+        type: String,
+    },
+    activite: {
+        type: String,
+    },
+    sousactivite: {
+        type: String,
+    },
+    regimefiscal: {
+        type: String,
+    },
     date: {
         type: Date,
         required: true,

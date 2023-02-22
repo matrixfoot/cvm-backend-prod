@@ -66,7 +66,13 @@ newevents.forEach((item, index) => {
 item.title=`${newevents[index].title}`
 item.date=`${newevents[index].date}`
 item.description=`${newevents[index].description}`
-const newEvent = new Event({title:item.title,date:item.date,description:item.description});
+item.nature=`${newevents[index].nature}`
+item.natureactivite=`${newevents[index].natureactivite}`
+item.activite=`${newevents[index].activite}`
+item.sousactivite=`${newevents[index].sousactivite}`
+item.regimefiscal=`${newevents[index].regimefiscal}`
+const newEvent = new Event({title:item.title,date:item.date,description:item.description,nature:item.nature,natureactivite:item.natureactivite
+,activite:item.activite,sousactivite:item.sousactivite,regimefiscal:item.regimefiscal});
 console.log(newEvent)
 newEvent.save();
    })

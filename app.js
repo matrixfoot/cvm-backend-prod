@@ -66,7 +66,9 @@ app.use((req, res, next) => {
   async function makeRequest() {
     User.find().then(
       (users) => {
-        users.forEach(async (element, key) => {
+        let filtredusers=users.filter((e => e.usertype=='Client'&&e.desactive.statut==false))
+        console.log(filtredusers)
+        filtredusers.forEach(async (element, key) => {
           event.find().then(
             (events) => {
               events.forEach(async (item, index) => {
@@ -74,10 +76,8 @@ app.use((req, res, next) => {
                 const mySender = 'TunSMS Test';
                /* const Url_str_accuse ="https://www.tunisiesms.tn/client/Api/Api.aspx?fct=dlr&key=8Xt1bBmrfe9Fuxj1tnAu9EXxNQmD9ilyxd2nzJ/ft5vUcv8d0FlnUbD/-/xkjFm6xYJgrZQib3Xq9c1qDuQfPIVaaOqRtTK9SD&msg_id=XXXX;YYYY";   */               
                 const Url_str ="https://www.tunisiesms.tn/client/Api/Api.aspx?fct=sms&key=8Xt1bBmrfe9Fuxj1tnAu9EXxNQmD9ilyxd2nzJ/ft5vUcv8d0FlnUbD/-/xkjFm6xYJgrZQib3Xq9c1qDuQfPIVaaOqRtTK9SD&mobile=216XXXXXXXX&sms=Hello+World&sender=YYYYYYY&date=jj/mm/aaaa&heure=hh:mm:ss";                  
-                const Url_str1 = Url_str.replace("216XXXXXXXX",element.mobile)
-                const Url_str2 = Url_str1.replace("Hello+World",`cher client${item.title}: dernier délai ${item.date.getFullYear()/item.date.getMonth() +1/item.date.getDate()} `);
+                const Url_str2 = Url_str.replace("Hello+World",`cher client${item.title}: dernier délai ${item.date.getFullYear()/item.date.getMonth() +1/item.date.getDate()} `);
                 const Url_str3 = Url_str2.replace("YYYYYYY",mySender);
-                const finalurl=Url_str3
                 /*const Url_str_accuse1 = Url_str_accuse.replace("216XXXXXXXX",element.mobile)
                 const Url_str_accuse2 = Url_str_accuse1.replace("Hello+World",`veuillez noter que la date du ${item.date.split('T')[0]}est la date du ${item.title}`);
                 const Url_str_accuse3 = Url_str_accuse2.replace("YYYYYYY",mySender);
@@ -87,13 +87,21 @@ app.use((req, res, next) => {
                 /*console.log(finalurlaccuse);*/
                 if(`${item.date.getDate()}`==currentdate.getDate() -4&&`${item.date.getMonth()}`==currentdate.getMonth()&&`${item.date.getFullYear()}`==currentdate.getFullYear())
                 {
-                  const response = await fetch(finalurl);
-                  /*const response2 = await fetch(finalurl);*/
-                  console.log('status code: ', response); // 👉️ 200
-                  if (!response.ok) {
-                    console.log(response);
-                    throw new Error(`Error! status: ${response.status}`);
-                  } 
+                  if(item.nature.split(';').find(element.nature)||item.nature==''&&item.natureactivite.split(';').find(element.natureactivite)||item.natureactivite==''
+                    &&item.activite.split(';').find(element.activite)||item.activite==''&&item.sousactivite.split(';').find(element.sousactivite)||item.sousactivite==''&&
+                    item.regimefiscal.split(';').find(element.regimefiscalimpot)||item.regimefiscal=='')
+                    {
+                      const Url_str1 = Url_str3.replace("XXXXXXXX",element.mobile)
+                      const finalurl=Url_str1
+                      const response = await fetch(finalurl);
+                      /*const response2 = await fetch(finalurl);*/
+                      console.log('status code: ', response); // 👉️ 200
+                      if (!response.ok) {
+                        console.log(response);
+                        throw new Error(`Error! status: ${response.status}`);
+                      } 
+                    }
+                  
                 }
                 
                  }) 
