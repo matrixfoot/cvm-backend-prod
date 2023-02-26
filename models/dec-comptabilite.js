@@ -65,6 +65,7 @@ const deccomptabiliteSchema = mongoose.Schema({
   totaltva19:{ type: String},
   totaldt19:{ type: String},
   totalttc19:{ type: String},
+  autre0: [],
   autre1: [],
   autre2: [],
   autre3: [],
