@@ -19,7 +19,7 @@ exports.createcondidate = (req, res, next) => {
         ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`});
       
       
-      (newCondidate.save(),sendconfirmemail(newCondidate, origin),sendcreationemail('macompta@macompta.com.tn',newCondidate.email,newCondidate._id, origin)).
+      (newCondidate.save(),sendconfirmemail(newCondidate, origin),sendcreationemail('tn.macompta@gmail.com',newCondidate.email,newCondidate._id, origin)).
       then (()=>res.status(201).json({
         data: newCondidate,
         message: "Votre demande a été crée avec succès"
@@ -118,7 +118,7 @@ exports.updateCondidate = async (req, res, next) => {
       if(condidateObject.statutadmin[condidateObject.statutadmin.length-1].statut=='clôturé')
       {
         console.log('clot')
-        await (condidate.save(),sendupdateemail(condidate, origin),sendmodifadmin('macompta@macompta.com.tn',condidate.email,condidate._id, origin)).
+        await (condidate.save(),sendupdateemail(condidate, origin),sendmodifadmin('tn.macompta@gmail.com',condidate.email,condidate._id, origin)).
         then (()=> res.status(200).json({
           data: condidateupdated,
           message: 'Candidature modifié !'
@@ -128,7 +128,7 @@ exports.updateCondidate = async (req, res, next) => {
       else if(condidateObject.statutadmin[condidateObject.statutadmin.length-1].statut!='clôturé')
       {
         console.log('autreclot')
-        await (condidate.save(),sendmodifadmin('macompta@macompta.com.tn',condidate.email,condidate._id, origin)).
+        await (condidate.save(),sendmodifadmin('tn.macompta@gmail.com',condidate.email,condidate._id, origin)).
         then (()=> res.status(200).json({
           data: condidateupdated,
           message: 'Candidature modifié !'
@@ -140,7 +140,7 @@ exports.updateCondidate = async (req, res, next) => {
       {
         console.log('here')
 
-        await (condidate.save(),sendmodifadmin('macompta@macompta.com.tn',condidate.email,condidate._id, origin)).
+        await (condidate.save(),sendmodifadmin('tn.macompta@gmail.com',condidate.email,condidate._id, origin)).
         then (()=> res.status(200).json({
           data: condidateupdated,
           message: 'Candidature modifié !'
