@@ -11,6 +11,7 @@ const userdeletedSchema = mongoose.Schema({
   fonction: { type: String,},
   secteur: { type: String,},
   adresseactivite: { type: String,},
+  dateeffet: { type: Date,},
   codepostal: { type: String,},
   ficheUrl: { type: String,},
   natureactivite: { type: String,},
@@ -28,8 +29,10 @@ const userdeletedSchema = mongoose.Schema({
   raisonsociale: { type: String,},
   nomsociete: { type: String,},
   clientcode:{ type: String },
-  choixfacture:{type:String},
-  numeronote:{type:String},
+  choixfacture:[],
+  numeronote:[],
+  droitcompta:{type:String},
+  rolesuperviseur:{type:String},
   role: {
     type: String,
    
@@ -45,6 +48,7 @@ const userdeletedSchema = mongoose.Schema({
     passwordReset: { type: Date},
     created: { type: Date},
     updated: { type: Date},
+    connected: { type: Boolean, default:false},
     desactive: { 
       statut: Boolean,
       date: Date

@@ -67,12 +67,12 @@ exports.allowIfLoggedin = async (req, res, next) => {
 exports.signup = async (req, res, next) => {
   try {
     const origin =req.get('origin');
-    const { email, password,confirmpassword, firstname,lastname,usertype,fonction,secteur,civilite,nature,raisonsociale,mobile,adresseactivite,codepostal,desactive,nomsociete,clientcode,role} = req.body
+    const { email, password,confirmpassword, firstname,lastname,usertype,fonction,secteur,civilite,nature,raisonsociale,mobile,adresseactivite,dateeffet,codepostal,desactive,nomsociete,clientcode,role} = req.body
     
     const hashedPassword = await hashPassword(password);
     const confirmedhashedPassword = await hashPassword(confirmpassword);
     
-    const newUser = new User({email, password:hashedPassword,confirmpassword:confirmedhashedPassword,firstname,usertype,lastname,mobile,fonction,adresseactivite,desactive,codepostal,secteur,civilite,nature,raisonsociale,nomsociete,clientcode,role: role || "basic" });
+    const newUser = new User({email, password:hashedPassword,confirmpassword:confirmedhashedPassword,firstname,usertype,lastname,mobile,fonction,adresseactivite,dateeffet,desactive,codepostal,secteur,civilite,nature,raisonsociale,nomsociete,clientcode,role: role || "basic" });
     const accessToken = jwt.sign({ userId: newUser._id }, 'RANDOM_TOKEN_SECRET', {
       expiresIn: "1d"
     });
@@ -261,9 +261,9 @@ exports.login = async (req, res, next) => {
        userId: user._id, email: user.email,password: user.password,confirmpassword: user.confirmpassword, role: user.role,
        acceptterms: user.acceptTerms, Firstname: user.firstname, Lastname: user.lastname,adresseactivite:user.adresseactivite,codepostal:user.codepostal, 
        fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,nature:user.nature,usertype:user.usertype,mobile:user.mobile,
-       raisonsociale:user.raisonsociale, nomsociete: user.nomsociete,natureactivite:user.natureactivite,
+       raisonsociale:user.raisonsociale, nomsociete: user.nomsociete,natureactivite:user.natureactivite,dateeffet:user.dateeffet,
        activite:user.activite,specialite:user.specialite,sousspecialite:user.sousspecialite,choixfacture:user.choixfacture,numeronote:user.numeronote,
-       sousactivite:user.sousactivite,
+       sousactivite:user.sousactivite,droitcompta:user.droitcompta,rolesuperviseur:user.rolesuperviseur,
        regimefiscalimpot:user.regimefiscalimpot,
        regimefiscaltva:user.regimefiscaltva,
        matriculefiscale:user.matriculefiscale, clientcode:user.clientcode,
@@ -432,10 +432,10 @@ exports.completeUser = async (req, res, next) => {
     const origin =req.get('origin');
     const { email, password,confirmpassword, firstname,lastname, natureactivite,
     activite,specialite,sousspecialite,
-    sousactivite,
+    sousactivite,droitcompta,rolesuperviseur, 
     regimefiscalimpot,
     regimefiscaltva,
-    matriculefiscale,fonction,secteur,choixfacture,numeronote,usertype,civilite,nature,raisonsociale,adresseactivite,codepostal,mobile,nomsociete,clientcode,role} = req.body
+    matriculefiscale,fonction,secteur,choixfacture,numeronote,usertype,civilite,nature,raisonsociale,adresseactivite,dateeffet,codepostal,mobile,nomsociete,clientcode,role} = req.body
     const _id = req.params.id;
     const user = await User.findById(_id);
     if (req.body.email && user.email !== req.body.email &&await User.findOne({ email: req.body.email })) {
@@ -443,6 +443,12 @@ exports.completeUser = async (req, res, next) => {
       return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
       
   }
+  if (req.body.matriculefiscale && user.matriculefiscale !== req.body.matriculefiscale &&await User.findOne({ matriculefiscale: req.body.matriculefiscale })) {
+    
+    return await (res.status(300).json({ error: 'utilisateur avec ce Matricule fiscale existe déjà!' }))
+    
+    
+}
     if (req.body.password&&req.body.confirmpassword) {
       
   
@@ -455,16 +461,16 @@ exports.completeUser = async (req, res, next) => {
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
     await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
       activite,specialite,sousspecialite,
-      sousactivite,usertype,
+      sousactivite,usertype,droitcompta,rolesuperviseur,
       regimefiscalimpot,choixfacture,numeronote,
       regimefiscaltva,
-      matriculefiscale,fonction,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,nomsociete,clientcode,role});}
+      matriculefiscale,fonction,secteur,civilite,nature,raisonsociale,adresseactivite,dateeffet,codepostal,nomsociete,clientcode,role});}
     else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
       activite,specialite,sousspecialite,
-      sousactivite,usertype,
+      sousactivite,usertype,droitcompta,rolesuperviseur,
       regimefiscalimpot,choixfacture,numeronote,
       regimefiscaltva,
-      matriculefiscale,secteur,civilite,nature,raisonsociale,adresseactivite,codepostal,nomsociete,mobile,clientcode,role});}
+      matriculefiscale,secteur,civilite,nature,raisonsociale,adresseactivite,dateeffet,codepostal,nomsociete,mobile,clientcode,role});}
     
     user.updated = Date.now();
     
@@ -488,12 +494,13 @@ exports.updateUser = async (req, res, next) => {
     const userObject = req.file ?
       {
         ...JSON.parse(req.body.user),
-        ficheUrl: `${req.file.url}`
+        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
       } : { ...req.body};
     const _id = req.params.id;
     const user = await User.findById(_id);
     const codepostal = userObject.codepostal;
     const adresseactivite = userObject.adresseactivite;
+    const dateeffet = userObject.dateeffet;
     const ficheUrl = userObject.ficheUrl;
     const activite=userObject.activite
     const specialite=userObject.specialite
@@ -505,6 +512,9 @@ exports.updateUser = async (req, res, next) => {
     const sousactivite=userObject.sousactivite
     const regimefiscalimpot=userObject.regimefiscalimpot
     const regimefiscaltva=userObject.regimefiscaltva
+    const droitcompta=userObject.droitcompta
+    const rolesuperviseur=userObject.rolesuperviseur
+
     const matriculefiscale=userObject.matriculefiscale
     const fonction=userObject.fonction
     const secteur=userObject.secteur
@@ -520,6 +530,12 @@ exports.updateUser = async (req, res, next) => {
       return await (sendAlreadyRegisteredEmail(email, origin),res.status(300).json({ error: 'utilisateur avec ce Mail existe déjà!' }))
       
   }
+  if (req.body.matriculefiscale && user.matriculefiscale !== req.body.matriculefiscale &&await User.findOne({ matriculefiscale: req.body.matriculefiscale })) {
+    
+    return await (res.status(300).json({ error: 'utilisateur avec ce Matricule fiscale existe déjà!' }))
+    
+    
+}
   if (req.body.mobile && user.mobile !== req.body.mobile &&await User.findOne({ mobile: req.body.mobile })) {
     
     return await (res.status(300).json({ error: 'utilisateur avec ce Mobile existe déjà!' }))
@@ -539,6 +555,7 @@ exports.updateUser = async (req, res, next) => {
     await User.findByIdAndUpdate(_id, { ...userObject,password:hashedPassword,confirmpassword:confirmedhashedPassword});}
     else {await User.findByIdAndUpdate(_id, {  codepostal : userObject.codepostal,
        adresseactivite : userObject.adresseactivite,
+       dateeffet : userObject.dateeffet,
        ficheUrl : userObject.ficheUrl,
        activite:userObject.activite,specialite:userObject.specialite,sousspecialite:userObject.sousspecialite,
        email:userObject.email,
@@ -549,6 +566,9 @@ exports.updateUser = async (req, res, next) => {
        regimefiscalimpot:userObject.regimefiscalimpot,
        regimefiscaltva:userObject.regimefiscaltva,
        matriculefiscale:userObject.matriculefiscale,
+       droitcompta:userObject.droitcompta,
+       rolesuperviseur:userObject.rolesuperviseur,
+
        fonction:userObject.fonction,
        secteur:userObject.secteur,
        civilite:userObject.civilite,nature:userObject.nature,
@@ -598,6 +618,7 @@ exports.deleteUser = async (req, res, next) => {
       userdeleted.lastname = user.lastname;
       userdeleted._id = user._id;
       userdeleted.adresseactivite=user.adresseactivite;
+      userdeleted.dateeffet=user.dateeffet;
       userdeleted.codepostal=user.codepostal;
       userdeleted.natureactivite=user.natureactivite;
       userdeleted.activite=user.activite;
@@ -620,6 +641,8 @@ exports.deleteUser = async (req, res, next) => {
       userdeleted.nomsociete = user.nomsociete;
       userdeleted.clientcode = user.clientcode;
       userdeleted.role = user.role;
+      userdeleted.droitcompta = user.droitcompta;
+      userdeleted.rolesuperviseur = user.rolesuperviseur;
       userdeleted.created = user.created;
       userdeleted.accessToken = user.accessToken;
       userdeleted.resetToken = user.resetToken;
@@ -650,6 +673,7 @@ exports.deleteUser = async (req, res, next) => {
       user.lastname=userdeleted.lastname;
       user._id=userdeleted._id;
       user.adresseactivite=userdeleted.adresseactivite;
+      user.dateeffet=userdeleted.dateeffet;
       user.codepostal=userdeleted.codepostal;
       user.natureactivite=userdeleted.natureactivite;
       user.activite=userdeleted.activite;
@@ -666,7 +690,8 @@ exports.deleteUser = async (req, res, next) => {
       user.secteur = userdeleted.secteur;
       user.civilite = userdeleted.civilite;
       user.nature = userdeleted.nature;
-
+      user.droitcompta = userdeleted.droitcompta;
+      user.rolesuperviseur = userdeleted.rolesuperviseur;
       user.usertype = userdeleted.usertype;
       user.mobile = userdeleted.mobile;
       user.raisonsociale = userdeleted.raisonsociale;
@@ -700,7 +725,7 @@ exports.deleteUser = async (req, res, next) => {
       const userObject = req.file ?
         {
           ...JSON.parse(req.body.user),
-          ficheUrl: `${req.file.url}`
+          ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
         } : { ...req.body };
       const _id = req.params.id;
       const user =  await User.findById(_id);
@@ -726,7 +751,7 @@ exports.deleteUser = async (req, res, next) => {
       const userObject = req.file ?
         {
           ...JSON.parse(req.body.user),
-          ficheUrl: `${req.file.url}`
+          ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
         } : { ...req.body };
       const _id = req.params.id;
       const user =  await User.findById(_id);
@@ -745,7 +770,52 @@ exports.deleteUser = async (req, res, next) => {
       res.status(404).json({ error });
     }
   }
-  
+  exports.connected = async (req, res, next) => {
+    try {   
+      const userObject = req.file ?
+        {
+          ...JSON.parse(req.body.user),
+          ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
+        } : { ...req.body };
+      const _id = req.params.id;
+      const user =  await User.findById(_id);
+      
+      await User.findByIdAndUpdate(_id, { ...userObject});
+      user.connected=true;    
+      await user.save().
+      then (()=> res.status(200).json({
+        data: user,
+        message: 'Utilisateur connecté avec succès!'
+      }))
+      .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      
+    } catch (error) {
+      res.status(404).json({ error });
+    }
+  }
+  exports.disconnected = async (req, res, next) => {
+    try {   
+      const userObject = req.file ?
+        {
+          ...JSON.parse(req.body.user),
+          ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
+        } : { ...req.body };
+      const _id = req.params.id;
+      const user =  await User.findById(_id);
+      
+      await User.findByIdAndUpdate(_id, { ...userObject});
+      user.connected=false;    
+      await user.save().
+      then (()=> res.status(200).json({
+        data: user,
+        message: 'Utilisateur déconnecté avec succès!'
+      }))
+      .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      
+    } catch (error) {
+      res.status(404).json({ error });
+    }
+  }
   async function sendupdatecompleteemail(user, origin) {
     let message;
     if (origin) {

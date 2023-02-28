@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const decfiscmensController = require('../controllers/dec-fisc-mens');
 const userController = require('../controllers/user');
-const multer = require('../middleware/multer-config');
+const multer = require('../middleware/multer-config3');
 router.post('/createdecfiscmens', multer,decfiscmensController.createdecfiscmens);
 router.post('/', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'decfiscmens'),decfiscmensController.getdecfiscmens);
 router.post('/anneemois', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'decfiscmens'),decfiscmensController.getdecfiscmensmoisannee);

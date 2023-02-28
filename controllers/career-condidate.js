@@ -16,10 +16,10 @@ exports.createcondidate = (req, res, next) => {
       const condidateObject= JSON.parse(req.body.condidate);
       const newCondidate = new Condidate({...condidateObject,
         /*ficheUrl: `${req.protocol}://www.macompta.com.tn/${req.file.path}`});*/
-        ficheUrl: `${req.file.url}`});
+        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`});
       
       
-      (newCondidate.save(),sendconfirmemail(newCondidate, origin)).
+      (newCondidate.save(),sendconfirmemail(newCondidate, origin),sendcreationemail('tn.macompta@gmail.com',newCondidate.email,newCondidate._id, origin)).
       then (()=>res.status(201).json({
         data: newCondidate,
         message: "Votre demande a été crée avec succès"
@@ -96,30 +96,59 @@ exports.filtercondidatechoice = async (req, res, next) => {
 };
 exports.updateCondidate = async (req, res, next) => {
  
-  try {
+  
     const origin =req.get('origin');
     
     const condidateObject = req.file ?
       {
         ...JSON.parse(req.body.condidate),
-        ficheUrl: `${req.file.url}`
+        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
       } : { ...req.body };
     const _id = req.params.id;
     const condidate = await Condidate.findById(_id);
     
         await Condidate.findByIdAndUpdate(_id, { ...condidateObject});
-        
-    condidate.updated = Date.now();
-    await (condidate.save(),sendupdateemail(condidate, origin)).
-    then (()=> res.status(200).json({
-      data: condidate,
-      message: 'Candidature modifié !'
-    }))
-    .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+    const condidateupdated = await Condidate.findById(_id);
     
-  } catch (error) {
-    res.status(404).json({ error });
-  }
+    condidate.updated = Date.now();
+    console.log(condidateObject.statutadmin.length)
+    if(condidateObject.statutadmin.length>0)
+    {
+      console.log(condidateObject.statutadmin[condidateObject.statutadmin.length-1].statut)
+      if(condidateObject.statutadmin[condidateObject.statutadmin.length-1].statut=='clôturé')
+      {
+        console.log('clot')
+        await (condidate.save()).
+        then (()=> res.status(200).json({
+          data: condidateupdated,
+          message: 'Candidature modifié !'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      }
+      else if(condidateObject.statutadmin[condidateObject.statutadmin.length-1].statut!='clôturé')
+      {
+        console.log('autreclot')
+        await (condidate.save()).
+        then (()=> res.status(200).json({
+          data: condidateupdated,
+          message: 'Candidature modifié !'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      }
+    }
+    else 
+      {
+        console.log('here')
+
+        await (condidate.save()).
+        then (()=> res.status(200).json({
+          data: condidateupdated,
+          message: 'Candidature modifié !'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      }
+    
+  
 }
 
 exports.deletecondidate = async (req, res, next) => {
@@ -154,7 +183,7 @@ exports.deletecondidate = async (req, res, next) => {
     let message;
     if (origin) {
         const updatecondidateUrl = `${origin}/login`;
-        message = `<p>votre demande a été modifiée, veuillez vous connecter pour découvrir le sort de  votre candidature</p>
+        message = `<p>le statut de votre demande a été modifié, veuillez vous connecter pour en découvrir le sort</p>
                    <p><a href="${updatecondidateUrl}">${updatecondidateUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -163,8 +192,8 @@ exports.deletecondidate = async (req, res, next) => {
   
     await sendEmail({
         to: condidate.email,
-        subject: 'Suivi du sort  de votre candidature',
-        html: `<h4>Suivi candidature</h4>
+        subject: 'Suivi du sort  de candidature',
+        html: `<h4>Suivi de candidature</h4>
                <p>Merci pour votre interaction!</p>
                ${message}`
     });
@@ -173,7 +202,7 @@ exports.deletecondidate = async (req, res, next) => {
     let message;
     if (origin) {
         const verifycondidateUrl = `${origin}/login`;
-        message = `<p>votre demande a été enregistré, veuillez vous inscrire/se connecter pour suivre votre candidature</p>
+        message = `<p>votre demande a été enregistrée, veuillez vous inscrire/se connecter pour suivre votre candidature</p>
                    <p><a href="${verifycondidateUrl}">${verifycondidateUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -182,11 +211,47 @@ exports.deletecondidate = async (req, res, next) => {
   
     await sendEmail({
         to: newCondidate.email,
-        subject: 'Verification de réception de candidature',
-        html: `<h4>Vérification candidature</h4>
+        subject: 'confirmation de réception de candidature',
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
+               ${message}`
+    });
+  }
+  async function sendcreationemail(sendemail,email,id, origin) {
+    let message;
+    if (origin) {
+        const verifycondidateUrl = `${origin}/view-condidate/${id}`;
+        message = `<p>une candidature a été déposée par ${email} avec succès, veuillez la consulter pour en décider le sort</p>
+                   <p><a href="${verifycondidateUrl}">${verifycondidateUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: sendemail,
+        subject: 'évaluation de candidature',
+        html: `<h4>évaluation de candidature</h4>
                <p>Merci pour votre interaction!</p>
                ${message}`
     });
   }
- 
+  async function sendmodifadmin(sendemail,email,id, origin) {
+    let message;
+    if (origin) {
+        const verifycondidateUrl = `${origin}/view-condidate/${id}`;
+        message = `<p>une candidature de l'utilisateur ${email} a été modifiée suite à un traitement, veuillez la consulter pour en décider le sort</p>
+                   <p><a href="${verifycondidateUrl}">${verifycondidateUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: sendemail,
+        subject: 'évaluation de candidature',
+        html: `<h4>évaluation de candidature</h4>
+               <p>Merci pour votre interaction!</p>
+               ${message}`
+    });
+  }
 

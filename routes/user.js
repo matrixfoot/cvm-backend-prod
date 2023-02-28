@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user');
-const multer = require('../middleware/multer-config');
+const multer = require('../middleware/multer-config3');
 router.post('/signup', userController.signup);
 
 router.post('/login', userController.login);
@@ -20,11 +20,14 @@ router.post('/filteruserfirstname', userController.allowIfLoggedin, userControll
 router.post('/filteruserlastname', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.filteruserlastname);
 router.post('/filteruserchoice', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.filteruserchoice);
 router.get('/deletedusers/all', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'), userController.getUsersdeleted);
-router.get('/', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'), userController.getUsers);
+router.get('/', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'profile'), userController.getUsers);
 router.put('/:id', userController.allowIfLoggedin,multer, userController.grantAccess('updateOwn', 'profile'), userController.updateUser);
 router.put('/complete/:id', userController.allowIfLoggedin,userController.grantAccess('updateOwn', 'profile'), userController.completeUser);
 router.put('/desactivate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.desactivateUser);
 router.put('/activate/:id', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'profile'), userController.activateUser);
+router.put('/connect/:id', userController.connected);
+router.put('/disconnect/:id', userController.disconnected);
+
 router.delete('/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.deleteUser);
 router.delete('/temporardelete/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.deleteUsertemporare);
 router.delete('/restaure/:id', userController.allowIfLoggedin, userController.grantAccess('deleteAny', 'profile'), userController.restaureuser);

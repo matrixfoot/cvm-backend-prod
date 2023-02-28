@@ -17,7 +17,7 @@ ac.grant("basic")
  .readOwn("decfiscmens")
  .updateOwn("decfiscmens")
  .readOwn("deccomptabilite")
- .updateOwn("decomptabilite")
+ .updateOwn("deccomptabilite")
 
 ac.grant("supervisor")
  .extend("basic")

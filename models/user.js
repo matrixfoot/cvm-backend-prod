@@ -1,3 +1,4 @@
+const { boolean } = require('joi');
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
@@ -11,6 +12,7 @@ const userSchema = mongoose.Schema({
   fonction: { type: String,},
   secteur: { type: String,}, 
   adresseactivite: { type: String,},
+  dateeffet: { type: Date,},
   codepostal: { type: String,},
   ficheUrl: { type: String,},
   natureactivite: { type: String,},
@@ -28,8 +30,10 @@ const userSchema = mongoose.Schema({
   raisonsociale: { type: String,},
   nomsociete: { type: String,},
   clientcode:{ type: String },
-  choixfacture:{type:String},
-  numeronote:{type:String},
+  choixfacture:[],
+  numeronote:[],
+  droitcompta:{type:String},
+  rolesuperviseur:{type:String},
   role: {
     type: String,
     default: 'basic',
@@ -46,6 +50,7 @@ const userSchema = mongoose.Schema({
     passwordReset: { type: Date},
     created: { type: Date, default: Date.now },
     updated: { type: Date},
+    connected: { type: Boolean, default:false},
     desactive: { 
       statut: Boolean, default: false,
       date: Date

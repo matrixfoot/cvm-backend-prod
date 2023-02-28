@@ -15,11 +15,11 @@ exports.createcontactreq = (req, res, next) => {
       const origin =req.get('origin');
       const contactObject= JSON.parse(req.body.contact);
       const newContact = new Contact({...contactObject,
-        ficheUrl:`${req.file.url}`});
+        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`});
       
       
       
-      (newContact.save(),sendconfirmemail(newContact, origin),sendmodificationemail('tn.macompta@gmail.com',newContact.email,newContact._id, origin)).
+      (newContact.save()).
       then (()=>res.status(200).json({
         data: newContact,
         message: "Votre requête a été crée avec succès"
@@ -36,7 +36,7 @@ exports.createcontactreq = (req, res, next) => {
     
     
     
-    (newContact.save(),sendconfirmemail(newContact, origin)).
+    (newContact.save()).
     then (()=>res.status(200).json({
       data: newContact,
       message: "Votre requête a été crée avec succès"
@@ -70,6 +70,20 @@ exports.getcontactbyid = (req, res, next) => {
   }).then(
     (contact) => {
       
+      res.status(200).json(contact);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
+exports.getContact = (req, res, next) => {
+  const {email} = req.body
+  Contact.find({ email}).then(
+    (contact) => {
       res.status(200).json(contact);
     }
   ).catch(
@@ -117,20 +131,43 @@ exports.updateContact = async (req, res, next) => {
     const contactObject = req.file ?
       {
         ...JSON.parse(req.body.contact),
-        ficheUrl: `${req.file.url}`
-      } : { ...req.body };
+        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
+            } : { ...req.body };
     const _id = req.params.id;
     const contact = await Contact.findById(_id);
-    
-        await Contact.findByIdAndUpdate(_id, { ...contactObject});
-        
+    await Contact.findByIdAndUpdate(_id, { ...contactObject});
+    const updatedcontact = await Contact.findById(_id);    
     contact.updated = Date.now();
-    await (contact.save(),sendupdateemail(contact, origin)).
-    then (()=> res.status(200).json({
-      data: contact,
-      message: 'Requête traitée!'
-    }))
-    .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+    if(contactObject.statutadmin.length>0)
+    {
+      if(contactObject.statutadmin[contactObject.statutadmin.length-1].statut=='clôturé')
+      {
+        await (contact.save()).
+        then (()=> res.status(200).json({
+          data: updatedcontact,
+          message: 'Requête traitée!'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      }
+      else if(contactObject.statutadmin[contactObject.statutadmin.length-1].statut!='clôturé')
+      {
+        await (contact.save()).
+        then (()=> res.status(200).json({
+          data: updatedcontact,
+          message: 'Requête traitée!'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      }
+    }
+    else 
+      {
+        await (contact.save()).
+        then (()=> res.status(200).json({
+          data: updatedcontact,
+          message: 'Requête traitée!'
+        }))
+        .catch(error => res.status(400).json({ error , message: 'opération non aboutie veuillez réessayer'}));
+      }
     
   } catch (error) {
     res.status(404).json({ error });
@@ -142,7 +179,7 @@ exports.updateContact = async (req, res, next) => {
     let message;
     if (origin) {
         const updatecontactUrl = `${origin}`;
-        message = `<p>votre réclamation a été traitée, veuillez nous rendre visite pour découvrir le résultat suite à  votre requête</p>
+        message = `<p>votre requête a été traitée, veuillez vous connecter pour en découvrir le sort</p>
                    <p><a href="${updatecontactUrl}">${updatecontactUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -151,9 +188,8 @@ exports.updateContact = async (req, res, next) => {
   
     await sendEmail({
         to: contact.email,
-        subject: 'Suivi de votre requête',
-        html: `<h4>Suivi requête</h4>
-               <p>Merci pour votre interaction!</p>
+        subject: 'Suivi de requête',
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });
   }
@@ -161,7 +197,7 @@ exports.updateContact = async (req, res, next) => {
     let message;
     if (origin) {
         const verifycontactUrl = `${origin}`;
-        message = `<p>votre requête a été envoyé avec succès, veuillez rester à l'écoute nous vous informons dès le traitement de votre requête</p>
+        message = `<p>votre requête a été enregistrée avec succès, vous pouvez toujours vous connecter pour en savoir le sort</p>
                    <p><a href="${verifycontactUrl}">${verifycontactUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -170,17 +206,16 @@ exports.updateContact = async (req, res, next) => {
   
     await sendEmail({
         to: newContact.email,
-        subject: 'Verification de réception de réclamation',
-        html: `<h4>Vérification réclamation</h4>
-               <p>Merci pour votre interaction!</p>
+        subject: 'confirmation de réception de requête',
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });
   }
-  async function sendmodificationemail(sendemail,email,id, origin) {
+  async function sendcreationemail(sendemail,email,id, origin) {
     let message;
     if (origin) {
-        const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
-        message = `<p>une réclamation a été complétée par ${email} avec succès, veuillez la consulter pour la traiter</p>
+        const verifydecfiscmensUrl = `${origin}/view-contact/${id}`;
+        message = `<p>une requête a été déposée par ${email} avec succès, veuillez la consulter pour la traiter</p>
                    <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -189,9 +224,26 @@ exports.updateContact = async (req, res, next) => {
   
     await sendEmail({
         to: sendemail,
-        subject: 'traitement de réclamation',
-        html: `<h4>évaluation de la réclamation</h4>
-               <p>Merci pour votre interaction!</p>
+        subject: 'réception de requête',
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
+               ${message}`
+    });
+  }
+  async function sendmodifemailadmin(sendemail,email,id, origin) {
+    let message;
+    if (origin) {
+        const verifydecfiscmensUrl = `${origin}/view-contact/${id}`;
+        message = `<p>une requête de l'utilisateur ${email} a été modifiée suite à un traitement, veuillez la consulter pour la traiter</p>
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: sendemail,
+        subject: 'évaluation de requête',
+        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });
   }
