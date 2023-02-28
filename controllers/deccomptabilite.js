@@ -27,13 +27,13 @@ const sendEmail = require('../send-email');
     autre3filtred.forEach((item, index) => { 
       if(filterByValue2(files3,'t3'+item.fournisseur+item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
       {
-        item.ficheUrl =`${files3[index].url}` 
+        item.ficheUrl= `${req.protocol}://${req.get('host')}/fichiers/${files3[index].url}`;
+
       }
       else 
       {
         item.ficheUrl=''
       }
-      console.log(`'t3${item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee}'`)
 
    })
    let autre5 = deccomptabiliteObject.autre5
@@ -41,26 +41,24 @@ const sendEmail = require('../send-email');
    autre5filtred.forEach((key, number) => { 
       if(filterByValue2(files5, 't5'+key.annee+key.mois))
       {
-        key.ficheUrl =`${files5[number].url}` 
+        key.ficheUrl =`${req.protocol}://${req.get('host')}/fichiers/${files5[number].url}`
       }
       else 
       {
         key.ficheUrl=''
       }
-      console.log(`'t5${key.mois+key.annee}'`)   
     })
       let autre6 = deccomptabiliteObject.autre6
       let files6= filterByValue(req.files, 't6')
       autre6filtred.forEach((item, index) => { 
         if(filterByValue2(files6,'t6'+item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
         {
-          item.ficheUrl =`${files6[index].url}` 
+          item.ficheUrl =`${req.protocol}://${req.get('host')}/fichiers/${files6[index].url}`
         }
         else 
         {
           item.ficheUrl=''
         }
-        console.log(`'t6${item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee}'`)
   
      }) 
    const newDeccomptabilite = new Deccomptabilite({...deccomptabiliteObject,
@@ -201,7 +199,6 @@ exports.updatedeccomptabilite = async (req, res, next) => {
     let autre5 = deccomptabiliteObject.autre5
     let autre6 = deccomptabiliteObject.autre6
 
-    console.log(autre1,autre2,autre3,autre4,autre5,autre6)
     let autre3filtred=filterByValue(deccomptabiliteObject.autre3,'true')
     let autre5filtred=filterByValue(deccomptabiliteObject.autre5,'true')
     let autre6filtred=filterByValue(deccomptabiliteObject.autre6,'true')
@@ -210,38 +207,36 @@ exports.updatedeccomptabilite = async (req, res, next) => {
     autre3filtred.forEach((item, index) => { 
       if(filterByValue2(files3,'t3'+item.fournisseur+item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
       {
-        item.ficheUrl =`${files3[index].url}` 
+        item.ficheUrl= `${req.protocol}://${req.get('host')}/fichiers/${files3[index].url}`;
+
       }
       else 
       {
         item.ficheUrl=''
       }
-      console.log(`'t3${item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee}'`)
 
    })
    let files5= filterByValue(req.files, 't5')
    autre5filtred.forEach((key, number) => { 
       if(filterByValue2(files5, 't5'+key.annee+key.mois))
       {
-        key.ficheUrl =`${files5[number].url}` 
+        key.ficheUrl =`${req.protocol}://${req.get('host')}/fichiers/${files5[number].url}`
       }
       else 
       {
         key.ficheUrl=''
       }
-      console.log(`'t5${key.mois+key.annee}'`)   
     })
       let files6= filterByValue(req.files, 't6')
       autre6filtred.forEach((item, index) => { 
         if(filterByValue2(files6,'t6'+item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
         {
-          item.ficheUrl =`${files6[index].url}` 
+          item.ficheUrl =`${req.protocol}://${req.get('host')}/fichiers/${files6[index].url}`
         }
         else 
         {
           item.ficheUrl=''
         }
-        console.log(`'t6${item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee}'`)
   
      })
     

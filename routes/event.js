@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const eventController = require('../controllers/event');
 const userController = require('../controllers/user');
-const multer = require('../middleware/multer-config');
+const multer = require('../middleware/multer-config3');
 router.get('/', eventController.getEvents);
 router.get('/coming_events', eventController.getcomingEvents);
 router.get('/:id', eventController.geteventbyid);

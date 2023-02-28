@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const contactController = require('../controllers/contact-req');
 const userController = require('../controllers/user');
-const multer = require('../middleware/multer-config');
+const multer = require('../middleware/multer-config3');
 router.post('/createcontactreq', multer,contactController.createcontactreq);
 router.post('/createcontactreqwithoutimage',contactController.createcontactreqwithoutimage);
 router.post('/filtercontactreqsup', userController.allowIfLoggedin, userController.grantAccess('readAny', 'contact'),contactController.getContactreqsup);

@@ -494,7 +494,7 @@ exports.updateUser = async (req, res, next) => {
     const userObject = req.file ?
       {
         ...JSON.parse(req.body.user),
-        ficheUrl: `${req.file.url}`
+        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
       } : { ...req.body};
     const _id = req.params.id;
     const user = await User.findById(_id);
@@ -725,7 +725,7 @@ exports.deleteUser = async (req, res, next) => {
       const userObject = req.file ?
         {
           ...JSON.parse(req.body.user),
-          ficheUrl: `${req.file.url}`
+          ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
         } : { ...req.body };
       const _id = req.params.id;
       const user =  await User.findById(_id);
@@ -751,7 +751,7 @@ exports.deleteUser = async (req, res, next) => {
       const userObject = req.file ?
         {
           ...JSON.parse(req.body.user),
-          ficheUrl: `${req.file.url}`
+          ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
         } : { ...req.body };
       const _id = req.params.id;
       const user =  await User.findById(_id);
@@ -775,7 +775,7 @@ exports.deleteUser = async (req, res, next) => {
       const userObject = req.file ?
         {
           ...JSON.parse(req.body.user),
-          ficheUrl: `${req.file.url}`
+          ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
         } : { ...req.body };
       const _id = req.params.id;
       const user =  await User.findById(_id);
@@ -798,7 +798,7 @@ exports.deleteUser = async (req, res, next) => {
       const userObject = req.file ?
         {
           ...JSON.parse(req.body.user),
-          ficheUrl: `${req.file.url}`
+          ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
         } : { ...req.body };
       const _id = req.params.id;
       const user =  await User.findById(_id);

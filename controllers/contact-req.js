@@ -15,11 +15,11 @@ exports.createcontactreq = (req, res, next) => {
       const origin =req.get('origin');
       const contactObject= JSON.parse(req.body.contact);
       const newContact = new Contact({...contactObject,
-        ficheUrl:`${req.file.url}`});
+        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`});
       
       
       
-      (newContact.save(),sendconfirmemail(newContact, origin),sendcreationemail('tn.macompta@gmail.com',newContact.email,newContact._id, origin)).
+      (newContact.save(),sendconfirmemail(newContact, origin),sendcreationemail('macompta@macompta.com.tn',newContact.email,newContact._id, origin)).
       then (()=>res.status(200).json({
         data: newContact,
         message: "Votre requête a été crée avec succès"
@@ -36,7 +36,7 @@ exports.createcontactreq = (req, res, next) => {
     
     
     
-    (newContact.save(),sendconfirmemail(newContact, origin),sendmodificationemail('tn.macompta@gmail.com',newContact.email,newContact._id, origin)).
+    (newContact.save(),sendconfirmemail(newContact, origin),sendmodificationemail('macompta@macompta.com.tn',newContact.email,newContact._id, origin)).
     then (()=>res.status(200).json({
       data: newContact,
       message: "Votre requête a été crée avec succès"
@@ -131,8 +131,8 @@ exports.updateContact = async (req, res, next) => {
     const contactObject = req.file ?
       {
         ...JSON.parse(req.body.contact),
-        ficheUrl: `${req.file.url}`
-      } : { ...req.body };
+        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
+            } : { ...req.body };
     const _id = req.params.id;
     const contact = await Contact.findById(_id);
     await Contact.findByIdAndUpdate(_id, { ...contactObject});
@@ -142,7 +142,7 @@ exports.updateContact = async (req, res, next) => {
     {
       if(contactObject.statutadmin[contactObject.statutadmin.length-1].statut=='clôturé')
       {
-        await (contact.save(),sendupdateemail(contact, origin),sendmodifemailadmin('tn.macompta@gmail.com',contact.email,contact._id, origin)).
+        await (contact.save(),sendupdateemail(contact, origin),sendmodifemailadmin('macompta@macompta.com.tn',contact.email,contact._id, origin)).
         then (()=> res.status(200).json({
           data: updatedcontact,
           message: 'Requête traitée!'
@@ -151,7 +151,7 @@ exports.updateContact = async (req, res, next) => {
       }
       else if(contactObject.statutadmin[contactObject.statutadmin.length-1].statut!='clôturé')
       {
-        await (contact.save(),sendmodifemailadmin('tn.macompta@gmail.com',contact.email,contact._id, origin)).
+        await (contact.save(),sendmodifemailadmin('macompta@macompta.com.tn',contact.email,contact._id, origin)).
         then (()=> res.status(200).json({
           data: updatedcontact,
           message: 'Requête traitée!'
@@ -161,7 +161,7 @@ exports.updateContact = async (req, res, next) => {
     }
     else 
       {
-        await (contact.save(),sendmodifemailadmin('tn.macompta@gmail.com',contact.email,contact._id, origin)).
+        await (contact.save(),sendmodifemailadmin('macompta@macompta.com.tn',contact.email,contact._id, origin)).
         then (()=> res.status(200).json({
           data: updatedcontact,
           message: 'Requête traitée!'

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const carouselController = require('../controllers/settings');
 const userController = require('../controllers/user');
-const multer = require('../middleware/multer-config');
+const multer = require('../middleware/multer-config3');
 router.post('/createcarouseldata', multer,carouselController.createcarouseldata);
 router.post('/createcarouselreqwithoutimage',carouselController.createactualitewithoutimage);
 router.get('/', carouselController.getCarouselalldata);

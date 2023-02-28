@@ -153,10 +153,11 @@ app.use((req, res, next) => {
  app.use('/api/decfiscmens', decfiscmensRoutes);
  app.use('/api/deccomptabilite', deccomptabiliteRoutes);
 
- app.use(express.static(path.join(__dirname, 'images')));
+ app.use(express.static(path.join(__dirname, 'fichiers')));
   app.get('*', (request, response) => {
-    response.sendFile(path.join(__dirname, 'images'));
+    response.sendFile(path.join(__dirname, 'fichiers'));
   })
+
 
   
 module.exports = app;
