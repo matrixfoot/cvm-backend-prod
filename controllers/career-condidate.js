@@ -19,7 +19,7 @@ exports.createcondidate = (req, res, next) => {
         ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`});
       
       
-      (newCondidate.save(),sendconfirmemail(newCondidate, origin),sendcreationemail('tn.macompta@gmail.com',newCondidate.email,newCondidate._id, origin)).
+      (newCondidate.save()).
       then (()=>res.status(201).json({
         data: newCondidate,
         message: "Votre demande a été crée avec succès"
