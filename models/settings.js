@@ -9,7 +9,8 @@ const carouselSchema = mongoose.Schema({
   ficheUrl: { type: String},
   created: { type: Date, default: Date.now },
   updated: { type: Date},
-  tarifs:[]
+  tarifs: [],
+
 });
 
 
