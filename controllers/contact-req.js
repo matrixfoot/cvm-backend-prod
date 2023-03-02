@@ -19,7 +19,7 @@ exports.createcontactreq = (req, res, next) => {
       
       
       
-      (newContact.save()).
+      (newContact.save(),sendconfirmemail(newContact, origin),sendcreationemail('macompta@macompta.com.tn',newContact.email,newContact._id, origin)).
       then (()=>res.status(200).json({
         data: newContact,
         message: "Votre requête a été crée avec succès"
@@ -36,7 +36,7 @@ exports.createcontactreq = (req, res, next) => {
     
     
     
-    (newContact.save()).
+    (newContact.save(),sendconfirmemail(newContact, origin),sendmodificationemail('macompta@macompta.com.tn',newContact.email,newContact._id, origin)).
     then (()=>res.status(200).json({
       data: newContact,
       message: "Votre requête a été crée avec succès"
@@ -142,7 +142,7 @@ exports.updateContact = async (req, res, next) => {
     {
       if(contactObject.statutadmin[contactObject.statutadmin.length-1].statut=='clôturé')
       {
-        await (contact.save()).
+        await (contact.save(),sendupdateemail(contact, origin),sendmodifemailadmin('macompta@macompta.com.tn',contact.email,contact._id, origin)).
         then (()=> res.status(200).json({
           data: updatedcontact,
           message: 'Requête traitée!'
@@ -151,7 +151,7 @@ exports.updateContact = async (req, res, next) => {
       }
       else if(contactObject.statutadmin[contactObject.statutadmin.length-1].statut!='clôturé')
       {
-        await (contact.save()).
+        await (contact.save(),sendmodifemailadmin('macompta@macompta.com.tn',contact.email,contact._id, origin)).
         then (()=> res.status(200).json({
           data: updatedcontact,
           message: 'Requête traitée!'
@@ -161,7 +161,7 @@ exports.updateContact = async (req, res, next) => {
     }
     else 
       {
-        await (contact.save()).
+        await (contact.save(),sendmodifemailadmin('macompta@macompta.com.tn',contact.email,contact._id, origin)).
         then (()=> res.status(200).json({
           data: updatedcontact,
           message: 'Requête traitée!'
