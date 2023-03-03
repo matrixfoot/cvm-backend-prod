@@ -36,7 +36,7 @@ exports.createcontactreq = (req, res, next) => {
     
     
     
-    (newContact.save(),sendconfirmemail(newContact, origin),sendmodificationemail('macompta@macompta.com.tn',newContact.email,newContact._id, origin)).
+    (newContact.save(),sendconfirmemail(newContact, origin),sendcreationemail('macompta@macompta.com.tn',newContact.email,newContact._id, origin)).
     then (()=>res.status(200).json({
       data: newContact,
       message: "Votre requête a été crée avec succès"
