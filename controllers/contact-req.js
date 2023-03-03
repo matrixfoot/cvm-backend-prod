@@ -214,7 +214,7 @@ exports.updateContact = async (req, res, next) => {
   async function sendcreationemail(sendemail,email,id, origin) {
     let message;
     if (origin) {
-        const verifydecfiscmensUrl = `${origin}/view-contact/${id}`;
+        const verifydecfiscmensUrl = `${origin}/view-contactreq/${id}`;
         message = `<p>une requête a été déposée par ${email} avec succès, veuillez la consulter pour la traiter</p>
                    <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
     } else {
@@ -232,7 +232,7 @@ exports.updateContact = async (req, res, next) => {
   async function sendmodifemailadmin(sendemail,email,id, origin) {
     let message;
     if (origin) {
-        const verifydecfiscmensUrl = `${origin}/view-contact/${id}`;
+        const verifydecfiscmensUrl = `${origin}/view-contactreq/${id}`;
         message = `<p>une requête de l'utilisateur ${email} a été modifiée suite à un traitement, veuillez la consulter pour la traiter</p>
                    <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
     } else {
