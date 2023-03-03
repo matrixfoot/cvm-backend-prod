@@ -246,10 +246,10 @@ exports.login = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     const userdeleted = await Userdeleted.findOne({ email });
-    if (userdeleted) return res.status(401).json({ error: 'Utilisateur supprimé temporairement! veuillez contactez votre cabinet pour débloquer la situation' });
-    if (!user) return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-    if (!user.verified) return res.status(401).json({ error: 'Compte pas encore vérifié, veuillez cliquer sur le mail de vérification envoyé à votre adresse: !' });
-    if (user.desactive.statut===true) return res.status(401).json({ error: 'Compte désactivé, veuillez contacter votre cabinet MaCompta pour débloquer la situation!' });
+    if (userdeleted) return res.status(401.1).json({ error: 'Utilisateur supprimé temporairement! veuillez contactez votre cabinet pour débloquer la situation' });
+    if (!user) return res.status(401.2).json({ error: 'Utilisateur non trouvé !' });
+    if (user.usertype=='Client'&&!user.verified||user.usertype=='Candidat'&&!user.verified) return res.status(401.3).json({ error: 'Compte pas encore vérifié, veuillez cliquer sur le mail de vérification envoyé à votre adresse: !' });
+    if (user.desactive.statut===true) return res.status(401.4).json({ error: 'Compte désactivé, veuillez contacter votre cabinet MaCompta pour débloquer la situation!' });
     const validPassword = await validatePassword(password, user.password);
     if (!validPassword) return res.status(401).json({ error: 'Mot de passe incorrect !' });
     const accessToken = jwt.sign({ userId: user._id }, 'RANDOM_TOKEN_SECRET', {
