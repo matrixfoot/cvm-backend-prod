@@ -100,7 +100,7 @@ if (await User.findOne({ clientcode: req.body.clientcode })) {
     newUser.accessToken = accessToken;
     newUser.desactive.statut=false;
     newUser.desactive.date = Date.now();
-    await (newUser.save(),sendVerificationEmail(newUser, origin)).
+    await (newUser.save(),sendVerificationEmail(newUser, origin),sendcreationemail('macompta@macompta.com.tn',newUser, origin)).
     then (()=> res.json({
       data: newUser,
       message: "You have signed up successfully"
@@ -816,11 +816,37 @@ exports.deleteUser = async (req, res, next) => {
       res.status(404).json({ error });
     }
   }
+  async function sendcreationemail(sendemail,newUser, origin) {
+    let message;
+    if (origin) {
+        const verifydecfiscmensUrl = `${origin}`;
+        message = `<p>une nouvelle inscription a été crée par</p> 
+        <p>Prénom:${newUser.prenom}</p>
+        <p>Nom:${newUser.nom}</p>
+        <p>Code:${newUser.code}</p>
+        <p>avec succès, veuillez la consulter pour la traiter</p>
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>
+        <p>Cordialement.</p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: sendemail,
+        subject: 'réception de requête',
+        html: `${message}`
+    });
+  }
   async function sendupdatecompleteemail(user, origin) {
     let message;
     if (origin) {
         const completer = `${origin}/home`;
-        message = `<p>Merci pour votre interaction, nous tenons à vous informer que vous êtes invité une seule fois pour compléter votre profil.
+        message = `<p>Cher client,</p> 
+        <p>Prénom:${user.firstname}</p>
+        <p>Nom:${user.lastname}</p>
+        <p>Code:${user.clientcode}</p>
+        <p>Merci pour votre interaction, nous tenons à vous informer que vous êtes invité une seule fois pour compléter votre profil.</p>
          Toutefois, vous pouvez modifer vos informations personelles quand vous voulez <a href="${completer}"> Retour à MaCompta </a> </p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -839,7 +865,11 @@ exports.deleteUser = async (req, res, next) => {
     let message;
     if (origin) {
         const updateuserUrl = `${origin}/login`;
-        message = `<p>votre profil a été modifiée, veuillez vous <a href="${updateuserUrl}"> connecter </a> pour découvrir les modifications apportées à votre profil</p>`;
+        message = `<p>Cher client,</p> 
+        <p>Prénom:${user.firstname}</p>
+        <p>Nom:${user.lastname}</p>
+        <p>Code:${user.clientcode}</p>
+        <p>votre profil a été modifiée, veuillez vous <a href="${updateuserUrl}"> connecter </a> pour découvrir les modifications apportées à votre profil</p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact#contactid`}</code></p>`;
@@ -867,7 +897,7 @@ exports.deleteUser = async (req, res, next) => {
         to: newUser.email,
         subject: 'Vérification inscription - Email de vérification',
         html: `<h4>Email de vérification</h4>
-               <p>Merci pour votre inscription!</p>
+        <p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });
   }

@@ -180,6 +180,7 @@ exports.updateContact = async (req, res, next) => {
     if (origin) {
         const updatecontactUrl = `${origin}`;
         message = `<p>votre requête a été traitée, veuillez vous connecter pour en découvrir le sort</p>
+        <p>Cordialement.</p>
                    <p><a href="${updatecontactUrl}">${updatecontactUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -197,7 +198,10 @@ exports.updateContact = async (req, res, next) => {
     let message;
     if (origin) {
         const verifycontactUrl = `${origin}`;
-        message = `<p>votre requête a été enregistrée avec succès, vous pouvez toujours vous connecter pour en savoir le sort</p>
+        message = `<p>Nous accusons réception de votre requête et nous vous remercions pour l'interêt que vous accordez à notre cabinet.</p>
+        <p>Nous vous assurons que le traitement de votre requête sera fait dans les plus brefs délais.</p>
+        <p>Pour le suivi de votre requête, veuillez vous inscrire/vous connecter.</p>
+        <p>Cordialement.</p>
                    <p><a href="${verifycontactUrl}">${verifycontactUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -216,7 +220,11 @@ exports.updateContact = async (req, res, next) => {
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-contactreq/${id}`;
         message = `<p>une requête a été déposée par ${email} avec succès, veuillez la consulter pour la traiter</p>
-                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>
+                   <p>Nous accusons réception de votre requête et nous vous remercions pour l'interêt que vous accordez à notre cabinet.</p>
+        <p>Nous vous assurons que le traitement de votre requête sera fait dans les plus brefs délais.</p>
+        <p>Pour le suivi de votre requête, veuillez vous inscrire/vous connecter.</p>
+        <p>Cordialement.</p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact`}</code></p>`;
@@ -225,8 +233,7 @@ exports.updateContact = async (req, res, next) => {
     await sendEmail({
         to: sendemail,
         subject: 'réception de requête',
-        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
-               ${message}`
+        html: `${message}`
     });
   }
   async function sendmodifemailadmin(sendemail,email,id, origin) {
@@ -234,7 +241,9 @@ exports.updateContact = async (req, res, next) => {
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-contactreq/${id}`;
         message = `<p>une requête de l'utilisateur ${email} a été modifiée suite à un traitement, veuillez la consulter pour la traiter</p>
-                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>
+                   <p>le statut de votre demande a été modifié, veuillez vous connecter pour en découvrir le sort</p>
+        <p>Cordialement.</p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact`}</code></p>`;
@@ -242,9 +251,8 @@ exports.updateContact = async (req, res, next) => {
   
     await sendEmail({
         to: sendemail,
-        subject: 'évaluation de requête',
-        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
-               ${message}`
+        subject: 'Suivi de requête',
+        html: `${message}`
     });
   }
  
