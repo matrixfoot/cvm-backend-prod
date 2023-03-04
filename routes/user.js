@@ -11,7 +11,7 @@ router.post('/forgot-password', userController.forgotPassword);
 router.post('/validate-reset-token', userController.validateResetToken);
 router.post('/reset-password', userController.resetPassword);
 router.post('/add_multiple_users', userController.allowIfLoggedin, userController.grantAccess('updateAny', 'event'),userController.createmultipleusers);
-router.get('/:id', userController.allowIfLoggedin, userController.grantAccess('readOwn', 'profile'),userController.getUser);
+router.get('/:id', userController.getUser);
 router.get('/deleteduser/:id', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.getUserdeleted);
 router.post('/filteruserrole', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.filteruserrole);
 router.post('/filteruseremail', userController.allowIfLoggedin, userController.grantAccess('readAny', 'profile'),userController.filteruseremail);

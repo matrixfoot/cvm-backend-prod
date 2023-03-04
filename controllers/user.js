@@ -821,9 +821,9 @@ exports.deleteUser = async (req, res, next) => {
     if (origin) {
         const verifydecfiscmensUrl = `${origin}`;
         message = `<p>une nouvelle inscription a été crée par</p> 
-        <p>Prénom:${newUser.prenom}</p>
-        <p>Nom:${newUser.nom}</p>
-        <p>Code:${newUser.code}</p>
+        <p>Prénom:${newUser.firstname}</p>
+        <p>Nom:${newUser.lastname}</p>
+        <p>Code:${newUser.clientcode}</p>
         <p>avec succès, veuillez la consulter pour la traiter</p>
                    <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>
         <p>Cordialement.</p>`;
@@ -886,7 +886,7 @@ exports.deleteUser = async (req, res, next) => {
   async function sendVerificationEmail(newUser, origin) {
     let message;
     if (origin) {
-        const verifyUrl = `${origin}/verify-email/${newUser.accessToken}`;
+        const verifyUrl = `${origin}/verify-email/${newUser._id}`;
         message = `<p>Prière de cliquer <a href="${verifyUrl}"> ici </a> pour activer votre compte</p>`;
     } else {
         message = `<p>Please use the below token to verify your email address with the <code>/newUser/verify-email</code> api route:</p>
