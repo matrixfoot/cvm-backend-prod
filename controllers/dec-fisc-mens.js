@@ -32,7 +32,7 @@ const sendEmail = require('../send-email');
     )
    
     const user = await User.findById(userId);
-  
+  console.log(origin)
      (newDecfiscmens.save(),sendconfirmemail(user.email,user.clientcode,user.firstname,user.lastname,origin),sendcreationemail('macompta@macompta.com.tn',user.clientcode,user.firstname,user.lastname,user.email,newDecfiscmens._id, origin)).
       then (()=>res.status(200).json({
         data: newDecfiscmens,
@@ -159,6 +159,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
         const updateddecfiscmens = await Decfiscmens.findById(_id);    
     decfiscmens.updated = Date.now();
+    console.log(origin)
     if(decfiscmensObject.statutadmin.length>0)
     {
       if(decfiscmensObject.statutadmin[decfiscmensObject.statutadmin.length-1].statut=='clôturé')
