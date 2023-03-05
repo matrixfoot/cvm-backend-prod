@@ -173,7 +173,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
       }
       else if(decfiscmensObject.statutadmin[decfiscmensObject.statutadmin.length-1].statut!='clôturé')
       {
-        await (decfiscmens.save(),sendmodificationemailadmincollab(origin,'macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id)).
+        await (decfiscmens.save(),sendmodificationemailadmincollab(origin,'macompta@macompta.com.tn',user.email,res.locals.loggedInUser.firstname,user.clientcode,user.firstname,user.lastname,decfiscmens._id)).
         then (()=> res.status(200).json({
           data: updateddecfiscmens,
           message: 'déclaration modifée!'
@@ -183,7 +183,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
     }
     else
     {
-      await (decfiscmens.save(),sendmodificationemailadmincollab(origin,'macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id)).
+      await (decfiscmens.save(),sendmodificationemailadmincollab(origin,'macompta@macompta.com.tn',user.email,res.locals.loggedInUser.firstname,user.clientcode,user.firstname,user.lastname,decfiscmens._id)).
         then (()=> res.status(200).json({
           data: updateddecfiscmens,
           message: 'déclaration modifée!'
