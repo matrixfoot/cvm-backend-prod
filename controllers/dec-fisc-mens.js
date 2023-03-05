@@ -350,13 +350,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
         <p>traité par:${collemail}</p>
         <p>a été modifié suite à un traitement, veuillez la consulter pour décider le sort de la déclaration</p>
         
-                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>
-                   <p>Cher client,</p> 
-        <p>Prénom:${prenom}</p>
-        <p>Nom:${nom}</p>
-        <p>Code:${code}</p>
-        <p>Vos données de déclaration ont été définitivement traitées, veuillez vous connecter pour l'éditer</p>
-        <p>Cordialement.</p>`;
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact`}</code></p>`;
