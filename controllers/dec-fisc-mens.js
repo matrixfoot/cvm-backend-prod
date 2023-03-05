@@ -278,7 +278,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
                ${message}`
     });
   }
-  async function sendcreationemail(sendemail,code,prenom,nom,email,id, origin) {
+  async function sendcreationemail(sendemail,email,code,prenom,nom,email,id, origin) {
     let message;
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
@@ -306,7 +306,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
         html: `${message}`
     });
   }
-  async function sendmodificationemailadmin(sendemail,code,prenom,nom,email,id, origin) {
+  async function sendmodificationemailadmin(sendemail,email,code,prenom,nom,email,id, origin) {
     let message;
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
