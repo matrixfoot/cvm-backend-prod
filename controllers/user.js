@@ -494,7 +494,7 @@ exports.updateUser = async (req, res, next) => {
     const userObject = req.file ?
       {
         ...JSON.parse(req.body.user),
-        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
+        ficheUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}.${req.file.extension}`
       } : { ...req.body};
     const _id = req.params.id;
     const user = await User.findById(_id);

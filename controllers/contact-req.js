@@ -15,7 +15,7 @@ exports.createcontactreq = (req, res, next) => {
       const origin =req.get('origin');
       const contactObject= JSON.parse(req.body.contact);
       const newContact = new Contact({...contactObject,
-        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`});
+        ficheUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}.${req.file.extension}`});
       
       
       
@@ -131,7 +131,7 @@ exports.updateContact = async (req, res, next) => {
     const contactObject = req.file ?
       {
         ...JSON.parse(req.body.contact),
-        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
+        ficheUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}.${req.file.extension}`
             } : { ...req.body };
     const _id = req.params.id;
     const contact = await Contact.findById(_id);

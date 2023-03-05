@@ -27,7 +27,7 @@ console.log(req.files)
     autre3filtred.forEach((item, index) => { 
       if(filterByValue2(files3,'t3'+item.fournisseur+item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
       {
-        item.ficheUrl= `${req.protocol}://${req.get('host')}/fichiers/${files3[index].url}`;
+        item.ficheUrl= `${req.protocol}://${req.get('host')}/${files3[index].url}`;
 
       }
       else 
@@ -41,7 +41,7 @@ console.log(req.files)
    autre5filtred.forEach((key, number) => { 
       if(filterByValue2(files5, 't5'+key.annee+key.mois))
       {
-        key.ficheUrl =`${req.protocol}://${req.get('host')}/fichiers/${files5[number].url}`
+        key.ficheUrl =`${req.protocol}://${req.get('host')}/${files5[number].url}`
       }
       else 
       {
@@ -53,7 +53,7 @@ console.log(req.files)
       autre6filtred.forEach((item, index) => { 
         if(filterByValue2(files6,'t6'+item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
         {
-          item.ficheUrl =`${req.protocol}://${req.get('host')}/fichiers/${files6[index].url}`
+          item.ficheUrl =`${req.protocol}://${req.get('host')}/${files6[index].url}`
         }
         else 
         {
@@ -207,7 +207,7 @@ exports.updatedeccomptabilite = async (req, res, next) => {
     autre3filtred.forEach((item, index) => { 
       if(filterByValue2(files3,'t3'+item.fournisseur+item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
       {
-        item.ficheUrl= `${req.protocol}://${req.get('host')}/fichiers/${files3[index].url}`;
+        item.ficheUrl= `${req.protocol}://${req.get('host')}/${files3[index].url}`;
 
       }
       else 
@@ -220,7 +220,7 @@ exports.updatedeccomptabilite = async (req, res, next) => {
    autre5filtred.forEach((key, number) => { 
       if(filterByValue2(files5, 't5'+key.annee+key.mois))
       {
-        key.ficheUrl =`${req.protocol}://${req.get('host')}/fichiers/${files5[number].url}`
+        key.ficheUrl =`${req.protocol}://${req.get('host')}/${files5[number].url}`
       }
       else 
       {
@@ -231,7 +231,7 @@ exports.updatedeccomptabilite = async (req, res, next) => {
       autre6filtred.forEach((item, index) => { 
         if(filterByValue2(files6,'t6'+item.matricule+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
         {
-          item.ficheUrl =`${req.protocol}://${req.get('host')}/fichiers/${files6[index].url}`
+          item.ficheUrl =`${req.protocol}://${req.get('host')}/${files6[index].url}`
         }
         else 
         {
