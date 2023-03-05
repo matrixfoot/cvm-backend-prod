@@ -834,7 +834,7 @@ exports.deleteUser = async (req, res, next) => {
   
     await sendEmail({
         to: sendemail,
-        subject: 'réception de requête',
+        subject: 'Nouvelle inscription',
         html: `${message}`
     });
   }
