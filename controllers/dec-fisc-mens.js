@@ -172,7 +172,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
       }
       else if(decfiscmensObject.statutadmin[decfiscmensObject.statutadmin.length-1].statut!='clôturé')
       {
-        await (decfiscmens.save(),sendmodificationemailadmin('macompta@macompta.com.tn',user.email,decfiscmens._id, origin)).
+        await (decfiscmens.save(),sendmodificationemailadmin('macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id, origin)).
         then (()=> res.status(200).json({
           data: updateddecfiscmens,
           message: 'déclaration modifée!'
@@ -182,7 +182,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
     }
     else
     {
-      await (decfiscmens.save(),sendmodificationemailadmin('macompta@macompta.com.tn',user.email,decfiscmens._id, origin)).
+      await (decfiscmens.save(),sendmodificationemailadmin('macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id, origin)).
         then (()=> res.status(200).json({
           data: updateddecfiscmens,
           message: 'déclaration modifée!'
@@ -217,7 +217,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
         
     decfiscmens.updated = Date.now();
-    await (decfiscmens.save(),sendmodificationemailadmin('macompta@macompta.com.tn',user.email,decfiscmens._id, origin)).
+    await (decfiscmens.save(),sendmodificationemailadmin('macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id, origin)).
     then (()=> res.status(200).json({
       data: decfiscmens,
       message: 'déclaration modifée!'
@@ -278,7 +278,8 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
                ${message}`
     });
   }
-  async function sendcreationemail(sendemail,email,code,prenom,nom,id, origin) {
+  //sendcreationemail('macompta@macompta.com.tn',user.clientcode,user.firstname,user.lastname,user.email,newDecfiscmens._id, origin)
+  async function sendcreationemail(sendemail,code,prenom,nom,email,id,origin) {
     let message;
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
@@ -306,6 +307,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
         html: `${message}`
     });
   }
+  //sendmodificationemailadmin('macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id, origin)
   async function sendmodificationemailadmin(sendemail,email,code,prenom,nom,id, origin) {
     let message;
     if (origin) {
