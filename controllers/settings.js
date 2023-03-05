@@ -15,7 +15,7 @@ exports.createcarouseldata = (req, res, next) => {
       const origin =req.get('origin');
       const carouselObject= JSON.parse(req.body.carousel);
       const newCarousel = new Carousel({...carouselObject,
-        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`});
+        ficheUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}.${req.file.extension}`});
       
       
       
@@ -90,7 +90,7 @@ exports.updateCarouseldata = async (req, res, next) => {
     const carouselObject = req.file ?
       {
         ...JSON.parse(req.body.carousel),
-        ficheUrl: `${req.protocol}://${req.get('host')}/fichiers/${req.file.filename}`
+        ficheUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}.${req.file.extension}`
       } : { ...req.body };
     const _id = req.params.id;
     const carousel = await Carousel.findById(_id);
