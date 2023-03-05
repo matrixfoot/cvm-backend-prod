@@ -218,7 +218,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
         await Decfiscmens.findByIdAndUpdate(_id, { ...decfiscmensObject});
         
     decfiscmens.updated = Date.now();
-    await (decfiscmens.save(),sendmodificationemailadmin(origin,'macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id)).
+    await (decfiscmens.save(),sendmodificationemailadmincollab(origin,'macompta@macompta.com.tn',user.email,res.locals.loggedInUser.firstname,user.clientcode,user.firstname,user.lastname,decfiscmens._id)).
     then (()=> res.status(200).json({
       data: decfiscmens,
       message: 'déclaration modifée!'
@@ -318,6 +318,36 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
         <p>Prénom:${prenom}</p>
         <p>Nom:${nom}</p>
         <p>email:${email}</p>
+        <p>a été modifié suite à un traitement, veuillez la consulter pour décider le sort de la déclaration</p>
+        
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>
+                   <p>Cher client,</p> 
+        <p>Prénom:${prenom}</p>
+        <p>Nom:${nom}</p>
+        <p>Code:${code}</p>
+        <p>Vos données de déclaration ont été définitivement traitées, veuillez vous connecter pour l'éditer</p>
+        <p>Cordialement.</p>`;
+    } else {
+        message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
+                   <p><code>${`${origin}/home/contact`}</code></p>`;
+    }
+  
+    await sendEmail({
+        to: sendemail,
+        subject: 'suivi de déclaration fiscale',
+        html: `${message}`
+    });
+  }
+  async function sendmodificationemailadmincollab(origin,sendemail,email,collemail,code,prenom,nom,id) {
+    let message;
+    if (origin) {
+        const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
+        message = `<p>le statut de la déclaration fiscale du client</p>
+        <p>code:${code}</p>
+        <p>Prénom:${prenom}</p>
+        <p>Nom:${nom}</p>
+        <p>email:${email}</p>
+        <p>traité par:${collemail}</p>
         <p>a été modifié suite à un traitement, veuillez la consulter pour décider le sort de la déclaration</p>
         
                    <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>
