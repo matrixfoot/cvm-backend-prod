@@ -33,7 +33,7 @@ const sendEmail = require('../send-email');
    
     const user = await User.findById(userId);
   console.log(origin)
-     (newDecfiscmens.save(),sendconfirmemail(user.email,user.clientcode,user.firstname,user.lastname,origin),sendcreationemail('macompta@macompta.com.tn',user.clientcode,user.firstname,user.lastname,user.email,newDecfiscmens._id, origin)).
+     (newDecfiscmens.save(),sendconfirmemail(user.email,user.clientcode,user.firstname,user.lastname,origin),sendcreationemail(origin,'macompta@macompta.com.tn',user.clientcode,user.firstname,user.lastname,user.email,newDecfiscmens._id)).
       then (()=>res.status(200).json({
         data: newDecfiscmens,
         message: "Votre déclaration a été crée avec succès"
@@ -164,7 +164,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
     {
       if(decfiscmensObject.statutadmin[decfiscmensObject.statutadmin.length-1].statut=='clôturé')
       {
-        await (decfiscmens.save(),sendupdateemail(user.email,user.clientcode,user.firstname,user.lastname, origin),sendmodificationemailadmin('macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id, origin)).
+        await (decfiscmens.save(),sendupdateemail(user.email,user.clientcode,user.firstname,user.lastname, origin),sendmodificationemailadmin(origin,'macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id)).
         then (()=> res.status(200).json({
           data: updateddecfiscmens,
           message: 'déclaration modifée!'
@@ -173,7 +173,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
       }
       else if(decfiscmensObject.statutadmin[decfiscmensObject.statutadmin.length-1].statut!='clôturé')
       {
-        await (decfiscmens.save(),sendmodificationemailadmin('macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id, origin)).
+        await (decfiscmens.save(),sendmodificationemailadmin(origin,'macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id)).
         then (()=> res.status(200).json({
           data: updateddecfiscmens,
           message: 'déclaration modifée!'
@@ -183,7 +183,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
     }
     else
     {
-      await (decfiscmens.save(),sendmodificationemailadmin('macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id, origin)).
+      await (decfiscmens.save(),sendmodificationemailadmin(origin,'macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id)).
         then (()=> res.status(200).json({
           data: updateddecfiscmens,
           message: 'déclaration modifée!'
@@ -280,7 +280,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
     });
   }
   //sendcreationemail('macompta@macompta.com.tn',user.clientcode,user.firstname,user.lastname,user.email,newDecfiscmens._id, origin)
-  async function sendcreationemail(sendemail,code,prenom,nom,email,id,origin) {
+  async function sendcreationemail(origin,sendemail,code,prenom,nom,email,id) {
     let message;
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
@@ -309,7 +309,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
     });
   }
   //sendmodificationemailadmin('macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id, origin)
-  async function sendmodificationemailadmin(sendemail,email,code,prenom,nom,id, origin) {
+  async function sendmodificationemailadmin(origin,sendemail,email,code,prenom,nom,id) {
     let message;
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
