@@ -33,7 +33,7 @@ const sendEmail = require('../send-email');
    
     const user = await User.findById(userId);
   
-     (newDecfiscmens.save(),sendconfirmemail(user.email, origin),sendcreationemail('macompta@macompta.com.tn',user.email,newDecfiscmens._id, origin)).
+     (newDecfiscmens.save(),sendconfirmemail(user.email,user.clientcode,user.firstname,user.lastname,origin),sendcreationemail('macompta@macompta.com.tn',user.clientcode,user.firstname,user.lastname,user.email,newDecfiscmens._id, origin)).
       then (()=>res.status(200).json({
         data: newDecfiscmens,
         message: "Votre déclaration a été crée avec succès"
@@ -163,7 +163,7 @@ exports.updatedecfiscmens = async (req, res, next) => {
     {
       if(decfiscmensObject.statutadmin[decfiscmensObject.statutadmin.length-1].statut=='clôturé')
       {
-        await (decfiscmens.save(),sendupdateemail(user.email, origin),sendmodificationemailadmin('macompta@macompta.com.tn',user.email,decfiscmens._id, origin)).
+        await (decfiscmens.save(),sendupdateemail(user.email,user.clientcode,user.firstname,user.lastname, origin),sendmodificationemailadmin('macompta@macompta.com.tn',user.email,user.clientcode,user.firstname,user.lastname,decfiscmens._id, origin)).
         then (()=> res.status(200).json({
           data: updateddecfiscmens,
           message: 'déclaration modifée!'
@@ -231,11 +231,16 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
 }
 
 
-  async function sendupdateemail(sendemail, origin) {
+  async function sendupdateemail(sendemail,code,prenom,nom, origin) {
     let message;
     if (origin) {
         const updatedecfiscmensUrl = `${origin}/user-board`;
-        message = `<p>Vos données de déclaration ont été définitivement traitées, veuillez vous connecter pour l'éditer</p>
+        message = `<p>Cher client,</p> 
+        <p>Prénom:${prenom}</p>
+        <p>Nom:${nom}</p>
+        <p>Code:${code}</p>
+        <p>Vos données de déclaration fiscale ont été définitivement traitées, veuillez vous connecter pour l'éditer</p>
+        <p>Cordialement.</p>           
                    <p><a href="${updatedecfiscmensUrl}">${updatedecfiscmensUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -244,18 +249,23 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
   
     await sendEmail({
         to: sendemail,
-        subject: 'Fin de traitement de votre déclaration',
+        subject: 'Fin de traitement de votre déclaration fiscale',
         html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
                ${message}`
     });
   }
  
-  async function sendconfirmemail(sendemail, origin) {
+  async function sendconfirmemail(sendemail,code,prenom,nom, origin) {
     let message;
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/user-board`;
-        message = `<p>vos données de déclaration ont été reçues avec succès, vous pouvez toujours vous connecter pour en savoir le sort. nous vous informerons dès que votre déclaration sera définitivement contrôlée</p>
-                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
+        message = `<p>Cher client,</p> 
+        <p>Prénom:${prenom}</p>
+        <p>Nom:${nom}</p>
+        <p>Code:${code}</p>
+        <p>Vos données de déclaration fiscale ont été reçues avec succès, vous pouvez toujours vous connecter pour savoir l'état d'avancement de son traitement.Nous vous informerons dès que votre déclaration sera définitivement traitée et contrôlée</p>
+        <p>Cordialement.</p>           
+        <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact`}</code></p>`;
@@ -268,12 +278,23 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
                ${message}`
     });
   }
-  async function sendcreationemail(sendemail,email,id, origin) {
+  async function sendcreationemail(sendemail,code,prenom,nom,email,id, origin) {
     let message;
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
-        message = `<p>une déclaration a été crée par ${email} avec succès, veuillez la consulter pour traitement</p>
-                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
+        message = `<p>une déclaration fiscale a été crée avec succès par</p> 
+        <p>code:${code}</p>
+        <p>Prénom:${prenom}</p>
+        <p>Nom:${nom}</p>
+        <p>email:${email}</p>
+        <p>veuillez la consulter pour traitement</p>
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>
+                   <p>Cher client,</p> 
+        <p>Prénom:${prenom}</p>
+        <p>Nom:${nom}</p>
+        <p>Code:${code}</p>
+        <p>Vos données de déclaration fiscale ont été reçues avec succès, vous pouvez toujours vous connecter pour savoir l'état d'avancement de son traitement.Nous vous informerons dès que votre déclaration sera définitivement traitée et contrôlée</p>
+        <p>Cordialement.</p> `;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact`}</code></p>`;
@@ -281,17 +302,28 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
   
     await sendEmail({
         to: sendemail,
-        subject: 'réception des données de déclaration',
-        html: `<p>Merci pour l'intérêt que vous accordez au cabinet!</p>
-               ${message}`
+        subject: 'réception des données de déclaration fiscale',
+        html: `${message}`
     });
   }
-  async function sendmodificationemailadmin(sendemail,email,id, origin) {
+  async function sendmodificationemailadmin(sendemail,code,prenom,nom,email,id, origin) {
     let message;
     if (origin) {
         const verifydecfiscmensUrl = `${origin}/view-decfiscmens/${id}`;
-        message = `<p>une déclaration du client ${email} a été modifiée suite à un traitement, veuillez la consulter pour décider le sort de la déclaration</p>
-                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>`;
+        message = `<p>le statut de la déclaration fiscale du client</p>
+        <p>code:${code}</p>
+        <p>Prénom:${prenom}</p>
+        <p>Nom:${nom}</p>
+        <p>email:${email}</p>
+        <p>a été modifié suite à un traitement, veuillez la consulter pour décider le sort de la déclaration</p>
+        
+                   <p><a href="${verifydecfiscmensUrl}">${verifydecfiscmensUrl}</a></p>
+                   <p>Cher client,</p> 
+        <p>Prénom:${prenom}</p>
+        <p>Nom:${nom}</p>
+        <p>Code:${code}</p>
+        <p>Vos données de déclaration ont été définitivement traitées, veuillez vous connecter pour l'éditer</p>
+        <p>Cordialement.</p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact`}</code></p>`;
@@ -299,9 +331,7 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
   
     await sendEmail({
         to: sendemail,
-        subject: 'évaluation de la déclaration',
-        html: `<h4>évaluation de la déclaration</h4>
-               <p>Merci pour votre interaction!</p>
-               ${message}`
+        subject: 'suivi de déclaration fiscale',
+        html: `${message}`
     });
   }

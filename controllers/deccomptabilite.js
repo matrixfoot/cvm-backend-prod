@@ -22,7 +22,7 @@ const sendEmail = require('../send-email');
     let autre3filtred=filterByValue(deccomptabiliteObject.autre3,'true')
     let autre5filtred=filterByValue(deccomptabiliteObject.autre5,'true')
     let autre6filtred=filterByValue(deccomptabiliteObject.autre6,'true')
-
+console.log(req.files)
     let files3= filterByValue(req.files, 't3')
     autre3filtred.forEach((item, index) => { 
       if(filterByValue2(files3,'t3'+item.fournisseur+item.numerofacture+deccomptabiliteObject.mois+deccomptabiliteObject.annee))
@@ -296,7 +296,10 @@ return res.status(401).json({error: 'vous n\'avez pas la permission d\'éxécute
   
 }
 function filterByValue(array, value) {
-  return array.filter((data) =>  JSON.stringify(data).toLowerCase().indexOf(value.toLowerCase()) !== -1);
+  if(array!=undefined)
+  {
+    return array.filter((data) =>  JSON.stringify(data).toLowerCase().indexOf(value.toLowerCase()) !== -1);
+  }
 }
 function filterByValue2(array, value) {
   return array.find((data) =>  JSON.stringify(data).toLowerCase().indexOf(value.toLowerCase()) !== -1);

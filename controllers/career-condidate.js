@@ -184,6 +184,7 @@ exports.deletecondidate = async (req, res, next) => {
     if (origin) {
         const updatecondidateUrl = `${origin}/login`;
         message = `<p>le statut de votre demande a été modifié, veuillez vous connecter pour en découvrir le sort</p>
+        <p>Cordialement.</p>
                    <p><a href="${updatecondidateUrl}">${updatecondidateUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -202,7 +203,10 @@ exports.deletecondidate = async (req, res, next) => {
     let message;
     if (origin) {
         const verifycondidateUrl = `${origin}/login`;
-        message = `<p>votre demande a été enregistrée, veuillez vous inscrire/se connecter pour suivre votre candidature</p>
+        message = `<p>Nous accusons réception de votre demande de candidature et nous vous remercions pour l'interêt que vous accordez à notre cabinet.</p>
+        <p>Nous vous souhaitons une bonne chance et nous espérons vous voir prochainement parmi nous.</p>
+        <p>Pour le suivi de votre demande, veuillez vous inscrire/vous connecter.</p>
+        <p>Cordialement.</p>
                    <p><a href="${verifycondidateUrl}">${verifycondidateUrl}</a></p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
@@ -221,7 +225,11 @@ exports.deletecondidate = async (req, res, next) => {
     if (origin) {
         const verifycondidateUrl = `${origin}/view-condidate/${id}`;
         message = `<p>une candidature a été déposée par ${email} avec succès, veuillez la consulter pour en décider le sort</p>
-                   <p><a href="${verifycondidateUrl}">${verifycondidateUrl}</a></p>`;
+                   <p><a href="${verifycondidateUrl}">${verifycondidateUrl}</a></p>
+                   <p>Nous accusons réception de votre demande de candidature et nous vous remercions pour l'interêt que vous accordez à notre cabinet.</p>
+        <p>Nous vous souhaitons une bonne chance et nous espérons vous voir prochainement parmi nous.</p>
+        <p>Pour le suivi de votre demande, veuillez vous inscrire/vous connecter.</p>
+        <p>Cordialement.</p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact`}</code></p>`;
@@ -240,7 +248,9 @@ exports.deletecondidate = async (req, res, next) => {
     if (origin) {
         const verifycondidateUrl = `${origin}/view-condidate/${id}`;
         message = `<p>une candidature de l'utilisateur ${email} a été modifiée suite à un traitement, veuillez la consulter pour en décider le sort</p>
-                   <p><a href="${verifycondidateUrl}">${verifycondidateUrl}</a></p>`;
+                   <p><a href="${verifycondidateUrl}">${verifycondidateUrl}</a></p>
+                   <p>le statut de votre demande a été modifié, veuillez vous connecter pour en découvrir le sort</p>
+        <p>Cordialement.</p>`;
     } else {
         message = `<p>Veuillez contacter votre cabinet pour débloquer la situation</p>
                    <p><code>${`${origin}/home/contact`}</code></p>`;
