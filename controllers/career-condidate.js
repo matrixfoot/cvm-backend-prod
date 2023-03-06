@@ -16,7 +16,7 @@ exports.createcondidate = (req, res, next) => {
       const condidateObject= JSON.parse(req.body.condidate);
       const newCondidate = new Condidate({...condidateObject,
         /*ficheUrl: `${req.protocol}://www.macompta.com.tn/${req.file.path}`});*/
-        ficheUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}.${req.file.extension}`});
+        ficheUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}`});
       
       
       (newCondidate.save(),sendconfirmemail(newCondidate, origin),sendcreationemail('macompta@macompta.com.tn',newCondidate.email,newCondidate._id, origin)).
@@ -102,7 +102,7 @@ exports.updateCondidate = async (req, res, next) => {
     const condidateObject = req.file ?
       {
         ...JSON.parse(req.body.condidate),
-        ficheUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}.${req.file.extension}`
+        ficheUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}`
       } : { ...req.body };
     const _id = req.params.id;
     const condidate = await Condidate.findById(_id);
