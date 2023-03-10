@@ -14,6 +14,7 @@ const condidateRoutes = require('./routes/career-condidate');
 const contactRoutes = require('./routes/contact-req');
 const carouselRoutes = require('./routes/settings');
 const eventRoutes = require('./routes/event');
+const communRoutes = require('./routes/communinfo');
 const decfiscmensRoutes = require('./routes/dec-fisc-mens');
 const deccomptabiliteRoutes = require('./routes/dec-comptabilite');
 const cron = require("node-cron");
@@ -152,6 +153,7 @@ app.use((req, res, next) => {
  app.use('/api/events', eventRoutes);
  app.use('/api/decfiscmens', decfiscmensRoutes);
  app.use('/api/deccomptabilite', deccomptabiliteRoutes);
+ app.use('/api/commun', communRoutes);
 
  app.use(express.static(path.join(__dirname, 'fichiers')));
   app.get('*', (request, response) => {
