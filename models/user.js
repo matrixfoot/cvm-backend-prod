@@ -33,7 +33,7 @@ const userSchema = mongoose.Schema({
   choixfacture:[],
   numeronote:[],
   droitcompta:{type:String},
-  prixminutespecial:{type:String},
+  prixspecialminute:{type:String},
 
   rolesuperviseur:{type:String},
   role: {
