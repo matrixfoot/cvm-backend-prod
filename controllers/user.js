@@ -263,7 +263,7 @@ exports.login = async (req, res, next) => {
        fonction:user.fonction, secteur:user.secteur, civilite:user.civilite,nature:user.nature,usertype:user.usertype,mobile:user.mobile,
        raisonsociale:user.raisonsociale, nomsociete: user.nomsociete,natureactivite:user.natureactivite,dateeffet:user.dateeffet,
        activite:user.activite,specialite:user.specialite,sousspecialite:user.sousspecialite,choixfacture:user.choixfacture,numeronote:user.numeronote,
-       sousactivite:user.sousactivite,droitcompta:user.droitcompta,rolesuperviseur:user.rolesuperviseur,
+       sousactivite:user.sousactivite,droitcompta:user.droitcompta,prixminutespecial:user.prixminutespecial,rolesuperviseur:user.rolesuperviseur,
        regimefiscalimpot:user.regimefiscalimpot,
        regimefiscaltva:user.regimefiscaltva,
        matriculefiscale:user.matriculefiscale, clientcode:user.clientcode,
@@ -432,7 +432,7 @@ exports.completeUser = async (req, res, next) => {
     const origin =req.get('origin');
     const { email, password,confirmpassword, firstname,lastname, natureactivite,
     activite,specialite,sousspecialite,
-    sousactivite,droitcompta,rolesuperviseur, 
+    sousactivite,droitcompta,prixminutespecial,rolesuperviseur, 
     regimefiscalimpot,
     regimefiscaltva,
     matriculefiscale,fonction,secteur,choixfacture,numeronote,usertype,civilite,nature,raisonsociale,adresseactivite,dateeffet,codepostal,mobile,nomsociete,clientcode,role} = req.body
@@ -461,13 +461,13 @@ exports.completeUser = async (req, res, next) => {
     if (await req.body.password!==req.body.confirmpassword) return await (res.status(301).json({ error: 'Les mot de passes ne sont pas identiques!' }));
     await User.findByIdAndUpdate(_id, { email, password:hashedPassword,confirmpassword:confirmedhashedPassword, firstname,mobile,lastname,natureactivite,
       activite,specialite,sousspecialite,
-      sousactivite,usertype,droitcompta,rolesuperviseur,
+      sousactivite,usertype,droitcompta,prixminutespecial,rolesuperviseur,
       regimefiscalimpot,choixfacture,numeronote,
       regimefiscaltva,
       matriculefiscale,fonction,secteur,civilite,nature,raisonsociale,adresseactivite,dateeffet,codepostal,nomsociete,clientcode,role});}
     else {await User.findByIdAndUpdate(_id, { email, firstname,lastname,fonction,natureactivite,
       activite,specialite,sousspecialite,
-      sousactivite,usertype,droitcompta,rolesuperviseur,
+      sousactivite,usertype,droitcompta,prixminutespecial,rolesuperviseur,
       regimefiscalimpot,choixfacture,numeronote,
       regimefiscaltva,
       matriculefiscale,secteur,civilite,nature,raisonsociale,adresseactivite,dateeffet,codepostal,nomsociete,mobile,clientcode,role});}
@@ -513,6 +513,7 @@ exports.updateUser = async (req, res, next) => {
     const regimefiscalimpot=userObject.regimefiscalimpot
     const regimefiscaltva=userObject.regimefiscaltva
     const droitcompta=userObject.droitcompta
+    const prixminutespecial=userObject.prixminutespecial
     const rolesuperviseur=userObject.rolesuperviseur
 
     const matriculefiscale=userObject.matriculefiscale
@@ -567,6 +568,7 @@ exports.updateUser = async (req, res, next) => {
        regimefiscaltva:userObject.regimefiscaltva,
        matriculefiscale:userObject.matriculefiscale,
        droitcompta:userObject.droitcompta,
+       prixminutespecial:userObject.prixminutespecial,
        rolesuperviseur:userObject.rolesuperviseur,
 
        fonction:userObject.fonction,
@@ -642,6 +644,7 @@ exports.deleteUser = async (req, res, next) => {
       userdeleted.clientcode = user.clientcode;
       userdeleted.role = user.role;
       userdeleted.droitcompta = user.droitcompta;
+      userdeleted.prixminutespecial = user.prixminutespecial;
       userdeleted.rolesuperviseur = user.rolesuperviseur;
       userdeleted.created = user.created;
       userdeleted.accessToken = user.accessToken;
@@ -691,6 +694,8 @@ exports.deleteUser = async (req, res, next) => {
       user.civilite = userdeleted.civilite;
       user.nature = userdeleted.nature;
       user.droitcompta = userdeleted.droitcompta;
+      user.prixminutespecial = userdeleted.prixminutespecial;
+
       user.rolesuperviseur = userdeleted.rolesuperviseur;
       user.usertype = userdeleted.usertype;
       user.mobile = userdeleted.mobile;
