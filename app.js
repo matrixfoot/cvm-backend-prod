@@ -15,7 +15,6 @@ const contactRoutes = require('./routes/contact-req');
 const carouselRoutes = require('./routes/settings');
 const communRoutes = require('./routes/communinfo');
 const eventRoutes = require('./routes/event');
-const communRoutes = require('./routes/communinfo');
 const decfiscmensRoutes = require('./routes/dec-fisc-mens');
 const deccomptabiliteRoutes = require('./routes/dec-comptabilite');
 const cron = require("node-cron");
